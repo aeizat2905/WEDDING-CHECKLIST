@@ -85,6 +85,13 @@ input[type="checkbox"] {
     transform: scale(1.2);
 }
 
+/* FILE LINK */
+.fileLink a {
+    color: #e91e63;
+    text-decoration: none;
+    font-size: 14px;
+}
+
 /* PROGRESS */
 .progress {
     height: 18px;
@@ -108,6 +115,7 @@ input[type="checkbox"] {
     .task {
         flex-direction: row;
         align-items: center;
+        gap: 10px;
     }
     .task input[type="text"] {
         width: 25%;
@@ -144,31 +152,43 @@ input[type="checkbox"] {
 <div class="container" id="app"></div>
 
 <script>
+// =====================
+// CONFIG
+// =====================
 const URL = "https://script.google.com/macros/s/AKfycbxk3mJnR0X6lnhz6j_4L1IttWJq9JIB1j3QJPNQC3DZXLldJ59yDhAIAo1yxWYTwjs/exec";
 let currentUser = "";
 let total = 0;
 let completed = 0;
 
+// =====================
+// CHECKLIST DATA
+// =====================
 const data = {
-"6–12 Bulan": ["Bajet","Konsep","Venue","Katering","Dekorasi","Kursus kahwin","Simpan duit"],
-"4–6 Bulan": ["Baju","Photographer","MUA","Tetamu","Kad kahwin","Hantaran"],
-"3 Bulan": ["Borang nikah","Ujian HIV","Confirm vendor","Tempah kad","Doorgift"],
-"2 Bulan": ["Result HIV","Hantar borang","Finalize tetamu","Print kad","Edar kad"],
-"1 Bulan": ["Fitting","Hantaran","Doorgift","Flow","Vendor"],
-"2 Minggu": ["Call vendor","Brief family","Flow majlis","Prepare IC"],
-"1 Minggu": ["Recheck","Emergency kit","Rehat"],
-"1 Hari": ["Barang","Jurunikah","Rehearsal","Tidur"],
-"Hari Kahwin": ["IC","Dokumen","Wali","Mas kahwin","Cincin","Enjoy"]
+  "6–12 Bulan": ["Bajet","Konsep","Venue","Katering","Dekorasi","Kursus kahwin","Simpan duit"],
+  "4–6 Bulan": ["Baju","Photographer","MUA","Tetamu","Kad kahwin","Hantaran"],
+  "3 Bulan": ["Borang nikah","Ujian HIV","Confirm vendor","Tempah kad","Doorgift"],
+  "2 Bulan": ["Result HIV","Hantar borang","Finalize tetamu","Print kad","Edar kad"],
+  "1 Bulan": ["Fitting","Hantaran","Doorgift","Flow","Vendor"],
+  "2 Minggu": ["Call vendor","Brief family","Flow majlis","Prepare IC"],
+  "1 Minggu": ["Recheck","Emergency kit","Rehat"],
+  "1 Hari": ["Barang","Jurunikah","Rehearsal","Tidur"],
+  "Hari Kahwin": ["IC","Dokumen","Wali","Mas kahwin","Cincin","Enjoy"]
 };
 
+// =====================
+// SELECT USER
+// =====================
 function selectUser(user){
     currentUser = user;
     document.getElementById("popup").style.display = "none";
     document.getElementById("userDisplay").innerText = user + " | 3 Januari 2026";
     createUI();
-    setTimeout(()=>loadUserData(user), 500); // load existing data after UI rendered
+    setTimeout(()=>loadUserData(user), 500); // wait for UI to render
 }
 
+// =====================
+// CREATE CHECKLIST UI
+// =====================
 function createUI(){
     const app = document.getElementById("app");
     app.innerHTML = "";
@@ -193,11 +213,20 @@ function createUI(){
                 <label><input type="checkbox"> ${task}</label>
                 <input type="text" placeholder="Remark">
                 <input type="file">
+                <div class="fileLink"></div>
             `;
 
             let checkbox = div.querySelector("input[type=checkbox]");
             checkbox.addEventListener("change", function(){
                 updateProgress();
+                saveData(section, task, checkbox, div);
+            });
+
+            div.querySelector("input[type=text]").addEventListener("blur", function(){
+                saveData(section, task, checkbox, div);
+            });
+
+            div.querySelector("input[type=file]").addEventListener("change", function(){
                 saveData(section, task, checkbox, div);
             });
 
@@ -208,7 +237,9 @@ function createUI(){
     });
 }
 
-// SAVE / UPDATE TASK
+// =====================
+// SAVE / UPDATE DATA
+// =====================
 function saveData(section, task, checkbox, div){
     let remark = div.querySelector("input[type=text]").value;
     let fileInput = div.querySelector("input[type=file]");
@@ -218,16 +249,18 @@ function saveData(section, task, checkbox, div){
         let reader = new FileReader();
         reader.onload = function(){
             let base64 = reader.result.split(",")[1];
-            sendToServer(section, task, checkbox, remark, base64, file.name, file.type);
+            sendToServer(section, task, checkbox, remark, base64, file.name, file.type, div);
         };
         reader.readAsDataURL(file);
     } else {
-        sendToServer(section, task, checkbox, remark, "", "", "");
+        sendToServer(section, task, checkbox, remark, "", "", "", div);
     }
 }
 
+// =====================
 // SEND TO GOOGLE SHEETS
-function sendToServer(section, task, checkbox, remark, base64, fileName, fileType){
+// =====================
+function sendToServer(section, task, checkbox, remark, base64, fileName, fileType, div){
     fetch(URL, {
         method: "POST",
         body: JSON.stringify({
@@ -240,10 +273,17 @@ function sendToServer(section, task, checkbox, remark, base64, fileName, fileTyp
             fileName: fileName,
             fileType: fileType
         })
-    });
+    }).then(res=>res.json())
+      .then(data=>{
+          if(data.result==="success" && data.fileUrl){
+              div.querySelector(".fileLink").innerHTML = `<a href="${data.fileUrl}" target="_blank">View File</a>`;
+          }
+      });
 }
 
+// =====================
 // LOAD EXISTING DATA
+// =====================
 function loadUserData(user){
     fetch(URL + "?user=" + user)
     .then(res => res.json())
@@ -255,6 +295,9 @@ function loadUserData(user){
                 if(label && label.innerText.includes(item.task)){
                     div.querySelector("input[type=checkbox]").checked = (item.status === "Done");
                     div.querySelector("input[type=text]").value = item.remark;
+                    if(item.fileUrl){
+                        div.querySelector(".fileLink").innerHTML = `<a href="${item.fileUrl}" target="_blank">View File</a>`;
+                    }
                 }
             });
         });
@@ -262,7 +305,9 @@ function loadUserData(user){
     });
 }
 
+// =====================
 // UPDATE PROGRESS BAR
+// =====================
 function updateProgress(){
     let totalTasks = document.querySelectorAll(".task input[type=checkbox]").length;
     let checked = document.querySelectorAll(".task input[type=checkbox]:checked").length;
@@ -272,6 +317,5 @@ function updateProgress(){
     bar.innerText = percent + "%";
 }
 </script>
-
 </body>
 </html>
