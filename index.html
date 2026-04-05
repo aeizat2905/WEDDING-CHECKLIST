@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checklist Kahwin</title>
-
 <style>
 body {
     font-family: 'Segoe UI', sans-serif;
@@ -30,6 +29,18 @@ body {
     text-align: center;
     width: 80%;
     max-width: 320px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #e91e63;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    margin: 8px 0;
 }
 
 /* HEADER */
@@ -63,7 +74,6 @@ header {
     gap: 5px;
 }
 
-/* INPUT */
 input[type="text"], input[type="file"] {
     width: 100%;
     padding: 8px;
@@ -73,18 +83,6 @@ input[type="text"], input[type="file"] {
 
 input[type="checkbox"] {
     transform: scale(1.2);
-}
-
-/* BUTTON */
-button {
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    background: #e91e63;
-    color: white;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
 }
 
 /* PROGRESS */
@@ -107,27 +105,22 @@ button {
 
 /* DESKTOP VIEW */
 @media (min-width: 768px) {
-
     .task {
         flex-direction: row;
         align-items: center;
     }
-
     .task input[type="text"] {
         width: 25%;
     }
-
     .task input[type="file"] {
         width: 25%;
     }
-
     button {
         width: auto;
     }
 }
 </style>
 </head>
-
 <body>
 
 <!-- POPUP -->
@@ -152,17 +145,9 @@ button {
 
 <script>
 const URL = "https://script.google.com/macros/s/AKfycbxk3mJnR0X6lnhz6j_4L1IttWJq9JIB1j3QJPNQC3DZXLldJ59yDhAIAo1yxWYTwjs/exec";
-
 let currentUser = "";
 let total = 0;
 let completed = 0;
-
-function selectUser(user){
-    currentUser = user;
-    document.getElementById("popup").style.display = "none";
-    document.getElementById("userDisplay").innerText = user + " | 3 Januari 2026";
-    createUI();
-}
 
 const data = {
 "6–12 Bulan": ["Bajet","Konsep","Venue","Katering","Dekorasi","Kursus kahwin","Simpan duit"],
@@ -176,8 +161,19 @@ const data = {
 "Hari Kahwin": ["IC","Dokumen","Wali","Mas kahwin","Cincin","Enjoy"]
 };
 
+function selectUser(user){
+    currentUser = user;
+    document.getElementById("popup").style.display = "none";
+    document.getElementById("userDisplay").innerText = user + " | 3 Januari 2026";
+    createUI();
+    setTimeout(()=>loadUserData(user), 500); // load existing data after UI rendered
+}
+
 function createUI(){
     const app = document.getElementById("app");
+    app.innerHTML = "";
+    total = 0;
+    completed = 0;
 
     Object.keys(data).forEach(section => {
         let card = document.createElement("div");
@@ -201,7 +197,7 @@ function createUI(){
 
             let checkbox = div.querySelector("input[type=checkbox]");
             checkbox.addEventListener("change", function(){
-                updateProgress(this);
+                updateProgress();
                 saveData(section, task, checkbox, div);
             });
 
@@ -212,6 +208,7 @@ function createUI(){
     });
 }
 
+// SAVE / UPDATE TASK
 function saveData(section, task, checkbox, div){
     let remark = div.querySelector("input[type=text]").value;
     let fileInput = div.querySelector("input[type=file]");
@@ -219,18 +216,17 @@ function saveData(section, task, checkbox, div){
 
     if(file){
         let reader = new FileReader();
-
         reader.onload = function(){
             let base64 = reader.result.split(",")[1];
             sendToServer(section, task, checkbox, remark, base64, file.name, file.type);
         };
-
         reader.readAsDataURL(file);
     } else {
         sendToServer(section, task, checkbox, remark, "", "", "");
     }
 }
 
+// SEND TO GOOGLE SHEETS
 function sendToServer(section, task, checkbox, remark, base64, fileName, fileType){
     fetch(URL, {
         method: "POST",
@@ -247,13 +243,31 @@ function sendToServer(section, task, checkbox, remark, base64, fileName, fileTyp
     });
 }
 
-function updateProgress(cb){
-    if(cb.checked) completed++;
-    else completed--;
+// LOAD EXISTING DATA
+function loadUserData(user){
+    fetch(URL + "?user=" + user)
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(item => {
+            let divs = document.querySelectorAll(".card .task");
+            divs.forEach(div => {
+                let label = div.querySelector("label");
+                if(label && label.innerText.includes(item.task)){
+                    div.querySelector("input[type=checkbox]").checked = (item.status === "Done");
+                    div.querySelector("input[type=text]").value = item.remark;
+                }
+            });
+        });
+        updateProgress();
+    });
+}
 
-    let percent = Math.round((completed/total)*100);
+// UPDATE PROGRESS BAR
+function updateProgress(){
+    let totalTasks = document.querySelectorAll(".task input[type=checkbox]").length;
+    let checked = document.querySelectorAll(".task input[type=checkbox]:checked").length;
+    let percent = Math.round((checked/totalTasks)*100);
     let bar = document.getElementById("progressBar");
-
     bar.style.width = percent + "%";
     bar.innerText = percent + "%";
 }
