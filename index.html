@@ -207,7 +207,7 @@
 // ════════════════════════════════════════════════════════
 //  ⚠️  WAJIB: Paste URL Apps Script anda di sini
 // ════════════════════════════════════════════════════════
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUDQmsez0Di6RB97vmXj0SW_1MgU_QPYGzOOoajBJtVDK8Sv357HpFfcUzUsmrWIFoFg/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykXsxdA6fElwzvGmdCgNhxLy2NtrjowvxbA9p09QO9ZEAiDmmIHGYLhAxaGc0BFvZXEw/exec';
 
 let currentUser = null;
 let tasksData = {};
@@ -283,7 +283,7 @@ const PHASES = [
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function isDone(id){const d=tasksData[id]?.done;return d===true||d==='true'||d==='TRUE';}
 function nowStr(){return new Date().toLocaleString('ms-MY',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
-function notConfigured(){return !SCRIPT_URL||SCRIPT_URL==='https://script.google.com/macros/s/AKfycbwUDQmsez0Di6RB97vmXj0SW_1MgU_QPYGzOOoajBJtVDK8Sv357HpFfcUzUsmrWIFoFg/exec';}
+function notConfigured(){return !SCRIPT_URL||SCRIPT_URL==='YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';}
 function fileIcon(name){
   const ext=(name||'').split('.').pop().toLowerCase();
   if(['jpg','jpeg','png','gif','webp','heic'].includes(ext)) return '🖼️';
