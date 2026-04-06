@@ -1,2215 +1,461 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
-<title>EOL Maintenance & PM Scheduler</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Majlis Hafiza & Aeizat 💍</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ══════════ CSS VARS ══════════ */
-:root{
-  --bg:#0d1117;--sur:#161b22;--sur2:#1e2530;--bor:#2a3441;
-  --acc:#f0a500;--acc2:#e05c00;--tx:#e6edf3;--tx2:#8b949e;
-  --red:#da3633;--grn:#238636;--blue:#1f6feb;--r:8px;
-  --pm-acc:#FF9500;--pm-acc2:#FF6B00;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;font-size:15px;}
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--bor);border-radius:3px}
+  :root {
+    --rose:#C8707A;--rose-light:#F5E6E8;--rose-dark:#8B3A42;
+    --gold:#C9A84C;--gold-light:#FBF3E0;--cream:#FAF7F2;
+    --dark:#2C2420;--muted:#7A6E6A;--border:rgba(200,112,122,0.2);
+    --white:#FFFFFF;--shadow:0 2px 16px rgba(139,58,66,0.08);--radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;}
 
-/* ══════════ ANIMATIONS ══════════ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes spi{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
-@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+  #front-page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;}
+  .front-logo{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(2rem,6vw,3.8rem);color:var(--rose-dark);text-align:center;line-height:1.1;margin-bottom:0.3rem;}
+  .front-subtitle{font-size:0.85rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:0.5rem;}
+  .front-dates{font-size:0.8rem;color:var(--muted);text-align:center;margin-bottom:3rem;}
+  .divider-ornament{display:flex;align-items:center;gap:12px;margin-bottom:2.5rem;}
+  .divider-ornament::before,.divider-ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--rose-light),var(--rose),var(--rose-light),transparent);max-width:120px;}
+  .divider-ornament span{font-size:1.1rem;color:var(--rose);}
+  .choose-label{font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:1.2rem;}
+  .user-cards{display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center;}
+  .user-card{background:var(--white);border:1.5px solid var(--border);border-radius:18px;padding:2rem 2.5rem;cursor:pointer;transition:all 0.25s ease;text-align:center;min-width:160px;position:relative;overflow:hidden;}
+  .user-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--rose-light),transparent);opacity:0;transition:opacity 0.25s;}
+  .user-card:hover::before{opacity:1;}
+  .user-card:hover{border-color:var(--rose);transform:translateY(-3px);box-shadow:var(--shadow);}
+  .user-card .avatar{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 1rem;position:relative;z-index:1;}
+  .hafiza .avatar{background:var(--rose-light);}
+  .aeizat .avatar{background:var(--gold-light);}
+  .user-card .name{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--dark);margin-bottom:0.25rem;position:relative;z-index:1;}
+  .user-card .role{font-size:0.75rem;color:var(--muted);position:relative;z-index:1;}
 
-/* ══════════ SCREENS ══════════ */
-.screen{min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;
-  background:radial-gradient(ellipse at 20% 80%,rgba(240,165,0,.07),transparent 50%),
-             radial-gradient(ellipse at 80% 20%,rgba(224,92,0,.05),transparent 50%),var(--bg);}
-.screen.active{display:flex;}
+  #app{display:none;}
+  .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,0.05);}
+  .topbar-left{display:flex;align-items:center;gap:12px;}
+  .topbar-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+  .topbar-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--dark);}
+  .topbar-title{font-family:'Playfair Display',serif;font-style:italic;font-size:1.05rem;color:var(--rose-dark);}
+  .topbar-right{display:flex;gap:8px;align-items:center;}
+  .btn{border:none;border-radius:8px;padding:0.45rem 0.9rem;font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer;transition:all 0.2s;font-weight:500;}
+  .btn-primary{background:var(--rose);color:#fff;}
+  .btn-primary:hover{background:var(--rose-dark);}
+  .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
+  .btn-ghost:hover{background:var(--rose-light);color:var(--rose-dark);}
+  .btn-sm{padding:0.3rem 0.65rem;font-size:0.75rem;}
+  .sync-indicator{display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--muted);}
+  .sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;}
+  .sync-dot.synced{background:#4CAF50;}
+  .sync-dot.syncing{background:var(--gold);animation:pulse 1s infinite;}
+  .sync-dot.error{background:#e53935;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 
-/* ══════════ CARDS ══════════ */
-.card{background:var(--sur);border:1px solid var(--bor);border-radius:14px;padding:26px;width:100%;max-width:520px;}
-.brand{text-align:center;margin-bottom:24px;}
-.brand .ico{font-size:46px;display:block;margin-bottom:10px;}
-.brand h1{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--acc);}
-.brand p{color:var(--tx2);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+  .content{max-width:820px;margin:0 auto;padding:1.5rem 1rem 4rem;}
+  .progress-bar-wrap{background:var(--white);border-radius:var(--radius);padding:1.2rem 1.5rem;margin-bottom:1.5rem;border:1px solid var(--border);}
+  .progress-label{display:flex;justify-content:space-between;font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;}
+  .progress-bar{height:6px;border-radius:4px;background:var(--rose-light);overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));border-radius:4px;transition:width 0.4s ease;}
+  .phase-header{display:flex;align-items:center;gap:12px;margin:2rem 0 1rem;}
+  .phase-badge{background:var(--rose);color:#fff;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.3rem 0.75rem;border-radius:30px;white-space:nowrap;}
+  .phase-title{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--dark);}
+  .phase-date{font-size:0.78rem;color:var(--gold);font-weight:500;margin-left:auto;white-space:nowrap;}
+  .section-header{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);padding:0.6rem 0 0.4rem;margin-bottom:0.4rem;border-bottom:1px solid var(--border);}
+  .task-card{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:0.5rem;overflow:hidden;transition:box-shadow 0.2s;}
+  .task-card:hover{box-shadow:var(--shadow);}
+  .task-card.done{opacity:0.65;}
+  .task-card.done .task-text{text-decoration:line-through;}
+  .task-main{display:flex;align-items:center;gap:12px;padding:0.75rem 1rem;}
+  .task-checkbox{width:20px;height:20px;border:2px solid var(--rose);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;background:transparent;cursor:pointer;}
+  .task-card.done .task-checkbox{background:var(--rose);border-color:var(--rose);}
+  .task-checkbox svg{display:none;}
+  .task-card.done .task-checkbox svg{display:block;}
+  .task-text{flex:1;font-size:0.9rem;color:var(--dark);line-height:1.4;}
+  .task-expand-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;padding:0.2rem 0.6rem;border-radius:4px;transition:all 0.15s;flex-shrink:0;line-height:1;}
+  .task-expand-btn:hover{background:var(--rose-light);color:var(--rose);}
+  .task-detail{display:none;border-top:1px solid var(--border);padding:0.75rem 1rem;background:var(--cream);}
+  .task-detail.open{display:block;}
+  .detail-row{margin-bottom:0.6rem;}
+  .detail-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:0.3rem;}
+  .detail-comment{width:100%;border:1px solid var(--border);border-radius:8px;padding:0.5rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--dark);background:var(--white);resize:vertical;min-height:60px;outline:none;transition:border-color 0.2s;}
+  .detail-comment:focus{border-color:var(--rose);}
+  .file-upload-btn{display:inline-flex;align-items:center;gap:6px;border:1.5px dashed var(--border);border-radius:8px;padding:0.55rem 1rem;font-size:0.82rem;color:var(--muted);cursor:pointer;transition:all 0.2s;background:none;font-family:'DM Sans',sans-serif;width:100%;justify-content:center;}
+  .file-upload-btn:hover{border-color:var(--rose);color:var(--rose);background:var(--rose-light);}
+  .attached-files{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .file-chip{display:flex;align-items:center;gap:5px;background:var(--rose-light);border:1px solid var(--border);border-radius:20px;padding:0.25rem 0.65rem;font-size:0.75rem;color:var(--rose-dark);text-decoration:none;}
+  .detail-footer{display:flex;justify-content:space-between;align-items:center;margin-top:0.75rem;flex-wrap:wrap;gap:6px;}
+  .last-updated{font-size:0.72rem;color:var(--muted);}
 
-/* ══════════ ROLE/MODE SELECTOR ══════════ */
-.sel-grid{display:grid;gap:12px;margin-bottom:18px;}
-.sel-grid.two-col{grid-template-columns:1fr 1fr;}
-.sel-grid.three-col{grid-template-columns:1fr 1fr 1fr;}
-.sel-btn{padding:20px 10px;background:var(--sur2);border:2px solid var(--bor);border-radius:12px;
-  color:var(--tx2);cursor:pointer;text-align:center;transition:all .2s;
-  font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;
-  text-transform:uppercase;user-select:none;position:relative;overflow:hidden;}
-.sel-btn .si{font-size:30px;display:block;margin-bottom:8px;}
-.sel-btn .sd{font-size:11px;font-weight:400;color:var(--tx2);margin-top:4px;letter-spacing:.5px;text-transform:none;line-height:1.4;}
-.sel-btn:hover{border-color:rgba(240,165,0,.4);color:var(--tx);}
-.sel-btn.active{border-color:var(--acc);color:var(--acc);background:rgba(240,165,0,.08);}
-.sel-btn.active-pm{border-color:var(--pm-acc);color:var(--pm-acc);background:rgba(255,149,0,.08);}
+  #toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--dark);color:#fff;padding:0.6rem 1.1rem;border-radius:8px;font-size:0.82rem;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;z-index:999;max-width:300px;}
+  #toast.show{opacity:1;transform:translateY(0);}
+  #toast.ok{background:#2e7d32;}
+  #toast.err{background:#c62828;}
 
-/* ══════════ FORMS ══════════ */
-.fg{margin-bottom:13px;}
-.fg label{display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx2);margin-bottom:6px;}
-.fg input,.fg select,.fg textarea{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--bor);
-  border-radius:var(--r);color:var(--tx);font-family:'Barlow',sans-serif;font-size:15px;
-  transition:border-color .2s;-webkit-appearance:none;appearance:none;}
-.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--acc);}
-.fg textarea{resize:vertical;min-height:80px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-@media(max-width:480px){.form-row{grid-template-columns:1fr;}}
+  #loading-overlay{position:fixed;inset:0;background:rgba(250,247,242,0.92);display:flex;align-items:center;justify-content:center;z-index:200;flex-direction:column;gap:1rem;}
+  .spinner{width:32px;height:32px;border:3px solid var(--rose-light);border-top-color:var(--rose);border-radius:50%;animation:spin 0.8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{font-size:0.85rem;color:var(--muted);}
 
-/* ══════════ BUTTONS ══════════ */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 20px;border-radius:var(--r);
-  font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;
-  text-transform:uppercase;cursor:pointer;border:none;transition:all .15s;user-select:none;}
-.btn-full{width:100%;}
-.btn-acc{background:var(--acc);color:#000;}
-.btn-acc:disabled{background:#4a3a00;color:#555;cursor:not-allowed;}
-.btn-pm{background:linear-gradient(135deg,var(--pm-acc),var(--pm-acc2));color:#fff;}
-.btn-pm:disabled{opacity:.5;cursor:not-allowed;}
-.btn-red{background:var(--red);color:#fff;}
-.btn-grn{background:var(--grn);color:#fff;}
-.btn-blue{background:var(--blue);color:#fff;}
-.btn-warn{background:#9e6a03;color:#fff;}
-.btn-ghost{background:transparent;border:1px solid var(--bor);color:var(--tx2);}
-.btn-sm{padding:8px 14px;font-size:13px;}
-.btn-xs{padding:5px 10px;font-size:12px;}
-
-/* ══════════ APP SHELL ══════════ */
-#app{display:none;flex-direction:column;min-height:100vh;}
-.topbar{background:var(--sur);border-bottom:2px solid var(--acc);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:8px;flex-wrap:wrap;}
-.topbar-pm{border-bottom-color:var(--pm-acc);}
-.topbar-l{display:flex;align-items:center;gap:9px;min-width:0;}
-.topbar h2{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--acc);white-space:nowrap;}
-.topbar-pm h2{color:var(--pm-acc);}
-.badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  background:rgba(240,165,0,.15);color:var(--acc);border:1px solid rgba(240,165,0,.3);white-space:nowrap;}
-.badge.adm{background:rgba(224,92,0,.15);color:var(--acc2);border-color:rgba(224,92,0,.3);}
-.badge-pm{background:rgba(255,149,0,.15);color:var(--pm-acc);border:1px solid rgba(255,149,0,.3);}
-.badge-grn{background:rgba(35,134,54,.15);color:#3fb950;border:1px solid rgba(35,134,54,.3);}
-.badge-blue{background:rgba(31,111,235,.15);color:#58a6ff;border:1px solid rgba(31,111,235,.3);}
-.sync-bar{background:var(--sur2);border-bottom:1px solid var(--bor);padding:5px 16px;font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:6px;}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--grn);flex-shrink:0;}
-.dot.off{background:var(--red);}.dot.spin{background:var(--acc);animation:pulse 1s infinite;}
-
-/* ══════════ TABS ══════════ */
-.tabs{display:flex;background:var(--sur);border-bottom:1px solid var(--bor);overflow-x:auto;scrollbar-width:none;}
-.tabs::-webkit-scrollbar{display:none;}
-.tab{flex-shrink:0;padding:12px 16px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
-  letter-spacing:1px;text-transform:uppercase;color:var(--tx2);cursor:pointer;border-bottom:3px solid transparent;
-  transition:all .2s;white-space:nowrap;}
-.tab.active{color:var(--acc);border-bottom-color:var(--acc);}
-.tab.active-pm{color:var(--pm-acc);border-bottom-color:var(--pm-acc);}
-
-/* ══════════ MAIN CONTENT ══════════ */
-.main{flex:1;padding:16px;max-width:1000px;margin:0 auto;width:100%;}
-.sec{display:none;animation:fadeUp .25s ease;}
-.sec.active{display:block;}
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
-.sec-t{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;letter-spacing:2px;text-transform:uppercase;}
-.sec-t span{color:var(--acc);}
-.sec-t span.pm{color:var(--pm-acc);}
-.block{background:var(--sur);border:1px solid var(--bor);border-radius:12px;padding:18px;margin-bottom:16px;}
-.block h3{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--acc);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--bor);}
-
-/* ══════════ BADGES & CHIPS ══════════ */
-.sbadge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;flex-shrink:0;}
-.s-ok{background:rgba(35,134,54,.2);color:#3fb950;border:1px solid rgba(35,134,54,.3);}
-.s-wip{background:rgba(240,165,0,.12);color:var(--acc);border:1px solid rgba(240,165,0,.25);}
-.dept-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;background:rgba(240,165,0,.1);color:var(--acc);border:1px solid rgba(240,165,0,.2);}
-.mtype-tag{display:inline-block;background:rgba(224,92,0,.1);color:var(--acc2);border:1px solid rgba(224,92,0,.2);border-radius:12px;padding:3px 10px;font-size:11px;font-weight:700;text-transform:uppercase;margin-left:4px;}
-.ptag{background:rgba(240,165,0,.1);color:var(--acc);border:1px solid rgba(240,165,0,.2);border-radius:12px;padding:2px 9px;font-size:11px;font-weight:600;}
-.chips-wrap{display:flex;flex-wrap:wrap;gap:7px;padding:3px 0;}
-.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;background:var(--sur2);border:1.5px solid var(--bor);border-radius:20px;cursor:pointer;transition:all .15s;font-size:13px;color:var(--tx2);user-select:none;}
-.chip.sel{background:rgba(240,165,0,.12);border-color:var(--acc);color:var(--acc);}
-.chip .ck{width:14px;height:14px;border:1.5px solid currentColor;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;opacity:.5;}
-.chip.sel .ck{opacity:1;background:currentColor;color:var(--bg);}
-
-/* ══════════ RECORDS ══════════ */
-.rlist{display:flex;flex-direction:column;gap:9px;}
-.rec{background:var(--sur);border:1px solid var(--bor);border-left:3px solid var(--acc);border-radius:9px;padding:13px 16px;animation:slideIn .2s ease;}
-.rec.done{border-left-color:var(--grn);}
-.rec-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:7px;margin-bottom:8px;flex-wrap:wrap;}
-.rec-id{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--acc);}
-.rec-sub{font-size:12px;color:var(--tx2);margin-top:1px;}
-.rmeta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:7px;}
-.rmi{font-size:12px;color:var(--tx2);}
-.rmi strong{color:var(--tx);font-weight:600;}
-.rdet{font-size:12px;color:var(--tx2);background:var(--bg);border-radius:5px;padding:7px 10px;margin-bottom:6px;border-left:3px solid var(--bor);}
-.photo-thumbs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-.photo-thumb{width:64px;height:64px;border-radius:6px;object-fit:cover;border:1px solid var(--bor);cursor:pointer;}
-.rec-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
-
-/* ══════════ DASHBOARD ══════════ */
-.dash-dept-card{background:var(--sur);border:1px solid var(--bor);border-radius:12px;padding:14px;margin-bottom:12px;}
-.ddc-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
-.ddc-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--acc);}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
-.stat{background:var(--sur2);border:1px solid var(--bor);border-radius:8px;padding:11px 6px;text-align:center;cursor:pointer;transition:border-color .2s;}
-.stat:hover{border-color:rgba(240,165,0,.3);}
-.stat.af{border-color:var(--acc);background:rgba(240,165,0,.06);}
-.sn{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;line-height:1;}
-.sl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx2);margin-top:2px;}
-
-/* ══════════ PM SCHEDULER STYLES ══════════ */
-.pm-banner{background:linear-gradient(135deg,#1A1F2E,#111827);border:1px solid rgba(255,149,0,.2);border-radius:14px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-.pm-dash-card{background:var(--sur);border:1px solid var(--bor);border-radius:14px;overflow:hidden;margin-bottom:14px;}
-.pm-dash-card-hdr{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;transition:background .15s;}
-.pm-dash-card-hdr:hover{background:#1a2030;}
-.pm-dash-card-body{border-top:1px solid var(--bor);padding:12px;display:grid;gap:8px;max-height:450px;overflow-y:auto;}
-.pm-mold-row{background:#0d1117;border:1px solid var(--bor);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;animation:slideIn .2s ease;}
-.pm-badge{font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:6px;text-transform:uppercase;display:inline-block;}
-.pm-filter-btn{padding:6px 12px;border-radius:20px;border:none;cursor:pointer;font-size:12px;font-weight:700;background:transparent;color:var(--tx2);white-space:nowrap;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;}
-.pm-filter-btn.active{background:var(--sur2);color:var(--tx);}
-.pm-cal-week{background:var(--sur);border:1px solid var(--bor);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start;}
-.pm-cal-week.current-wk{border-color:var(--pm-acc);background:#1a1500;}
-.pm-wk-chip{display:inline-flex;align-items:center;gap:5px;background:var(--sur2);border:1px solid var(--bor);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--tx);font-family:'DM Mono',monospace;}
-.wk-chip-rm{background:none;border:none;color:var(--tx2);cursor:pointer;padding:0;font-size:14px;line-height:1;display:flex;align-items:center;}
-.wk-chip-rm:hover{color:var(--red);}
-.week-tags{display:flex;flex-wrap:wrap;gap:6px;min-height:36px;background:var(--bg);border:1px solid var(--bor);border-radius:10px;padding:8px 10px;align-items:center;}
-.qtr-btn{padding:7px 16px;border-radius:20px;border:none;cursor:pointer;font-weight:700;font-size:13px;background:var(--sur2);color:var(--tx2);font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;}
-.qtr-btn.active{background:linear-gradient(135deg,var(--pm-acc),var(--pm-acc2));color:#fff;}
-.pm-hist-row{background:var(--sur);border:1px solid var(--bor);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.group-header{background:var(--sur2);border-radius:8px;padding:8px 14px;margin:6px 0 4px;font-size:12px;font-weight:700;color:var(--tx2);letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;}
-.dept-manage-card{background:var(--sur);border:1px solid var(--bor);border-radius:12px;margin-bottom:12px;overflow:hidden;}
-.dmc-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;user-select:none;gap:8px;}
-.dmc-hdr h4{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--acc);}
-.dmc-body{display:none;padding:0 18px 16px;border-top:1px solid var(--bor);}
-.dmc-body.open{display:block;}
-
-/* ══════════ PM FORM INPUT ══════════ */
-.pm-form-input{background:var(--sur2);border:1px solid var(--bor);border-radius:10px;padding:11px 14px;color:var(--tx);font-size:14px;width:100%;font-family:'Barlow',sans-serif;}
-.pm-form-input:focus{outline:none;border-color:var(--pm-acc);}
-.pm-form-label{color:var(--tx2);font-size:11px;font-weight:700;letter-spacing:1px;display:block;margin-bottom:6px;text-transform:uppercase;}
-
-/* ══════════ PHOTO UPLOAD ══════════ */
-.photo-drop{border:2px dashed var(--bor);border-radius:10px;padding:20px;text-align:center;cursor:pointer;background:var(--sur2);position:relative;overflow:hidden;}
-.photo-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.pd-ico{font-size:28px;margin-bottom:6px;}
-.pd-txt{font-size:13px;color:var(--tx2);line-height:1.5;}
-.pd-txt strong{color:var(--tx);}
-.photo-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
-.pi{position:relative;width:78px;height:78px;border-radius:8px;overflow:hidden;border:1px solid var(--bor);flex-shrink:0;background:var(--sur2);}
-.pi img{width:100%;height:100%;object-fit:cover;}
-.pi .pi-rm{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.75);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.pi .ov{position:absolute;inset:0;background:rgba(13,17,23,.8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
-.pi-sp{width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--acc);border-radius:50%;animation:spi .7s linear infinite;}
-.pi-prog{font-size:10px;color:var(--acc);font-weight:700;}
-
-/* ══════════ HALF/PRESS SELECTORS ══════════ */
-.half-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px;}
-.half-btn,.press-btn{padding:10px 6px;background:var(--sur2);border:2px solid var(--bor);border-radius:var(--r);
-  color:var(--tx2);cursor:pointer;text-align:center;font-family:'Barlow Condensed',sans-serif;
-  font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .2s;user-select:none;}
-.half-btn.active{border-color:var(--acc);color:var(--acc);background:rgba(240,165,0,.1);}
-.press-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:4px;}
-.press-btn.sel{border-color:var(--blue);color:#58a6ff;background:rgba(31,111,235,.1);}
-
-/* ══════════ MODALS ══════════ */
-.mover{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;}
-.mover.show{display:flex;}
-.mbox{background:var(--sur);border:1px solid var(--bor);border-radius:14px;padding:22px;width:100%;max-width:520px;margin:auto;animation:fadeUp .2s ease;}
-.mbox h3{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--acc);margin-bottom:16px;}
-.mbox h3.pm{color:var(--pm-acc);}
-.macts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap;}
-.macts .btn{width:auto;padding:9px 18px;}
-
-/* ══════════ FILTER BAR ══════════ */
-.fbar{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
-.fbar input,.fbar select{padding:9px 11px;background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);color:var(--tx);font-family:'Barlow',sans-serif;font-size:14px;flex:1;min-width:100px;-webkit-appearance:none;appearance:none;}
-.fbar input:focus,.fbar select:focus{outline:none;border-color:var(--acc);}
-
-/* ══════════ MISC ══════════ */
-.step{background:var(--sur2);border:1px solid var(--bor);border-radius:8px;padding:11px 13px;margin-bottom:8px;}
-.step-n{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--acc);margin-bottom:5px;}
-.step p{font-size:13px;color:var(--tx2);line-height:1.65;}
-.step code{background:var(--bg);color:var(--acc);padding:1px 6px;border-radius:3px;font-size:12px;}
-.errbox{display:none;color:var(--red);font-size:13px;padding:9px 12px;background:rgba(218,54,51,.1);border-radius:6px;border-left:3px solid var(--red);margin-bottom:10px;line-height:1.5;}
-.empty{text-align:center;padding:40px 20px;color:var(--tx2);}
-.empty .ei{font-size:40px;margin-bottom:10px;opacity:.3;}
-.empty h4{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
-.mlist{display:flex;flex-direction:column;gap:7px;}
-.mitem{display:flex;align-items:center;justify-content:space-between;background:var(--sur2);border:1px solid var(--bor);border-radius:var(--r);padding:10px 13px;gap:8px;}
-.mitem span{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;}
-.add-r{display:flex;gap:8px;margin-bottom:12px;}
-.add-r input{flex:1;padding:10px 12px;background:var(--bg);border:1px solid var(--bor);border-radius:var(--r);color:var(--tx);font-family:'Barlow',sans-serif;font-size:15px;}
-.add-r input:focus{outline:none;border-color:var(--acc);}
-.rpt-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:16px;}
-.rpt-scard{background:var(--sur);border:1px solid var(--bor);border-radius:10px;padding:14px;text-align:center;}
-.rpt-scard .rn{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;color:var(--acc);}
-.rpt-scard .rl{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx2);margin-top:3px;}
-.rpt-equip-block{background:var(--sur);border:1px solid var(--bor);border-radius:12px;margin-bottom:14px;overflow:hidden;}
-.rpt-equip-hdr{background:var(--sur2);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--bor);}
-.rpt-equip-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:var(--acc);letter-spacing:1px;}
-.rpt-table{width:100%;border-collapse:collapse;font-size:13px;}
-.rpt-table th{background:var(--sur2);color:var(--tx2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:9px 10px;text-align:left;border-bottom:2px solid var(--bor);}
-.rpt-table td{padding:9px 10px;border-bottom:1px solid var(--bor);color:var(--tx);vertical-align:top;}
-.rpt-table tr:last-child td{border-bottom:none;}
-.rpt-table tr:hover td{background:var(--sur2);}
-.rpt-dept-chips{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 4px;}
-.rpt-dept-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:var(--sur2);border:1.5px solid var(--bor);border-radius:20px;cursor:pointer;transition:all .15px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--tx2);user-select:none;white-space:nowrap;}
-.rpt-dept-chip.active{background:rgba(240,165,0,.14);border-color:var(--acc);color:var(--acc);}
-.rpt-chart-wrap{background:var(--sur);border:1px solid var(--bor);border-radius:12px;padding:18px;margin-bottom:16px;}
-.rpt-freq-scroll{max-height:246px;overflow-y:auto;}
-
-/* ══════════ PM Apps Script Info Box ══════════ */
-.pm-gs-info{background:linear-gradient(135deg,#0f1a0e,#1a2e1a);border:1px solid rgba(35,134,54,.3);border-radius:12px;padding:16px 18px;margin-top:14px;}
-.pm-gs-info h4{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;letter-spacing:1px;color:#3fb950;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-.pm-gs-info p{color:var(--tx2);font-size:12px;line-height:1.7;margin-bottom:10px;}
-.pm-gs-step{background:rgba(35,134,54,.08);border:1px solid rgba(35,134,54,.2);border-radius:8px;padding:9px 12px;margin-bottom:6px;font-size:12px;color:var(--tx2);line-height:1.7;}
-.pm-gs-step b{color:var(--tx);}
-.pm-gs-step code{background:var(--bg);color:#3fb950;padding:1px 6px;border-radius:3px;font-size:11px;}
-
-/* ══════════ PHOTO UPLOAD ══════════ */
-.lover{display:none;position:fixed;inset:0;background:rgba(13,17,23,.92);z-index:300;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
-.lover.show{display:flex;}
-.sp{width:36px;height:36px;border:3px solid var(--bor);border-top-color:var(--acc);border-radius:50%;animation:spi .8s linear infinite;}
-.ltxt{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--sur2);border:1px solid var(--bor);color:var(--tx);padding:11px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.5);max-width:88vw;text-align:center;line-height:1.4;animation:fadeUp .2s ease;}
-#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:500;align-items:center;justify-content:center;}
-#lightbox.show{display:flex;}
-#lightbox img{max-width:94vw;max-height:90vh;border-radius:8px;object-fit:contain;}
-.lbc{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:20px;width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-
-/* ══════════ BOTTOM NAV (mobile PM) ══════════ */
-#pm-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0d1117;border-top:1px solid var(--bor);z-index:100;padding:8px 0 12px;}
-.pm-tab-btn{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;background:transparent;border:none;cursor:pointer;padding:4px;color:var(--tx2);font-size:10px;font-weight:700;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;}
-.pm-tab-btn.active{color:var(--pm-acc);}
-@media(max-width:640px){
-  #pm-header-tabs{display:none!important;}
-  #pm-bottom-nav{display:flex!important;}
-  #pm-main-content{padding-bottom:80px!important;}
-}
-
-/* ══════════ PRINT ══════════ */
-@media print{
-  .topbar,.sync-bar,.tabs,#pm-bottom-nav,.btn,.fbar,.rec-actions,.mover,.lover{display:none!important;}
-  .sec{display:block!important;}body{background:#fff!important;color:#000!important;}
-  .rpt-table th{background:#f0f0f0!important;color:#000!important;}
-  .rpt-table td{color:#000!important;border-color:#ddd!important;}
-  .rpt-freq-scroll{max-height:none!important;overflow:visible!important;}
-  @page{margin:15mm;size:A4;}
-}
+  @media(max-width:500px){.topbar-title{display:none;}.phase-date{display:none;}.user-card{padding:1.5rem 1.8rem;min-width:130px;}}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════════
-     SCREEN 1: SETUP (EOL URL)
-══════════════════════════════════════════════════════════ -->
-<div id="setupScreen" class="screen" style="display:none;">
-  <div class="card" style="max-width:500px;">
-    <div class="brand"><span class="ico">⚙️</span><h1>System Setup</h1><p>Connect to Google Sheets Backend</p></div>
-    <div class="step"><div class="step-n">Step 1</div><p>Google Sheet → Extensions → Apps Script → paste backend script → Save</p></div>
-    <div class="step"><div class="step-n">Step 2</div><p>Run <code>setupSheets</code> → authorise → run <code>createDailyTrigger</code></p></div>
-    <div class="step"><div class="step-n">Step 3</div><p>Deploy → New Web App → Execute as <code>Me</code> | Access <code>Anyone</code> → copy <strong style="color:var(--acc)">/exec URL</strong></p></div>
-    <div class="step" style="border-color:rgba(255,149,0,.3);background:rgba(255,149,0,.05);">
-      <div class="step-n" style="color:var(--pm-acc);">PM Scheduler Note</div>
-      <p>The PM Scheduler now uses the <strong style="color:var(--tx);">same Google Sheets backend</strong> — no extra accounts or API keys needed. Make sure your Apps Script includes the <code>getPMData</code> and <code>savePMData</code> actions.</p>
+<div id="front-page">
+  <div class="front-logo">Hafiza & Aeizat</div>
+  <div class="front-subtitle">Wedding Planner</div>
+  <div class="front-dates">Tunang: 30 Ogos 2026 &nbsp;·&nbsp; Nikah: 3 Januari 2027</div>
+  <div class="divider-ornament"><span>✦</span></div>
+  <div class="choose-label">Siapa anda?</div>
+  <div class="user-cards">
+    <div class="user-card hafiza" onclick="selectUser('Hafiza')">
+      <div class="avatar">🌸</div>
+      <div class="name">Hafiza</div>
+      <div class="role">Pengantin Perempuan</div>
     </div>
-    <div style="height:12px;"></div>
-    <div class="fg"><label>Apps Script /exec URL</label>
-      <input type="text" id="urlInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-        placeholder="https://script.google.com/macros/s/.../exec"
-        onkeydown="if(event.key==='Enter'){event.preventDefault();doConnect();}">
-    </div>
-    <div id="setupErr" class="errbox"></div>
-    <div id="setupOk" style="display:none;color:#3fb950;font-size:13px;padding:9px 12px;background:rgba(35,134,54,.1);border-radius:6px;margin-bottom:8px;">✅ Connected!</div>
-    <button id="connectBtn" class="btn btn-acc btn-full" onclick="doConnect()">🔗 Connect to Google Sheets</button>
-    <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--tx2);">EOL Maintenance & PM Scheduler v2.1 · Sheets-Unified</div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════════════════
-     SCREEN 2: LOGIN
-══════════════════════════════════════════════════════════ -->
-<div id="loginScreen" class="screen" style="display:none;">
-  <div class="card" style="max-width:460px;">
-    <div class="brand">
-      <span class="ico">🏭</span>
-      <h1>EOL Maintenance</h1>
-      <p>Integrated Maintenance System v2.1</p>
-    </div>
-    <div id="step-role">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);margin-bottom:12px;">Select Access Level</div>
-      <div class="sel-grid two-col" style="margin-bottom:16px;">
-        <div class="sel-btn" id="btnUser" onclick="selRole('user')">
-          <span class="si">👷</span>User<div class="sd">View & submit records</div>
-        </div>
-        <div class="sel-btn" id="btnAdmin" onclick="selRole('admin')">
-          <span class="si">🛡️</span>Admin<div class="sd">Full access & management</div>
-        </div>
-      </div>
-      <div id="adminFields" style="display:none;">
-        <div class="fg"><label>Username</label><input type="text" id="aUser" autocomplete="off"></div>
-        <div class="fg"><label>Password</label><input type="password" id="aPass" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      </div>
-      <div id="loginErr" class="errbox">❌ Invalid username or password.</div>
-      <button class="btn btn-acc btn-full" onclick="doLogin()" style="margin-top:8px;">▶ Continue</button>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
-      <button class="btn btn-ghost btn-sm" onclick="goSetup()">← Back to Setup</button>
-      <span style="font-size:12px;color:var(--tx2);cursor:pointer;" onclick="goSetup()">🔧 Change URL</span>
+    <div class="user-card aeizat" onclick="selectUser('Aeizat')">
+      <div class="avatar">💍</div>
+      <div class="name">Aeizat</div>
+      <div class="role">Pengantin Lelaki</div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     SCREEN 3: MODULE SELECT
-══════════════════════════════════════════════════════════ -->
-<div id="moduleScreen" class="screen" style="display:none;">
-  <div class="card" style="max-width:580px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px;">
+<div id="loading-overlay" style="display:none">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loading-text">Memuatkan senarai semak...</div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-avatar" id="tb-avatar"></div>
       <div>
-        <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:var(--acc);">Select Module</h2>
-        <p style="color:var(--tx2);font-size:13px;margin-top:3px;">Choose your work area</p>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-        <span class="badge" id="modRoleBadge"></span>
-        <button class="btn btn-ghost btn-sm" onclick="doLogout()">⬅ Logout</button>
+        <div style="font-size:0.7rem;color:var(--muted)">Log masuk sebagai</div>
+        <div class="topbar-name" id="tb-name"></div>
       </div>
     </div>
-
-    <div class="sel-btn" id="modMaint" onclick="selectModule('maintenance')" style="margin-bottom:12px;text-align:left;padding:18px 20px;display:flex;align-items:center;gap:16px;">
-      <span style="font-size:36px;flex-shrink:0;">🔧</span>
-      <div>
-        <div style="font-size:18px;font-weight:800;letter-spacing:1px;color:var(--tx);">Maintenance Department</div>
-        <div class="sd" style="margin-top:4px;font-size:13px;">Record PM activities, track equipment, view reports & history</div>
+    <div class="topbar-title">Senarai Semak Majlis</div>
+    <div class="topbar-right">
+      <div class="sync-indicator">
+        <div class="sync-dot" id="sync-dot"></div>
+        <span id="sync-label">—</span>
       </div>
+      <button class="btn btn-ghost btn-sm" onclick="syncAll()">⟳ Sync</button>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">Tukar</button>
     </div>
-
-    <div class="sel-btn" id="modSched" onclick="selectModule('scheduler')" style="text-align:left;padding:18px 20px;display:flex;align-items:center;gap:16px;">
-      <span style="font-size:36px;flex-shrink:0;">📅</span>
-      <div>
-        <div style="font-size:18px;font-weight:800;letter-spacing:1px;color:var(--tx);">PM Scheduler</div>
-        <div class="sd" style="margin-top:4px;font-size:13px;">Schedule & track preventive maintenance — synced via Google Sheets</div>
-      </div>
+  </div>
+  <div class="content">
+    <div class="progress-bar-wrap">
+      <div class="progress-label"><span>Kemajuan Keseluruhan</span><span id="progress-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-
-    <!-- Maintenance dept pick -->
-    <div id="deptPickWrap" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--bor);">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);margin-bottom:12px;">Select Department</div>
-      <div id="deptPickGrid" class="sel-grid" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr));margin-bottom:12px;"></div>
-      <div id="deptPickErr" class="errbox">⚠️ Please select a department.</div>
-      <button class="btn btn-acc btn-full" onclick="confirmDeptPick()">▶ Enter Department</button>
-    </div>
-
-    <!-- Scheduler type pick — now uses Google Sheets, no API key needed -->
-    <div id="schedPickWrap" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--bor);">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--tx2);margin-bottom:12px;">Select Scheduler Type</div>
-      <div class="sel-grid" style="grid-template-columns:repeat(auto-fill,minmax(130px,1fr));margin-bottom:12px;" id="schedTypeGrid"></div>
-      <div id="schedPickErr" class="errbox">⚠️ Please select a scheduler type.</div>
-
-      <!-- Google Sheets info — replaces JSONBin setup -->
-      <div class="pm-gs-info">
-        <h4>📊 Google Sheets Backend</h4>
-        <p>PM Scheduler data is stored directly in your <b style="color:var(--tx);">existing Google Sheet</b> — same connection, no extra accounts or API keys needed.</p>
-        <div class="pm-gs-step"><b>Required:</b> Your Apps Script must include the <code>getPMData</code> and <code>savePMData</code> actions. Add these functions to your existing script and redeploy.</div>
-        <div class="pm-gs-step"><b>Sheet tab:</b> A sheet named <code>PMData</code> will be auto-created in your Google Sheet on first save.</div>
-        <div id="gsConnStatus" style="margin-top:10px;font-size:12px;color:var(--tx2);display:flex;align-items:center;gap:6px;">
-          <div class="dot" style="background:var(--grn);"></div>
-          <span>Already connected to Google Sheets ✓</span>
-        </div>
-      </div>
-
-      <div style="margin-top:14px;">
-        <button class="btn btn-pm btn-full" onclick="confirmSchedPick()">▶ Open PM Scheduler</button>
-      </div>
-    </div>
+    <div id="tasks-container"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     APP SHELL
-══════════════════════════════════════════════════════════ -->
-<div id="app" style="display:none;">
-  <div class="topbar" id="appTopbar">
-    <div class="topbar-l">
-      <span style="font-size:20px;" id="topIcon">⚙️</span>
-      <h2 id="topTitle">EOL Maintenance</h2>
-      <span class="badge" id="roleBadge">User</span>
-      <span class="badge" id="modeBadge" style="display:none;"></span>
-      <span class="badge" id="deptBadge" style="display:none;background:rgba(31,111,235,.15);color:#58a6ff;border-color:rgba(31,111,235,.3);"></span>
-    </div>
-    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
-      <button class="btn btn-ghost btn-sm" onclick="backToModule()">🔀 Switch</button>
-      <button class="btn btn-ghost btn-sm" onclick="doLogout()">⬅ Logout</button>
-    </div>
-  </div>
-  <!-- Single unified sync bar for both modules -->
-  <div class="sync-bar" id="syncBar"><div class="dot" id="sDot"></div><span id="sTxt">Connected</span></div>
-
-  <div class="tabs" id="appTabs"></div>
-
-  <div class="main" id="appMain">
-    <!-- ════ MAINTENANCE SECTIONS ════ -->
-    <div class="sec" id="sec-dash">
-      <div class="sec-hdr">
-        <div class="sec-t">Dashboard <span>Overview</span></div>
-        <button class="btn btn-ghost btn-sm" onclick="refreshAll()">🔄 Refresh</button>
-      </div>
-      <div id="dashContent"></div>
-    </div>
-
-    <div class="sec" id="sec-new">
-      <div class="sec-hdr"><div class="sec-t">New <span>PM Entry</span></div></div>
-      <div class="block">
-        <div style="background:rgba(240,165,0,.07);border:1px solid rgba(240,165,0,.25);border-radius:8px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
-          <div>
-            <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx2);margin-bottom:2px;">Department</div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--acc);" id="formDeptLabel">—</div>
-          </div>
-          <button class="btn btn-ghost btn-sm" onclick="backToModule()">🔀 Switch</button>
-        </div>
-        <div class="fg"><label>Equipment / ID *</label><select id="fEquip"><option value="">— Select —</option></select></div>
-        <div class="fg" id="pressWrap" style="display:none;">
-          <label>Press * <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--tx2);font-size:11px;">select one or more (max 4)</span></label>
-          <div class="press-grid" id="pressGrid"></div>
-        </div>
-        <div class="fg" id="halfWrap" style="display:none;">
-          <label>Section *</label>
-          <div class="half-row">
-            <div class="half-btn" id="halfTop" onclick="pickHalf('top')">⬆ Top</div>
-            <div class="half-btn" id="halfBottom" onclick="pickHalf('bottom')">⬇ Bottom</div>
-            <div class="half-btn" id="halfBoth" onclick="pickHalf('both')">↕ Both</div>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="fg"><label>Person In Charge *</label><select id="fPIC"><option value="">— Select —</option></select></div>
-          <div class="fg"><label>Maintenance Type *</label><select id="fType"><option value="">— Select —</option></select></div>
-        </div>
-        <div class="form-row">
-          <div class="fg"><label>Date Start *</label><input type="date" id="fDs"></div>
-          <div class="fg"><label>Date Finish <span style="font-weight:400;color:var(--tx2);font-size:10px;">(blank if ongoing)</span></label><input type="date" id="fDf"></div>
-        </div>
-        <div class="fg"><label>Details / Findings *</label><textarea id="fDet" placeholder="Describe findings, issues, observations..."></textarea></div>
-        <div class="fg">
-          <label>Parts / Tools Changed * <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--tx2);font-size:11px;">tick all that apply</span></label>
-          <div class="chips-wrap" id="partsGrid"></div>
-        </div>
-        <div class="fg">
-          <label>PM Photos <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--tx2);font-size:11px;">optional · max 3</span></label>
-          <div class="photo-drop">
-            <input type="file" id="photoInput" accept="image/*" multiple onchange="onPhotoPick(event)">
-            <div class="pd-ico">📷</div>
-            <div class="pd-txt"><strong>Tap to take photo or choose from gallery</strong><br>Auto-compressed · fast upload</div>
-          </div>
-          <div class="photo-grid" id="photoGrid"></div>
-          <div id="upinfo" style="margin-top:7px;font-size:12px;color:var(--tx2);min-height:16px;"></div>
-        </div>
-        <div id="formErr" class="errbox"></div>
-        <button class="btn btn-acc btn-full" id="subBtn" onclick="submitPM()" style="margin-top:10px;">✔ Submit PM Record</button>
-      </div>
-    </div>
-
-    <div class="sec" id="sec-recs">
-      <div class="sec-hdr">
-        <div class="sec-t">PM <span>Records</span></div>
-        <button class="btn btn-ghost btn-sm" onclick="loadRecs(true)">🔄 Refresh</button>
-      </div>
-      <div class="fbar">
-        <input type="text" id="fSrch" placeholder="🔍 Search..." oninput="applyF()">
-        <select id="fFdept" onchange="applyF()"><option value="">All Departments</option></select>
-        <select id="fFpic" onchange="applyF()"><option value="">All PIC</option></select>
-        <select id="fFstat" onchange="applyF()">
-          <option value="">All Status</option>
-          <option value="in_progress">In Progress</option>
-          <option value="completed">Completed</option>
-        </select>
-      </div>
-      <div class="rlist" id="recList"></div>
-    </div>
-
-    <div class="sec" id="sec-report">
-      <div class="sec-hdr">
-        <div class="sec-t">Service <span>Report</span></div>
-        <button class="btn btn-blue btn-sm" onclick="window.print()">🖨️ Print</button>
-      </div>
-      <div class="block" id="reportFilters">
-        <h3>🔍 Filter Report</h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-          <div class="fg" style="margin:0;"><label>Department</label><select id="rFdept" onchange="onRptDeptChange()"><option value="">All Departments</option></select></div>
-          <div class="fg" style="margin:0;"><label>Equipment</label><select id="rFequip" onchange="renderReport()"><option value="">All Equipment</option></select></div>
-          <div class="fg" style="margin:0;"><label>Date From</label><input type="date" id="rFfrom" onchange="renderReport()"></div>
-          <div class="fg" style="margin:0;"><label>Date To</label><input type="date" id="rFto" onchange="renderReport()"></div>
-          <div class="fg" style="margin:0;"><label>Person In Charge</label><select id="rFpic" onchange="renderReport()"><option value="">All PIC</option></select></div>
-          <div class="fg" style="margin:0;"><label>Maint. Type</label><select id="rFmtype" onchange="renderReport()"><option value="">All Types</option></select></div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <div class="fg" style="margin:0;flex:1;min-width:120px;"><label>Status</label>
-            <select id="rFstat" onchange="renderReport()"><option value="">All Status</option><option value="completed">Completed</option><option value="in_progress">In Progress</option></select>
-          </div>
-          <button class="btn btn-ghost btn-sm" onclick="clearRptFilters()" style="margin-top:18px;">✕ Clear</button>
-        </div>
-      </div>
-      <div id="reportSummary"></div>
-      <div id="reportContent"></div>
-    </div>
-
-    <div class="sec" id="sec-mgmt">
-      <div class="sec-hdr"><div class="sec-t">Admin <span>Manage</span></div></div>
-      <div class="block" style="padding:0;overflow:hidden;">
-        <div onclick="toggleManage('pwd')" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:14px 18px;user-select:none;">
-          <h3 style="margin:0;padding:0;border:none;">🔐 Admin Password</h3>
-          <span id="marr-pwd" style="color:var(--tx2);">▶</span>
-        </div>
-        <div id="msec-pwd" style="display:none;padding:0 18px 16px;border-top:1px solid var(--bor);">
-          <div style="height:12px;"></div>
-          <button class="btn btn-warn btn-sm" onclick="openChangePwd()">🔑 Change Password</button>
-        </div>
-      </div>
-      <div class="block" style="padding:0;overflow:hidden;">
-        <div onclick="toggleManage('depts')" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:14px 18px;user-select:none;">
-          <h3 style="margin:0;padding:0;border:none;">🏭 Departments</h3>
-          <span id="marr-depts" style="color:var(--tx2);">▶</span>
-        </div>
-        <div id="msec-depts" style="display:none;padding:0 18px 16px;border-top:1px solid var(--bor);">
-          <div style="height:12px;"></div>
-          <div class="add-r"><input type="text" id="addDeptIn" placeholder="e.g. Forming, Dejunk..."><button class="btn btn-grn btn-sm" onclick="addDept()">+ Add Dept</button></div>
-          <div id="deptManageList"></div>
-        </div>
-      </div>
-      <div class="block" style="padding:0;overflow:hidden;">
-        <div onclick="toggleManage('pic')" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:14px 18px;user-select:none;">
-          <h3 style="margin:0;padding:0;border:none;">👷 Person In Charge</h3>
-          <span id="marr-pic" style="color:var(--tx2);">▶</span>
-        </div>
-        <div id="msec-pic" style="display:none;padding:0 18px 16px;border-top:1px solid var(--bor);">
-          <div style="height:12px;"></div>
-          <div class="add-r"><input type="text" id="addPICIn" placeholder="New PIC name..."><button class="btn btn-grn btn-sm" onclick="addPIC()">+ Add</button></div>
-          <div class="mlist" id="picList"></div>
-        </div>
-      </div>
-      <div class="block" style="padding:0;overflow:hidden;">
-        <div onclick="toggleManage('types')" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:14px 18px;user-select:none;">
-          <h3 style="margin:0;padding:0;border:none;">🗂️ Maintenance Types</h3>
-          <span id="marr-types" style="color:var(--tx2);">▶</span>
-        </div>
-        <div id="msec-types" style="display:none;padding:0 18px 16px;border-top:1px solid var(--bor);">
-          <div style="height:12px;"></div>
-          <div class="add-r"><input type="text" id="addTypeIn" placeholder="New maintenance type..."><button class="btn btn-grn btn-sm" onclick="addType()">+ Add</button></div>
-          <div class="mlist" id="typeList"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════ PM SCHEDULER SECTIONS ════ -->
-    <div class="sec" id="sec-pm-dashboard">
-      <div id="pm-wk-banner" class="pm-banner"></div>
-      <div id="pm-dash-content"></div>
-    </div>
-
-    <div class="sec" id="sec-pm-molds">
-      <div class="sec-hdr">
-        <div class="sec-t">All <span class="pm">Mold Dies</span></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;" id="pmMoldsHdrBtns"></div>
-      </div>
-      <input id="pm-mold-search" style="background:var(--sur2);border:1px solid var(--bor);border-radius:10px;padding:10px 14px;color:var(--tx);font-size:14px;width:100%;margin-bottom:12px;font-family:'Barlow',sans-serif;" placeholder="🔍  Search mold die name..." oninput="renderPMMolds()"/>
-      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;" id="pm-filter-btns"></div>
-      <div id="pm-molds-list" style="display:grid;gap:8px;"></div>
-    </div>
-
-    <div class="sec" id="sec-pm-calendar">
-      <div class="sec-hdr">
-        <div class="sec-t">PM <span class="pm">Calendar</span> — FY2026</div>
-      </div>
-      <div id="pm-qtr-tabs" style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;"></div>
-      <div id="pm-calendar-content"></div>
-    </div>
-
-    <div class="sec" id="sec-pm-history">
-      <div class="sec-hdr">
-        <div class="sec-t">PM <span class="pm">History</span></div>
-        <div id="pm-history-count" style="color:var(--tx2);font-size:13px;"></div>
-      </div>
-      <div style="background:var(--sur);border:1px solid var(--bor);border-radius:12px;padding:14px;margin-bottom:14px;display:grid;gap:10px;">
-        <input id="pm-history-search" style="background:var(--bg);border:1px solid var(--bor);border-radius:8px;padding:10px 14px;color:var(--tx);font-size:14px;width:100%;font-family:'Barlow',sans-serif;" placeholder="🔍  Search by mold, technician, notes..." oninput="renderPMHistory()"/>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-          <span style="color:var(--tx2);font-size:12px;font-weight:600;">Week:</span>
-          <input id="pm-hist-wk" style="background:var(--bg);border:1px solid var(--bor);border-radius:8px;padding:7px 12px;color:var(--tx);font-size:13px;width:100px;font-family:'Barlow',sans-serif;" placeholder="e.g. 620" oninput="renderPMHistory()"/>
-          <button onclick="clearPMHistFilters()" style="background:transparent;border:1px solid var(--bor);border-radius:8px;padding:7px 12px;color:var(--tx2);cursor:pointer;font-size:12px;white-space:nowrap;">✕ Clear</button>
-        </div>
-      </div>
-      <div id="pm-history-list" style="display:grid;gap:8px;"></div>
-    </div>
-
-    <div class="sec" id="sec-pm-users">
-      <div class="sec-hdr">
-        <div class="sec-t">PM <span class="pm">Technicians</span></div>
-        <div id="pm-user-count" style="color:var(--tx2);font-size:13px;"></div>
-      </div>
-      <div class="block">
-        <div style="color:var(--pm-acc);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Add Technician</div>
-        <div style="display:flex;gap:10px;">
-          <input id="pm-new-user" class="pm-form-input" placeholder="Enter technician name..." style="flex:1;" onkeydown="if(event.key==='Enter')pmAddUser()"/>
-          <button onclick="pmAddUser()" class="btn btn-pm" style="white-space:nowrap;padding:11px 18px;">+ Add</button>
-        </div>
-      </div>
-      <div id="pm-users-list" style="display:grid;gap:8px;"></div>
-    </div>
-  </div>
-
-  <nav id="pm-bottom-nav">
-    <button onclick="pmShowTab('pm-dashboard')" id="pmbtab-dashboard" class="pm-tab-btn active">📊<span>Dashboard</span></button>
-    <button onclick="pmShowTab('pm-molds')" id="pmbtab-molds" class="pm-tab-btn">🔧<span>Molds</span></button>
-    <button onclick="pmShowTab('pm-calendar')" id="pmbtab-calendar" class="pm-tab-btn">📅<span>Calendar</span></button>
-    <button onclick="pmShowTab('pm-history')" id="pmbtab-history" class="pm-tab-btn">📋<span>History</span></button>
-    <button onclick="pmShowTab('pm-users')" id="pmbtab-users" class="pm-tab-btn" style="display:none;">👤<span>Users</span></button>
-  </nav>
-</div>
-
-<!-- ══════════ MODALS ══════════ -->
-<div class="mover" id="editMod">
-  <div class="mbox">
-    <h3>✏️ Edit PM Record</h3>
-    <input type="hidden" id="editId">
-    <div class="fg"><label>Person In Charge</label><select id="ePIC"></select></div>
-    <div class="fg"><label>Equipment / ID</label><select id="eEquip"></select></div>
-    <div class="fg" id="ePressWrap" style="display:none;"><label>Press</label><div class="press-grid" id="ePressGrid"></div></div>
-    <div class="fg" id="eHalfWrap" style="display:none;">
-      <label>Section</label>
-      <div class="half-row">
-        <div class="half-btn" id="eHalfTop" onclick="pickEditHalf('top')">⬆ Top</div>
-        <div class="half-btn" id="eHalfBottom" onclick="pickEditHalf('bottom')">⬇ Bottom</div>
-        <div class="half-btn" id="eHalfBoth" onclick="pickEditHalf('both')">↕ Both</div>
-      </div>
-    </div>
-    <div class="fg"><label>Maintenance Type</label><select id="eType"></select></div>
-    <div class="form-row">
-      <div class="fg"><label>Date Start</label><input type="date" id="eDs"></div>
-      <div class="fg"><label>Date Finish</label><input type="date" id="eDf"></div>
-    </div>
-    <div class="fg"><label>Details / Findings</label><textarea id="eDet" style="min-height:80px;"></textarea></div>
-    <div class="fg"><label>Parts / Tools</label><div class="chips-wrap" id="editPartsGrid"></div></div>
-    <div id="editErr" class="errbox"></div>
-    <div class="macts"><button class="btn btn-ghost" onclick="closeEdit()">Cancel</button><button class="btn btn-acc" onclick="saveEdit()" id="saveEditBtn">💾 Save</button></div>
-  </div>
-</div>
-
-<div class="mover" id="delMod">
-  <div class="mbox"><h3>🗑️ Delete Record</h3><p style="color:var(--tx2);font-size:14px;line-height:1.5;">Permanently delete this record and all photos?</p>
-    <div class="macts"><button class="btn btn-ghost" onclick="closeMod('delMod')">Cancel</button><button class="btn btn-red" onclick="confirmDel()">Yes, Delete</button></div>
-  </div>
-</div>
-
-<div class="mover" id="doneMod">
-  <div class="mbox"><h3>✅ Mark as Completed</h3><input type="hidden" id="doneId">
-    <div class="fg"><label>Date Finish</label><input type="date" id="doneDf"></div>
-    <div class="macts"><button class="btn btn-ghost" onclick="closeMod('doneMod')">Cancel</button><button class="btn btn-grn" onclick="confirmDone()">✅ Mark Done</button></div>
-  </div>
-</div>
-
-<div class="mover" id="changePwdMod">
-  <div class="mbox"><h3>🔑 Change Password</h3>
-    <div class="fg"><label>Current Password</label><input type="password" id="cpOldIn"></div>
-    <div class="fg"><label>New Password</label><input type="password" id="cpNewIn"></div>
-    <div class="fg"><label>Confirm New Password</label><input type="password" id="cpConfIn"></div>
-    <div id="cpErr" class="errbox"></div>
-    <div id="cpOk" style="display:none;color:#3fb950;font-size:13px;padding:9px 12px;background:rgba(35,134,54,.1);border-radius:6px;margin-bottom:8px;">✅ Password changed!</div>
-    <div class="macts"><button class="btn btn-ghost" onclick="closeMod('changePwdMod')">Cancel</button><button class="btn btn-acc" onclick="saveChangePwd()">💾 Save</button></div>
-  </div>
-</div>
-
-<!-- PM: Add Mold Modal -->
-<div class="mover" id="pmAddMoldMod">
-  <div class="mbox">
-    <h3 class="pm">➕ Add New Mold Die</h3>
-    <div style="display:grid;gap:14px;">
-      <div><label class="pm-form-label">Mold Die Name *</label><input id="pmAddName" class="pm-form-input" placeholder="e.g. QFN CU # 6"/></div>
-      <div><label class="pm-form-label">Group / Type</label><input id="pmAddGroup" class="pm-form-input" placeholder="e.g. QFN CU"/></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div><label class="pm-form-label">Machine</label><input id="pmAddMachine" class="pm-form-input" placeholder="e.g. IDEAL"/></div>
-        <div><label class="pm-form-label">Interval (weeks)</label><input id="pmAddInterval" class="pm-form-input" type="number" min="1" max="52" placeholder="e.g. 4"/></div>
-      </div>
-      <div>
-        <label class="pm-form-label">Scheduled Weeks (1–52, repeat yearly)</label>
-        <div class="week-tags" id="pmAddWeekTags"><span style="color:var(--tx2);font-size:12px;">No weeks added yet</span></div>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
-          <select id="pmAddWeekSel" class="pm-form-input" style="flex:1;"><option value="">— Select week number —</option></select>
-          <button onclick="pmAddWeekTag('add')" class="btn btn-pm" style="padding:10px 16px;white-space:nowrap;">+ Add</button>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:22px;">
-      <button onclick="closeMod('pmAddMoldMod')" class="btn btn-ghost" style="flex:1;justify-content:center;">Cancel</button>
-      <button onclick="pmDoAddMold()" id="pmAddSubmitBtn" class="btn btn-pm" style="flex:2;justify-content:center;">Add Mold Die</button>
-    </div>
-  </div>
-</div>
-
-<!-- PM: Edit Mold Modal -->
-<div class="mover" id="pmEditMoldMod">
-  <div class="mbox">
-    <h3 class="pm">✏️ Edit Mold Die</h3>
-    <input type="hidden" id="pmEditId"/>
-    <div style="display:grid;gap:14px;">
-      <div><label class="pm-form-label">Mold Die Name</label><input id="pmEditName" class="pm-form-input"/></div>
-      <div><label class="pm-form-label">Group / Type</label><input id="pmEditGroup" class="pm-form-input"/></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div><label class="pm-form-label">Machine</label><input id="pmEditMachine" class="pm-form-input"/></div>
-        <div><label class="pm-form-label">Interval (weeks)</label><input id="pmEditInterval" class="pm-form-input" type="number" min="1" max="52"/></div>
-      </div>
-      <div>
-        <label class="pm-form-label">Scheduled Weeks (1–52)</label>
-        <div class="week-tags" id="pmEditWeekTags"><span style="color:var(--tx2);font-size:12px;">No weeks added yet</span></div>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
-          <select id="pmEditWeekSel" class="pm-form-input" style="flex:1;"><option value="">— Select week number —</option></select>
-          <button onclick="pmAddWeekTag('edit')" class="btn btn-pm" style="padding:10px 16px;white-space:nowrap;">+ Add</button>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:22px;">
-      <button onclick="closeMod('pmEditMoldMod')" class="btn btn-ghost" style="flex:1;justify-content:center;">Cancel</button>
-      <button onclick="pmDoEditMold()" id="pmEditSubmitBtn" class="btn btn-pm" style="flex:2;justify-content:center;">Save Changes</button>
-    </div>
-  </div>
-</div>
-
-<!-- PM: Mark Done Modal -->
-<div class="mover" id="pmDoneMod">
-  <div class="mbox" style="max-width:440px;">
-    <h3 class="pm">✅ Mark PM as Done</h3>
-    <p style="color:var(--tx2);font-size:13px;margin-bottom:4px;">Mold: <b id="pmDoneMoldName" style="color:var(--tx);"></b></p>
-    <p id="pmDoneDueInfo" style="color:var(--pm-acc);font-size:12px;margin-bottom:16px;"></p>
-    <div style="display:grid;gap:14px;">
-      <div>
-        <label class="pm-form-label">Scheduled Week Being Completed</label>
-        <select id="pmDoneSchedWk" class="pm-form-input"></select>
-      </div>
-      <div>
-        <label class="pm-form-label">Actual PM Date *</label>
-        <input id="pmDoneDate" class="pm-form-input" type="date"/>
-      </div>
-      <div>
-        <label class="pm-form-label">Performed By *</label>
-        <select id="pmDonePerson" class="pm-form-input"><option value="">— Select technician —</option></select>
-      </div>
-      <div>
-        <label class="pm-form-label">Notes / Remarks</label>
-        <input id="pmDoneNotes" class="pm-form-input" placeholder="Optional observations..."/>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:22px;">
-      <button onclick="closeMod('pmDoneMod')" class="btn btn-ghost" style="flex:1;justify-content:center;">Cancel</button>
-      <button onclick="pmConfirmDone()" id="pmDoneConfirmBtn" class="btn btn-grn" style="flex:2;justify-content:center;">✅ Confirm Done</button>
-    </div>
-  </div>
-</div>
-
-<div id="lightbox"><button class="lbc" onclick="closeLB()">✕</button><img id="lbImg" src="" alt=""></div>
-<div class="lover" id="lOver"><div class="sp"></div><div class="ltxt" id="lTxt">Loading...</div></div>
+<div id="toast"></div>
 
 <script>
-/* ══════════════════════════════════════════════════════
-   GLOBAL CONFIG
-══════════════════════════════════════════════════════ */
-const STORAGE_KEY='eol_unified_v2';
-const IMGBB_KEY='b4ebddea23a53d61e7f2b06ce4f20d8a';
-const MAX_PHOTOS=3,IMG_MAX_PX=1200,IMG_Q=0.80;
-let ADMIN_USER='EOLmaint',ADMIN_PASS='EOLmaint';
-let APPURL='';
+// ⚠️ PASTE URL APPS SCRIPT ANDA DI SINI (selepas deploy)
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz3pmH7uE-pMfw_5p5AzRIBhWQnTjTQvWeh2ne8W17uWAFBXNMcBSk9iBE6pM9ELrCTMg/exec';
+const DRIVE_URL = 'https://drive.google.com/drive/folders/1jRcBD1xTyifIfS83VusqKC8J1ZYcv3Iw';
 
-/* ══════════════════════════════════════════════════════
-   PM GOOGLE SHEETS STORAGE
-   Uses the same APPURL / jsonp() as the Maintenance module.
-   Required Apps Script actions: getPMData, savePMData
-══════════════════════════════════════════════════════ */
-let pmIsSaving=false;
+let currentUser = null;
+let tasksData = {};
 
-/*
-  ─────────────────────────────────────────────────────
-  APPS SCRIPT FUNCTIONS TO ADD TO YOUR EXISTING SCRIPT
-  ─────────────────────────────────────────────────────
-  Add these two functions to your Apps Script, then
-  redeploy as a new version. No new sheet needed —
-  a "PMData" tab will be auto-created on first save.
-
-  function getPMData(e) {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sh = ss.getSheetByName('PMData');
-    if (!sh) return { typeId: e.parameter.typeId, molds: [], history: [], users: [] };
-    var rows = sh.getDataRange().getValues();
-    var typeId = e.parameter.typeId || 'mold-die';
-    for (var i = 1; i < rows.length; i++) {
-      if (rows[i][0] === typeId) {
-        try { return JSON.parse(rows[i][1]); } catch(ex) {}
-      }
-    }
-    return { typeId: typeId, molds: [], history: [], users: [] };
-  }
-
-  function savePMData(e) {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sh = ss.getSheetByName('PMData') || ss.insertSheet('PMData');
-    if (sh.getLastRow() === 0) sh.appendRow(['typeId','data','updatedAt']);
-    var typeId = e.parameter.typeId;
-    var data = e.parameter.data;
-    var rows = sh.getDataRange().getValues();
-    for (var i = 1; i < rows.length; i++) {
-      if (rows[i][0] === typeId) {
-        sh.getRange(i+1,1,1,3).setValues([[typeId, data, new Date().toISOString()]]);
-        return { status:'ok' };
-      }
-    }
-    sh.appendRow([typeId, data, new Date().toISOString()]);
-    return { status:'ok' };
-  }
-
-  // In your doGet(e) switch/if-else chain, add:
-  // if (action === 'getPMData') return respond(getPMData(e));
-  // if (action === 'savePMData') return respond(savePMData(e));
-  ─────────────────────────────────────────────────────
-*/
-
-async function pmLoadFromSheets(typeId){
-  sy('sync','Loading PM data...');
-  try{
-    const r=await jsonp({action:'getPMData',typeId},20000);
-    // r should be {typeId, molds:[], history:[], users:[]}
-    pmMolds=(r.molds||[]).map(m=>({...m,scheduledWeeks:m.scheduledWeeks||[]}));
-    pmHistory=r.history||[];
-    pmUsers=r.users||[];
-    // If completely empty (first time), seed with defaults
-    if(!pmMolds.length){
-      const seeds=PM_SCHED_SEEDS[typeId]||[];
-      if(seeds.length){
-        pmMolds=[...seeds];
-        // Seed each mold atomically on first load
-        for(const mold of pmMolds){
-          try{await jsonp({action:'pmAddMold',typeId,mold:JSON.stringify(mold)},20000);}catch(ex){}
-        }
-      }
-    }
-    sy('ok');
-  }catch(e){
-    sy('off');
-    toast('⚠️ PM data load failed: '+e.message+'\n\nMake sure getPMData action is in your Apps Script.');
-    pmMolds=[];pmHistory=[];pmUsers=[];
-  }
-}
-
-/*
-  pmSave* — atomic JSONP operations.
-  Each sends only the changed object (fits easily in a URL).
-  No POST / no CORS issues.
-*/
-
-// Used after pmDoAddMold()
-async function pmSaveNewMold(mold){
-  const tid=currentSchedType?.id||'mold-die';
-  sy('sync','Saving...');
-  try{
-    const r=await jsonp({action:'pmAddMold',typeId:tid,mold:JSON.stringify(mold)},20000);
-    if(!r||r.status!=='ok')throw new Error(r?.message||'Failed');
-    sy('ok');
-  }catch(e){sy('off');throw e;}
-}
-
-// Used after pmDoEditMold()
-async function pmSaveUpdatedMold(mold){
-  const tid=currentSchedType?.id||'mold-die';
-  sy('sync','Saving...');
-  try{
-    const r=await jsonp({action:'pmUpdateMold',typeId:tid,mold:JSON.stringify(mold)},20000);
-    if(!r||r.status!=='ok')throw new Error(r?.message||'Failed');
-    sy('ok');
-  }catch(e){sy('off');throw e;}
-}
-
-// Used after pmDeleteMold()
-async function pmSaveDeleteMold(moldId){
-  const tid=currentSchedType?.id||'mold-die';
-  sy('sync','Saving...');
-  try{
-    const r=await jsonp({action:'pmDeleteMold',typeId:tid,moldId:moldId},20000);
-    if(!r||r.status!=='ok')throw new Error(r?.message||'Failed');
-    sy('ok');
-  }catch(e){sy('off');throw e;}
-}
-
-// Used after pmConfirmDone() — saves one history entry
-async function pmSaveHistoryEntry(entry){
-  const tid=currentSchedType?.id||'mold-die';
-  sy('sync','Saving...');
-  try{
-    const r=await jsonp({action:'pmAppendHistory',typeId:tid,entry:JSON.stringify(entry)},20000);
-    if(!r||r.status!=='ok')throw new Error(r?.message||'Failed');
-    sy('ok');
-  }catch(e){sy('off');throw e;}
-}
-
-// Used after pmAddUser()
-async function pmSaveNewUser(user){
-  const tid=currentSchedType?.id||'mold-die';
-  sy('sync','Saving...');
-  try{
-    const r=await jsonp({action:'pmAddUser',typeId:tid,user:JSON.stringify(user)},20000);
-    if(!r||r.status!=='ok')throw new Error(r?.message||'Failed');
-    sy('ok');
-  }catch(e){sy('off');throw e;}
-}
-
-// Used after pmDeleteUser()
-async function pmSaveDeleteUser(name){
-  const tid=currentSchedType?.id||'mold-die';
-  sy('sync','Saving...');
-  try{
-    const r=await jsonp({action:'pmDeleteUser',typeId:tid,name:encodeURIComponent(name)},20000);
-    if(!r||r.status!=='ok')throw new Error(r?.message||'Failed');
-    sy('ok');
-  }catch(e){sy('off');throw e;}
-}
-
-// Legacy alias — kept so any missed call sites don't crash silently
-async function pmSaveToSheets(){
-  sy('ok');
-}
-
-/* ══════════════════════════════════════════════════════
-   STATE
-══════════════════════════════════════════════════════ */
-let role=null,sRole=null;
-let currentModule=null;
-let currentSchedType=null;
-let curDept=null;
-let recs=[],pics=[],types=[],departments=[];
-let pmMolds=[],pmHistory=[],pmUsers=[];
-let photoQueue=[],delId=null,cbN=0;
-let selectedHalf=null,editSelectedHalf=null;
-let selectedPresses=[],editSelectedPresses=[];
-let dashActiveFilter={},dashOpenState={},manageOpenState={};
-let pmAddWeekState=[],pmEditWeekState=[];
-let pmActiveFilter='all',pmActiveQtr='2Q26',pmDoneMoldId=null;
-let pmActiveSec='pm-dashboard';
-let rptFreqDept='',rptHistDept='';
-let freqChartInstance=null;
-
-/* ══════════════════════════════════════════════════════
-   PM SCHEDULER TYPES
-══════════════════════════════════════════════════════ */
-const PM_SCHED_TYPES=[
-  {id:'mold-die',label:'Mold Die',icon:'🔩',desc:'QFN CU, DD/TO CU etc.'},
-  {id:'mold-machine',label:'Mold Machine',icon:'🏗️',desc:'Injection mold machines'},
-  {id:'dieset',label:'Dieset',icon:'⚙️',desc:'Transfer block die sets'},
-  {id:'dejunk',label:'Dejunk Machine',icon:'✂️',desc:'Dejunk & trim machines'},
-  {id:'forming',label:'Forming',icon:'🔧',desc:'Forming machines'},
-  {id:'custom',label:'Custom',icon:'📋',desc:'Custom equipment type'},
+const PHASES = [
+  { id:'tunang', label:'Fasa 1: Pertunangan', badge:'Fasa 1', date:'30 Ogos 2026', sections:[
+    { label:'April – Mei 2026 (4–5 Bulan Sebelum Tunang)', tasks:[
+      {id:'t01',text:'Bincang dengan kedua-dua belah keluarga (bajet, lokasi, dan jumlah jemputan).'},
+      {id:'t02',text:'Tetapkan tema warna majlis.'},
+      {id:'t03',text:'Beli/tempah cincin risik dan cincin tunang.'},
+      {id:'t04',text:'Cari inspirasi dan senaraikan barang dulang hantaran (contoh: 5 berbalas 7).'},
+    ]},
+    { label:'Jun – Julai 2026 (1–2 Bulan Sebelum Tunang)', tasks:[
+      {id:'t05',text:'Tempah baju tunang.'},
+      {id:'t06',text:'Tempah jurusolek (MUA) dan jurugambar (jika perlu).'},
+      {id:'t07',text:'Tempah mini pelamin (jika buat di rumah) atau tempah lokasi.'},
+      {id:'t08',text:'Beli barang hantaran dan gubahan dulang.'},
+      {id:'t09',text:'Tempah katering atau rancang menu masakan keluarga.'},
+      {id:'t10',text:'Sediakan cenderahati (doorgift) ringkas untuk tetamu.'},
+    ]},
+    { label:'Ogos 2026 (Bulan Pertunangan)', tasks:[
+      {id:'t11',text:'Fitting baju tunang.'},
+      {id:'t12',text:'Siapkan gubahan hantaran sepenuhnya.'},
+      {id:'t13',text:'Bersihkan dan kemaskan kawasan rumah/lokasi majlis.'},
+      {id:'t14',text:'🌹 30 Ogos 2026: MAJLIS PERTUNANGAN',important:true},
+    ]},
+  ]},
+  { id:'nikah', label:'Fasa 2: Perkahwinan', badge:'Fasa 2', date:'3 Januari 2027', sections:[
+    { label:'September 2026 (4 Bulan Sebelum Kahwin)', tasks:[
+      {id:'k01',text:'Hadir Kursus Pra-Perkahwinan (jika belum).'},
+      {id:'k02',text:'Bincang bajet keseluruhan majlis perkahwinan.'},
+      {id:'k03',text:'Tempah lokasi/dewan majlis dan khemah (jika buat di rumah).'},
+      {id:'k04',text:'Tempah katering untuk majlis perkahwinan.'},
+      {id:'k05',text:'Tempah Pakej Perkahwinan (Pelamin, Baju Nikah & Sanding).'},
+      {id:'k06',text:'Tempah MUA, Jurugambar dan Juruvideo.'},
+    ]},
+    { label:'Oktober 2026 (3 Bulan Sebelum Kahwin)', tasks:[
+      {id:'k07',text:'Buat Ujian Saringan HIV di klinik kesihatan.'},
+      {id:'k08',text:'Sediakan dokumen dan isi borang kebenaran berkahwin (online/pejabat agama).'},
+      {id:'k09',text:'Cari Tok Kadi dan tetapkan masa akad nikah.'},
+      {id:'k10',text:'Bincang dan senaraikan barang hantaran kahwin (contoh: 7 berbalas 9).'},
+      {id:'k11',text:'Beli cincin/gelang batal air sembahyang.'},
+    ]},
+    { label:'November 2026 (2 Bulan Sebelum Kahwin)', tasks:[
+      {id:'k12',text:'Cetak kad jemputan (fizikal) dan buat kad jemputan digital (e-card).'},
+      {id:'k13',text:'Beli barang hantaran dan mula tempah gubahan hantaran.'},
+      {id:'k14',text:'Tempah cenderahati (doorgift) tetamu.'},
+      {id:'k15',text:'Lantik ahli keluarga/rakan sebagai jawatankuasa majlis.'},
+    ]},
+    { label:'Disember 2026 (1 Bulan Sebelum Kahwin)', tasks:[
+      {id:'k16',text:'Edarkan kad jemputan (fizikal dan digital).'},
+      {id:'k17',text:'Hantar borang nikah yang telah lengkap ke Pejabat Agama.'},
+      {id:'k18',text:'Fitting baju nikah dan sanding buat kali terakhir.'},
+      {id:'k19',text:'Sahkan (finalize) jumlah tetamu dengan pihak katering.'},
+      {id:'k20',text:'Siapkan semua gubahan hantaran.'},
+      {id:'k21',text:'Beli barang keperluan bilik pengantin.'},
+    ]},
+    { label:'Januari 2027 (Bulan Perkahwinan)', tasks:[
+      {id:'k22',text:'Ambil baju pengantin dari butik.'},
+      {id:'k23',text:'Rehat yang cukup dan jaga kesihatan mental/fizikal.'},
+      {id:'k24',text:'💒 3 Januari 2027: MAJLIS AKAD NIKAH & RESEPSI',important:true},
+    ]},
+  ]},
 ];
 
-/* ══════════════════════════════════════════════════════
-   FISCAL CALENDAR FY2026
-══════════════════════════════════════════════════════ */
-const CALENDAR=[
-  {wk:601,wkNum:1,qtr:"1Q26",mth:"NOV",period:"P1",sun:2,mon:3,tue:4,wed:5,thu:6,fri:7,sat:8},
-  {wk:602,wkNum:2,qtr:"1Q26",mth:"NOV",period:"P1",sun:9,mon:10,tue:11,wed:12,thu:13,fri:14,sat:15},
-  {wk:603,wkNum:3,qtr:"1Q26",mth:"NOV",period:"P1",sun:16,mon:17,tue:18,wed:19,thu:20,fri:21,sat:22},
-  {wk:604,wkNum:4,qtr:"1Q26",mth:"NOV",period:"P1",sun:23,mon:24,tue:25,wed:26,thu:27,fri:28,sat:29},
-  {wk:605,wkNum:5,qtr:"1Q26",mth:"DEC",period:"P2",sun:30,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6},
-  {wk:606,wkNum:6,qtr:"1Q26",mth:"DEC",period:"P2",sun:7,mon:8,tue:9,wed:10,thu:11,fri:12,sat:13},
-  {wk:607,wkNum:7,qtr:"1Q26",mth:"DEC",period:"P2",sun:14,mon:15,tue:16,wed:17,thu:18,fri:19,sat:20},
-  {wk:608,wkNum:8,qtr:"1Q26",mth:"DEC",period:"P2",sun:21,mon:22,tue:23,wed:24,thu:25,fri:26,sat:27},
-  {wk:609,wkNum:9,qtr:"1Q26",mth:"JAN",period:"P3",sun:28,mon:29,tue:30,wed:31,thu:1,fri:2,sat:3},
-  {wk:610,wkNum:10,qtr:"1Q26",mth:"JAN",period:"P3",sun:4,mon:5,tue:6,wed:7,thu:8,fri:9,sat:10},
-  {wk:611,wkNum:11,qtr:"1Q26",mth:"JAN",period:"P3",sun:11,mon:12,tue:13,wed:14,thu:15,fri:16,sat:17},
-  {wk:612,wkNum:12,qtr:"1Q26",mth:"JAN",period:"P3",sun:18,mon:19,tue:20,wed:21,thu:22,fri:23,sat:24},
-  {wk:613,wkNum:13,qtr:"1Q26",mth:"JAN",period:"P3",sun:25,mon:26,tue:27,wed:28,thu:29,fri:30,sat:31},
-  {wk:614,wkNum:14,qtr:"2Q26",mth:"FEB",period:"P4",sun:1,mon:2,tue:3,wed:4,thu:5,fri:6,sat:7},
-  {wk:615,wkNum:15,qtr:"2Q26",mth:"FEB",period:"P4",sun:8,mon:9,tue:10,wed:11,thu:12,fri:13,sat:14},
-  {wk:616,wkNum:16,qtr:"2Q26",mth:"FEB",period:"P4",sun:15,mon:16,tue:17,wed:18,thu:19,fri:20,sat:21},
-  {wk:617,wkNum:17,qtr:"2Q26",mth:"FEB",period:"P4",sun:22,mon:23,tue:24,wed:25,thu:26,fri:27,sat:28},
-  {wk:618,wkNum:18,qtr:"2Q26",mth:"MAR",period:"P5",sun:1,mon:2,tue:3,wed:4,thu:5,fri:6,sat:7},
-  {wk:619,wkNum:19,qtr:"2Q26",mth:"MAR",period:"P5",sun:8,mon:9,tue:10,wed:11,thu:12,fri:13,sat:14},
-  {wk:620,wkNum:20,qtr:"2Q26",mth:"MAR",period:"P5",sun:15,mon:16,tue:17,wed:18,thu:19,fri:20,sat:21},
-  {wk:621,wkNum:21,qtr:"2Q26",mth:"MAR",period:"P5",sun:22,mon:23,tue:24,wed:25,thu:26,fri:27,sat:28},
-  {wk:622,wkNum:22,qtr:"2Q26",mth:"APR",period:"P6",sun:29,mon:30,tue:31,wed:1,thu:2,fri:3,sat:4},
-  {wk:623,wkNum:23,qtr:"2Q26",mth:"APR",period:"P6",sun:5,mon:6,tue:7,wed:8,thu:9,fri:10,sat:11},
-  {wk:624,wkNum:24,qtr:"2Q26",mth:"APR",period:"P6",sun:12,mon:13,tue:14,wed:15,thu:16,fri:17,sat:18},
-  {wk:625,wkNum:25,qtr:"2Q26",mth:"APR",period:"P6",sun:19,mon:20,tue:21,wed:22,thu:23,fri:24,sat:25},
-  {wk:626,wkNum:26,qtr:"2Q26",mth:"APR",period:"P6",sun:26,mon:27,tue:28,wed:29,thu:30,fri:1,sat:2},
-  {wk:627,wkNum:27,qtr:"3Q26",mth:"MAY",period:"P7",sun:3,mon:4,tue:5,wed:6,thu:7,fri:8,sat:9},
-  {wk:628,wkNum:28,qtr:"3Q26",mth:"MAY",period:"P7",sun:10,mon:11,tue:12,wed:13,thu:14,fri:15,sat:16},
-  {wk:629,wkNum:29,qtr:"3Q26",mth:"MAY",period:"P7",sun:17,mon:18,tue:19,wed:20,thu:21,fri:22,sat:23},
-  {wk:630,wkNum:30,qtr:"3Q26",mth:"MAY",period:"P7",sun:24,mon:25,tue:26,wed:27,thu:28,fri:29,sat:30},
-  {wk:631,wkNum:31,qtr:"3Q26",mth:"JUN",period:"P8",sun:31,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6},
-  {wk:632,wkNum:32,qtr:"3Q26",mth:"JUN",period:"P8",sun:7,mon:8,tue:9,wed:10,thu:11,fri:12,sat:13},
-  {wk:633,wkNum:33,qtr:"3Q26",mth:"JUN",period:"P8",sun:14,mon:15,tue:16,wed:17,thu:18,fri:19,sat:20},
-  {wk:634,wkNum:34,qtr:"3Q26",mth:"JUN",period:"P8",sun:21,mon:22,tue:23,wed:24,thu:25,fri:26,sat:27},
-  {wk:635,wkNum:35,qtr:"3Q26",mth:"JUL",period:"P9",sun:28,mon:29,tue:30,wed:1,thu:2,fri:3,sat:4},
-  {wk:636,wkNum:36,qtr:"3Q26",mth:"JUL",period:"P9",sun:5,mon:6,tue:7,wed:8,thu:9,fri:10,sat:11},
-  {wk:637,wkNum:37,qtr:"3Q26",mth:"JUL",period:"P9",sun:12,mon:13,tue:14,wed:15,thu:16,fri:17,sat:18},
-  {wk:638,wkNum:38,qtr:"3Q26",mth:"JUL",period:"P9",sun:19,mon:20,tue:21,wed:22,thu:23,fri:24,sat:25},
-  {wk:639,wkNum:39,qtr:"3Q26",mth:"JUL",period:"P9",sun:26,mon:27,tue:28,wed:29,thu:30,fri:31,sat:1},
-  {wk:640,wkNum:40,qtr:"4Q26",mth:"AUG",period:"P10",sun:2,mon:3,tue:4,wed:5,thu:6,fri:7,sat:8},
-  {wk:641,wkNum:41,qtr:"4Q26",mth:"AUG",period:"P10",sun:9,mon:10,tue:11,wed:12,thu:13,fri:14,sat:15},
-  {wk:642,wkNum:42,qtr:"4Q26",mth:"AUG",period:"P10",sun:16,mon:17,tue:18,wed:19,thu:20,fri:21,sat:22},
-  {wk:643,wkNum:43,qtr:"4Q26",mth:"AUG",period:"P10",sun:23,mon:24,tue:25,wed:26,thu:27,fri:28,sat:29},
-  {wk:644,wkNum:44,qtr:"4Q26",mth:"SEP",period:"P11",sun:30,mon:31,tue:1,wed:2,thu:3,fri:4,sat:5},
-  {wk:645,wkNum:45,qtr:"4Q26",mth:"SEP",period:"P11",sun:6,mon:7,tue:8,wed:9,thu:10,fri:11,sat:12},
-  {wk:646,wkNum:46,qtr:"4Q26",mth:"SEP",period:"P11",sun:13,mon:14,tue:15,wed:16,thu:17,fri:18,sat:19},
-  {wk:647,wkNum:47,qtr:"4Q26",mth:"SEP",period:"P11",sun:20,mon:21,tue:22,wed:23,thu:24,fri:25,sat:26},
-  {wk:648,wkNum:48,qtr:"4Q26",mth:"OCT",period:"P12",sun:27,mon:28,tue:29,wed:30,thu:1,fri:2,sat:3},
-  {wk:649,wkNum:49,qtr:"4Q26",mth:"OCT",period:"P12",sun:4,mon:5,tue:6,wed:7,thu:8,fri:9,sat:10},
-  {wk:650,wkNum:50,qtr:"4Q26",mth:"OCT",period:"P12",sun:11,mon:12,tue:13,wed:14,thu:15,fri:16,sat:17},
-  {wk:651,wkNum:51,qtr:"4Q26",mth:"OCT",period:"P12",sun:18,mon:19,tue:20,wed:21,thu:22,fri:23,sat:24},
-  {wk:652,wkNum:52,qtr:"4Q26",mth:"OCT",period:"P12",sun:25,mon:26,tue:27,wed:28,thu:29,fri:30,sat:31},
-];
-
-function detectCurrentWeek(){
-  const now=new Date();
-  const myt=new Date(now.getTime()+(8*60*60*1000));
-  const todayY=myt.getUTCFullYear(),todayM=myt.getUTCMonth(),todayD=myt.getUTCDate();
-  const MI={JAN:0,FEB:1,MAR:2,APR:3,MAY:4,JUN:5,JUL:6,AUG:7,SEP:8,OCT:9,NOV:10,DEC:11};
-  function calYear(mth){return(mth==="NOV"||mth==="DEC")?2025:2026;}
-  for(const w of CALENDAR){
-    const baseYr=calYear(w.mth),baseMo=MI[w.mth];
-    let sunMo,sunYr,satMo,satYr;
-    if(w.sun>w.sat){sunMo=baseMo-1;sunYr=baseYr;if(sunMo<0){sunMo=11;sunYr--;}satMo=baseMo;satYr=baseYr;}
-    else{sunMo=baseMo;sunYr=baseYr;satMo=baseMo;satYr=baseYr;}
-    const afterSun=(todayY>sunYr)||(todayY===sunYr&&todayM>sunMo)||(todayY===sunYr&&todayM===sunMo&&todayD>=w.sun);
-    const beforeSat=(todayY<satYr)||(todayY===satYr&&todayM<satMo)||(todayY===satYr&&todayM===satMo&&todayD<=w.sat);
-    if(afterSun&&beforeSat)return w.wk;
-  }
-  return CALENDAR[CALENDAR.length-1].wk;
+// ── USER ──
+function selectUser(name) {
+  currentUser = name;
+  document.getElementById('front-page').style.display = 'none';
+  document.getElementById('loading-overlay').style.display = 'flex';
+  document.getElementById('app').style.display = 'block';
+  const av = document.getElementById('tb-avatar');
+  av.textContent = name==='Hafiza'?'🌸':'💍';
+  av.style.background = name==='Hafiza'?'var(--rose-light)':'var(--gold-light)';
+  document.getElementById('tb-name').textContent = name;
+  loadFromSheet();
 }
-const CURRENT_WK=detectCurrentWeek();
-const CURRENT_WKNUM=CURRENT_WK-600;
-function getWk(fwk){return CALENDAR.find(w=>w.wk===fwk);}
+function logout() {
+  currentUser=null; tasksData={};
+  document.getElementById('front-page').style.display='flex';
+  document.getElementById('app').style.display='none';
+}
 
-/* ══════════════════════════════════════════════════════
-   PM SEED DATA (first-time defaults)
-══════════════════════════════════════════════════════ */
-const PM_SCHED_SEEDS={
-  'mold-die':[
-    {id:101,name:"DD / TO CU # 2",group:"DD/TO CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:102,name:"DD / TO CU # 3",group:"DD/TO CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:103,name:"DD / TO CU # 4",group:"DD/TO CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:104,name:"DD / TO CU # 5",group:"DD/TO CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:105,name:"DD / TO CU # 6",group:"DD/TO CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:106,name:"DD / TO CU # 7",group:"DD/TO CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:107,name:"DD / TO CU # 8",group:"DD/TO CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:108,name:"DD / TO CU # 9",group:"DD/TO CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:601,name:"QFN CU # 1",group:"QFN CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:602,name:"QFN CU # 2",group:"QFN CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:603,name:"QFN CU # 3",group:"QFN CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:604,name:"QFN CU # 4",group:"QFN CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-    {id:605,name:"QFN CU # 5",group:"QFN CU",machine:"",pmIntervalWeeks:null,scheduledWeeks:[]},
-  ],
-};
+// ── RENDER ──
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function isDone(id){const d=tasksData[id]?.done;return d===true||d==='true'||d==='TRUE';}
+function nowStr(){return new Date().toLocaleString('ms-MY',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});}
 
-/* ══════════════════════════════════════════════════════
-   JSONP (EOL backend — same for Maintenance AND PM)
-══════════════════════════════════════════════════════ */
-function jsonp(params,ms){
-  return new Promise((res,rej)=>{
-    const cb='_cb'+(++cbN)+'_'+Date.now();
-    const tid=setTimeout(()=>{cleanup();rej(new Error('Request timed out.'));},ms||25000);
-    function cleanup(){clearTimeout(tid);delete window[cb];document.getElementById(cb)?.remove();}
-    window[cb]=d=>{cleanup();res(d);};
-    params.callback=cb;
-    const qs=Object.entries(params).map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(String(v??''))).join('&');
-    const s=document.createElement('script');s.id=cb;
-    s.src=APPURL+'?'+qs+'&_t='+Date.now();
-    s.onerror=()=>{cleanup();rej(new Error('Network error.'));};
+function renderTasks() {
+  const c = document.getElementById('tasks-container');
+  c.innerHTML = '';
+  PHASES.forEach(phase => {
+    const ph = document.createElement('div');
+    ph.innerHTML = `<div class="phase-header"><span class="phase-badge">${phase.badge}</span><span class="phase-title">${phase.label}</span><span class="phase-date">📅 ${phase.date}</span></div>`;
+    c.appendChild(ph);
+    phase.sections.forEach(sec => {
+      const sh = document.createElement('div');
+      sh.innerHTML = `<div class="section-header">${sec.label}</div>`;
+      c.appendChild(sh);
+      sec.tasks.forEach(task => buildCard(c, task));
+    });
+  });
+  updateProgress();
+}
+
+function buildCard(container, task) {
+  const td = tasksData[task.id] || {};
+  const done = isDone(task.id);
+  const files = td.files || [];
+  const card = document.createElement('div');
+  card.className = `task-card${done?' done':''}`;
+  card.id = `card-${task.id}`;
+
+  const fileChips = files.map(f=>`<a class="file-chip" href="${esc(f.url||DRIVE_URL)}" target="_blank">📄 ${esc(f.name)}</a>`).join('');
+  const updatedTxt = td.updatedBy ? `✏️ ${esc(td.updatedBy)} · ${esc(td.updatedAt||'')}` : '';
+  const importantStyle = task.important ? ' style="font-weight:600;color:var(--rose-dark)"' : '';
+
+  card.innerHTML = `
+    <div class="task-main">
+      <div class="task-checkbox" id="chk-${task.id}" onclick="toggleDone('${task.id}')">
+        <svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4L4 7.5L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="task-text"${importantStyle}>${esc(task.text)}</span>
+      <button class="task-expand-btn" onclick="toggleExpand('${task.id}')">+</button>
+    </div>
+    <div class="task-detail" id="detail-${task.id}">
+      <div class="detail-row">
+        <div class="detail-label">📝 Nota / Komen</div>
+        <textarea class="detail-comment" id="comment-${task.id}" placeholder="Tambah nota di sini...">${esc(td.comment||'')}</textarea>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">📎 Fail Lampiran &nbsp;<a href="${DRIVE_URL}" target="_blank" style="color:var(--rose);font-size:0.7rem">Buka Google Drive ↗</a></div>
+        <button class="file-upload-btn" onclick="document.getElementById('file-${task.id}').click()">📂 Pilih fail untuk direkod</button>
+        <input type="file" id="file-${task.id}" multiple style="display:none" onchange="handleFiles('${task.id}')">
+        <div class="attached-files" id="files-${task.id}">${fileChips}</div>
+      </div>
+      <div class="detail-footer">
+        <span class="last-updated" id="updated-${task.id}">${updatedTxt}</span>
+        <button class="btn btn-primary btn-sm" onclick="saveTask('${task.id}')">💾 Simpan</button>
+      </div>
+    </div>`;
+  container.appendChild(card);
+}
+
+function toggleExpand(id) {
+  const det = document.getElementById(`detail-${id}`);
+  const btn = det.previousElementSibling.querySelector('.task-expand-btn');
+  det.classList.toggle('open');
+  btn.textContent = det.classList.contains('open') ? '−' : '+';
+}
+
+function toggleDone(id) {
+  if (!tasksData[id]) tasksData[id] = {};
+  tasksData[id].done = !isDone(id);
+  tasksData[id].updatedBy = currentUser;
+  tasksData[id].updatedAt = nowStr();
+  // grab comment if panel is open
+  const cel = document.getElementById(`comment-${id}`);
+  if (cel) tasksData[id].comment = cel.value;
+  refreshCardDone(id);
+  updateProgress();
+  saveToSheet(id);
+}
+
+function refreshCardDone(id) {
+  const card = document.getElementById(`card-${id}`);
+  if (!card) return;
+  card.classList.toggle('done', isDone(id));
+}
+
+function saveTask(id) {
+  if (!tasksData[id]) tasksData[id] = {};
+  const cel = document.getElementById(`comment-${id}`);
+  if (cel) tasksData[id].comment = cel.value;
+  tasksData[id].updatedBy = currentUser;
+  tasksData[id].updatedAt = nowStr();
+  const uEl = document.getElementById(`updated-${id}`);
+  if (uEl) uEl.textContent = `✏️ ${currentUser} · ${tasksData[id].updatedAt}`;
+  saveToSheet(id);
+}
+
+function handleFiles(id) {
+  const input = document.getElementById(`file-${id}`);
+  if (!input.files.length) return;
+  if (!tasksData[id]) tasksData[id] = {};
+  if (!tasksData[id].files) tasksData[id].files = [];
+  Array.from(input.files).forEach(f => {
+    tasksData[id].files.push({name:f.name, url:DRIVE_URL, by:currentUser});
+    const chip = document.createElement('a');
+    chip.className = 'file-chip';
+    chip.href = DRIVE_URL; chip.target = '_blank';
+    chip.textContent = '📄 ' + f.name;
+    document.getElementById(`files-${id}`).appendChild(chip);
+  });
+  tasksData[id].updatedBy = currentUser;
+  tasksData[id].updatedAt = nowStr();
+  saveToSheet(id);
+  window.open(DRIVE_URL, '_blank');
+  toast('📤 Sila upload fail ke Google Drive yang dibuka!', 'ok');
+}
+
+function updateProgress() {
+  const all = PHASES.flatMap(p=>p.sections.flatMap(s=>s.tasks.map(t=>t.id)));
+  const done = all.filter(isDone).length;
+  const pct = Math.round(done/all.length*100);
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-pct').textContent = `${done}/${all.length} (${pct}%)`;
+}
+
+// ══════════════════════════════════════════════
+//  JSONP — avoids CORS entirely
+//  Apps Script must return: callback({...})
+// ══════════════════════════════════════════════
+function jsonp(params) {
+  return new Promise((resolve, reject) => {
+    const cb = 'jcb_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timer = setTimeout(() => { cleanup(); reject(new Error('Timeout — semak URL Apps Script')); }, 20000);
+    function cleanup() { clearTimeout(timer); delete window[cb]; const s=document.getElementById(cb); if(s)s.remove(); }
+    window[cb] = data => { cleanup(); resolve(data); };
+    const qs = Object.entries({...params, callback:cb}).map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&');
+    const s = document.createElement('script');
+    s.id = cb; s.src = SCRIPT_URL + '?' + qs;
+    s.onerror = () => { cleanup(); reject(new Error('Gagal sambung ke Apps Script')); };
     document.head.appendChild(s);
   });
 }
 
-/* ══════════════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════════════ */
-function init(){
-  try{
-    const u=localStorage.getItem(STORAGE_KEY);
-    if(u&&u.includes('script.google.com')&&u.includes('/exec')){APPURL=u;document.getElementById('urlInput').value=u;showScreen('loginScreen');}
-    else{localStorage.removeItem(STORAGE_KEY);showScreen('setupScreen');}
-  }catch(e){showScreen('setupScreen');}
+function notConfigured() {
+  return SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE' || !SCRIPT_URL;
 }
 
-function showScreen(id){
-  ['setupScreen','loginScreen','moduleScreen','app'].forEach(s=>{
-    const el=document.getElementById(s);
-    if(el){el.style.display='none';el.classList&&el.classList.remove('active');}
-  });
-  const target=document.getElementById(id);
-  if(!target)return;
-  if(id==='app'){target.style.display='flex';}
-  else{target.style.display='flex';target.classList&&target.classList.add('active');}
-}
-
-/* ══════════════════════════════════════════════════════
-   SETUP
-══════════════════════════════════════════════════════ */
-async function doConnect(){
-  const u=document.getElementById('urlInput').value.replace(/\s+/g,'').trim();
-  document.getElementById('urlInput').value=u;
-  const eEl=document.getElementById('setupErr'),oEl=document.getElementById('setupOk');
-  eEl.style.display='none';oEl.style.display='none';
-  if(!u){eEl.textContent='⚠️ Please paste your Apps Script URL.';eEl.style.display='block';return;}
-  if(!u.includes('script.google.com')){eEl.textContent='⚠️ URL must be from script.google.com';eEl.style.display='block';return;}
-  if(!u.includes('/exec')){eEl.textContent='⚠️ URL must end with /exec';eEl.style.display='block';return;}
-  const btn=document.getElementById('connectBtn');btn.disabled=true;btn.textContent='⏳ Connecting...';
-  APPURL=u;
-  try{
-    const r=await jsonp({action:'ping'},25000);
-    if(r&&r.status==='ok'){
-      localStorage.setItem(STORAGE_KEY,u);oEl.style.display='block';
-      btn.textContent='✅ Connected!';
-      setTimeout(()=>{btn.disabled=false;btn.textContent='🔗 Connect to Google Sheets';showScreen('loginScreen');},1200);
-    }else throw new Error('Server error.');
-  }catch(e){
-    APPURL='';eEl.textContent='❌ '+e.message;eEl.style.display='block';
-    btn.disabled=false;btn.textContent='🔗 Connect to Google Sheets';
-  }
-}
-function goSetup(){localStorage.removeItem(STORAGE_KEY);APPURL='';showScreen('setupScreen');}
-
-/* ══════════════════════════════════════════════════════
-   LOGIN
-══════════════════════════════════════════════════════ */
-function selRole(r){
-  sRole=r;
-  document.getElementById('btnUser').classList.toggle('active',r==='user');
-  document.getElementById('btnAdmin').classList.toggle('active',r==='admin');
-  document.getElementById('adminFields').style.display=r==='admin'?'block':'none';
-  document.getElementById('loginErr').style.display='none';
-}
-
-async function doLogin(){
-  if(!sRole){toast('Please select User or Admin.');return;}
-  load('Loading data...');
-  try{
-    const r=await jsonp({action:'getAll'});
-    pics=r.pics||[];types=r.types||[];departments=r.departments||[];recs=r.records||[];
-    if(r.adminUser)ADMIN_USER=r.adminUser;
-    if(r.adminPass)ADMIN_PASS=r.adminPass;
-    unload();
-    if(sRole==='admin'){
-      const u=document.getElementById('aUser').value.trim();
-      const p=document.getElementById('aPass').value;
-      if(u!==ADMIN_USER||p!==ADMIN_PASS){
-        document.getElementById('loginErr').style.display='block';
-        const card=document.getElementById('loginScreen').querySelector('.card');
-        if(card){card.style.animation='shake .4s ease';setTimeout(()=>card.style.animation='',500);}
-        return;
-      }
-      role='admin';
-    }else role='user';
-    document.getElementById('modRoleBadge').textContent=role==='admin'?'🛡️ Admin':'👷 User';
-    document.getElementById('modRoleBadge').className='badge'+(role==='admin'?' adm':'');
-    showScreen('moduleScreen');
-    buildSchedTypeGrid();
-  }catch(e){unload();sy('off');toast('❌ '+e.message);}
-}
-
-function doLogout(){
-  role=null;sRole=null;recs=[];pics=[];types=[];departments=[];photoQueue=[];
-  pmMolds=[];pmHistory=[];pmUsers=[];curDept=null;currentModule=null;currentSchedType=null;
-  ['aUser','aPass'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('loginErr').style.display='none';
-  document.getElementById('adminFields').style.display='none';
-  ['btnUser','btnAdmin'].forEach(id=>document.getElementById(id).classList.remove('active'));
-  sRole=null;
-  showScreen('loginScreen');
-}
-
-/* ══════════════════════════════════════════════════════
-   MODULE SELECTION
-══════════════════════════════════════════════════════ */
-let pendingDeptIdx=null,pendingSchedType=null;
-
-function selectModule(mod){
-  currentModule=null;pendingDeptIdx=null;pendingSchedType=null;
-  ['modMaint','modSched'].forEach(id=>document.getElementById(id).classList.remove('active','active-pm'));
-  document.getElementById('deptPickWrap').style.display='none';
-  document.getElementById('schedPickWrap').style.display='none';
-  document.getElementById('deptPickErr').style.display='none';
-
-  if(mod==='maintenance'){
-    document.getElementById('modMaint').classList.add('active');
-    buildDeptGrid();
-    document.getElementById('deptPickWrap').style.display='block';
-  }else{
-    document.getElementById('modSched').classList.add('active-pm');
-    document.getElementById('schedPickWrap').style.display='block';
+async function saveToSheet(taskId) {
+  if (notConfigured()) { toast('⚠️ SCRIPT_URL belum diisi dalam kod HTML','err'); return; }
+  setSyncing();
+  const td = tasksData[taskId] || {};
+  try {
+    const r = await jsonp({
+      action:'save', taskId,
+      done: isDone(taskId) ? 'true' : 'false',
+      comment: td.comment||'',
+      files: JSON.stringify(td.files||[]),
+      updatedBy: td.updatedBy||currentUser,
+      updatedAt: td.updatedAt||nowStr(),
+    });
+    if (r && r.success) { setSynced(); toast('✓ Disimpan!','ok'); }
+    else throw new Error(r?.error||'Ralat tidak diketahui');
+  } catch(e) {
+    console.error(e);
+    setSyncError();
+    toast('⚠ ' + e.message, 'err');
   }
 }
 
-function buildDeptGrid(){
-  const grid=document.getElementById('deptPickGrid');
-  if(!departments.length){grid.innerHTML='<p style="color:var(--tx2);font-size:13px;">No departments configured.</p>';return;}
-  grid.innerHTML=departments.map((d,i)=>`
-    <div class="sel-btn" id="dpbtn-${i}" onclick="pickDeptIdx(${i})">
-      <span class="si">${deptIcon(d.name)}</span>${esc(d.name)}
-    </div>`).join('');
-}
-
-function pickDeptIdx(i){
-  pendingDeptIdx=i;
-  document.querySelectorAll('[id^="dpbtn-"]').forEach(b=>b.classList.remove('active'));
-  document.getElementById('deptPickErr').style.display='none';
-  const btn=document.getElementById('dpbtn-'+i);if(btn)btn.classList.add('active');
-}
-
-function confirmDeptPick(){
-  if(pendingDeptIdx===null||pendingDeptIdx===undefined){document.getElementById('deptPickErr').style.display='block';return;}
-  curDept=departments[pendingDeptIdx]||null;
-  if(!curDept){toast('Department not found.');return;}
-  currentModule='maintenance';
-  enterApp();
-}
-
-function buildSchedTypeGrid(){
-  const grid=document.getElementById('schedTypeGrid');
-  grid.innerHTML=PM_SCHED_TYPES.map(t=>`
-    <div class="sel-btn" id="stbtn-${t.id}" onclick="pickSchedType('${t.id}')">
-      <span class="si">${t.icon}</span>${t.label}
-      <div class="sd">${t.desc}</div>
-    </div>`).join('');
-}
-
-function pickSchedType(id){
-  pendingSchedType=PM_SCHED_TYPES.find(t=>t.id===id)||null;
-  document.querySelectorAll('[id^="stbtn-"]').forEach(b=>b.classList.remove('active','active-pm'));
-  const btn=document.getElementById('stbtn-'+id);if(btn)btn.classList.add('active-pm');
-}
-
-async function confirmSchedPick(){
-  if(!pendingSchedType){document.getElementById('schedPickErr').style.display='block';return;}
-  currentSchedType=pendingSchedType;
-  currentModule='scheduler';
-  load('Loading PM data from Google Sheets...');
-  await pmLoadFromSheets(currentSchedType.id);
-  unload();
-  enterApp();
-}
-
-/* ══════════════════════════════════════════════════════
-   ENTER APP
-══════════════════════════════════════════════════════ */
-function enterApp(){
-  showScreen('app');
-  buildAppUI();
-  if(currentModule==='maintenance'){
-    renderMaintenanceTabs();
-    goSec('dash');
-    renderDash();
-  }else{
-    renderSchedulerTabs();
-    pmShowTab('pm-dashboard');
+async function loadFromSheet() {
+  if (notConfigured()) {
+    document.getElementById('loading-overlay').style.display='none';
+    renderTasks();
+    toast('⚠️ SCRIPT_URL belum diisi — data tidak disync','err');
+    return;
+  }
+  document.getElementById('loading-text').textContent = 'Memuatkan data dari Google Sheets...';
+  try {
+    const r = await jsonp({action:'load'});
+    if (r && r.tasks) tasksData = r.tasks;
+    setSynced();
+  } catch(e) {
+    console.error(e);
+    setSyncError();
+    toast('⚠ ' + e.message,'err');
+  } finally {
+    document.getElementById('loading-overlay').style.display='none';
+    renderTasks();
   }
 }
 
-function buildAppUI(){
-  const topbar=document.getElementById('appTopbar');
-  const modeBadge=document.getElementById('modeBadge');
-  const deptBadge=document.getElementById('deptBadge');
-  const roleBadge=document.getElementById('roleBadge');
-  const pmNav=document.getElementById('pm-bottom-nav');
-  const syncBar=document.getElementById('syncBar');
-
-  roleBadge.textContent=role==='admin'?'🛡️ Admin':'👷 User';
-  roleBadge.className='badge'+(role==='admin'?' adm':'');
-
-  if(currentModule==='maintenance'){
-    topbar.className='topbar';
-    document.getElementById('topIcon').textContent='⚙️';
-    document.getElementById('topTitle').textContent='EOL Maintenance';
-    document.getElementById('topTitle').style.color='var(--acc)';
-    modeBadge.style.display='';modeBadge.className='badge';modeBadge.textContent='🔧 Maintenance';
-    deptBadge.style.display='';deptBadge.textContent=curDept?deptIcon(curDept.name)+' '+curDept.name:'';
-    syncBar.style.display='';
-    pmNav.style.display='none';
-    sy('ok');
-  }else{
-    topbar.className='topbar topbar-pm';
-    document.getElementById('topIcon').textContent=currentSchedType?.icon||'📅';
-    document.getElementById('topTitle').textContent='PM Scheduler';
-    document.getElementById('topTitle').style.color='var(--pm-acc)';
-    modeBadge.style.display='';modeBadge.className='badge badge-pm';modeBadge.textContent='📅 '+currentSchedType?.label;
-    deptBadge.style.display='none';
-    // Show sync bar for PM too — now it shows Sheets status
-    syncBar.style.display='';
-    sy('ok');
-  }
+async function syncAll() {
+  document.getElementById('loading-overlay').style.display='flex';
+  document.getElementById('loading-text').textContent='Menyegerakkan...';
+  await loadFromSheet();
 }
 
-function backToModule(){
-  currentModule=null;curDept=null;currentSchedType=null;
-  pendingDeptIdx=null;pendingSchedType=null;
-  document.getElementById('deptPickWrap').style.display='none';
-  document.getElementById('schedPickWrap').style.display='none';
-  ['modMaint','modSched'].forEach(id=>document.getElementById(id).classList.remove('active','active-pm'));
-  showScreen('moduleScreen');
-}
+function setSyncing(){document.getElementById('sync-dot').className='sync-dot syncing';document.getElementById('sync-label').textContent='Menyimpan...';}
+function setSynced(){document.getElementById('sync-dot').className='sync-dot synced';document.getElementById('sync-label').textContent='Tersimpan';}
+function setSyncError(){document.getElementById('sync-dot').className='sync-dot error';document.getElementById('sync-label').textContent='Ralat';}
 
-/* ══════════════════════════════════════════════════════
-   MAINTENANCE TABS
-══════════════════════════════════════════════════════ */
-function renderMaintenanceTabs(){
-  document.getElementById('pm-bottom-nav').style.display='none';
-  const tabs=[
-    {id:'dash',label:'📊 Dashboard'},
-    {id:'new',label:'➕ New PM'},
-    {id:'recs',label:'📋 Records'},
-    {id:'report',label:'📄 Report'},
-  ];
-  if(role==='admin')tabs.push({id:'mgmt',label:'⚙️ Manage'});
-  document.getElementById('appTabs').innerHTML=tabs.map(t=>`
-    <div class="tab" id="mtab-${t.id}" onclick="goSec('${t.id}')">${t.label}</div>`).join('');
+let toastT;
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show' + (type?' '+type:'');
+  clearTimeout(toastT);
+  toastT = setTimeout(()=>{ el.className=''; }, 3500);
 }
-
-function goSec(id){
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active','active-pm'));
-  const sec=document.getElementById('sec-'+id);if(sec)sec.classList.add('active');
-  const tab=document.getElementById('mtab-'+id);if(tab)tab.classList.add('active');
-  if(id==='dash')renderDash();
-  if(id==='new'){fillNewForm();resetPhotos();}
-  if(id==='recs'){fillFDDs();applyF();}
-  if(id==='report'){fillReportFilters();renderReport();}
-  if(id==='mgmt')renderMgmt();
-}
-
-/* ══════════════════════════════════════════════════════
-   SCHEDULER TABS
-══════════════════════════════════════════════════════ */
-function renderSchedulerTabs(){
-  document.getElementById('pm-bottom-nav').style.display='flex';
-  const tabs=[
-    {id:'pm-dashboard',label:'📊 Dashboard'},
-    {id:'pm-molds',label:'🔧 All Molds'},
-    {id:'pm-calendar',label:'📅 Calendar'},
-    {id:'pm-history',label:'📋 History'},
-  ];
-  if(role==='admin')tabs.push({id:'pm-users',label:'👤 Users'});
-  document.getElementById('appTabs').innerHTML=tabs.map(t=>`
-    <div class="tab" id="pmtab-${t.id}" onclick="pmShowTab('${t.id}')">${t.label}</div>`).join('');
-  const ubtn=document.getElementById('pmbtab-users');
-  if(ubtn)ubtn.style.display=role==='admin'?'flex':'none';
-}
-
-function pmShowTab(id){
-  pmActiveSec=id;
-  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active','active-pm'));
-  document.querySelectorAll('.pm-tab-btn').forEach(b=>b.classList.remove('active'));
-  const sec=document.getElementById('sec-'+id);if(sec)sec.classList.add('active');
-  const tab=document.getElementById('pmtab-'+id);if(tab)tab.classList.add('active-pm');
-  const btab=document.getElementById('pmbtab-'+id.replace('pm-',''));if(btab)btab.classList.add('active');
-  populatePMWeekSelects();
-  if(id==='pm-dashboard')renderPMDashboard();
-  if(id==='pm-molds')renderPMMolds();
-  if(id==='pm-calendar')renderPMCalendar();
-  if(id==='pm-history')renderPMHistory();
-  if(id==='pm-users')renderPMUsers();
-}
-
-/* ══════════════════════════════════════════════════════
-   SYNC BAR — shared by both modules
-══════════════════════════════════════════════════════ */
-function sy(s,msg){
-  const d=document.getElementById('sDot'),t=document.getElementById('sTxt');
-  if(!d||!t)return;
-  d.className='dot'+(s==='sync'?' spin':s==='off'?' off':'');
-  if(msg){t.textContent=msg;return;}
-  const mod=currentModule==='scheduler'?'Google Sheets (PM)':'Google Sheets';
-  t.textContent={sync:'Syncing...',off:'⚠️ Error — tap Refresh',ok:'Connected · '+mod}[s]||'';
-}
-
-async function refreshAll(){
-  sy('sync');
-  try{
-    const r=await jsonp({action:'getAll'});
-    pics=r.pics||[];types=r.types||[];departments=r.departments||[];recs=r.records||[];
-    if(r.adminUser)ADMIN_USER=r.adminUser;if(r.adminPass)ADMIN_PASS=r.adminPass;
-    if(curDept)curDept=departments.find(d=>d.name===curDept.name)||curDept;
-    sy('ok');renderDash();
-    if(document.getElementById('sec-mgmt')?.classList.contains('active'))renderMgmt();
-  }catch(e){sy('off');toast('⚠️ '+e.message);}
-}
-async function loadRecs(refresh){
-  if(refresh){sy('sync');try{const r=await jsonp({action:'getRecords'});recs=r.records||[];sy('ok');}catch(e){sy('off');}}
-  fillFDDs();applyF();
-}
-
-/* ══════════════════════════════════════════════════════
-   MAINTENANCE: DASHBOARD
-══════════════════════════════════════════════════════ */
-function renderDash(){
-  const container=document.getElementById('dashContent');
-  if(!departments.length){container.innerHTML='<div class="empty"><div class="ei">🏭</div><h4>No departments yet</h4></div>';return;}
-  const depts=role==='user'&&curDept?[curDept]:departments;
-  container.innerHTML=depts.map(d=>{
-    const dr=recs.filter(r=>r.dept===d.name);
-    const done=dr.filter(r=>r.status==='completed').length;
-    const wip=dr.length-done;
-    const af=dashActiveFilter[d.name]||'all';
-    const dkey='dk_'+d.name.replace(/[^a-zA-Z0-9]/g,'_');
-    return`<div class="dash-dept-card">
-      <div class="ddc-hdr">
-        <div class="ddc-name">${deptIcon(d.name)} ${esc(d.name)}</div>
-        <span style="font-size:12px;color:var(--tx2);">${dr.length} record${dr.length!==1?'s':''}</span>
-      </div>
-      <div class="stats">
-        <div class="stat${af==='all'?' af':''}" onclick="dashF('${esc(d.name)}','all')"><div class="sn" style="color:var(--acc)">${dr.length}</div><div class="sl">Total</div></div>
-        <div class="stat${af==='done'?' af':''}" onclick="dashF('${esc(d.name)}','done')"><div class="sn" style="color:#3fb950">${done}</div><div class="sl">Done</div></div>
-        <div class="stat${af==='wip'?' af':''}" onclick="dashF('${esc(d.name)}','wip')"><div class="sn" style="color:var(--acc)">${wip}</div><div class="sl">WIP</div></div>
-      </div>
-      <div onclick="toggleDashRecent('${dkey}')" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:8px 0 4px;margin-top:8px;border-top:1px solid var(--bor);user-select:none;">
-        <span style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--tx2);">🕐 Recent</span>
-        <span id="dash-arrow-${dkey}" style="color:var(--tx2);font-size:12px;">▶</span>
-      </div>
-      <div id="dash-recent-${dkey}" style="display:none;"></div>
-    </div>`;
-  }).join('');
-  depts.forEach(d=>renderDashRecent(d.name));
-}
-function dashF(n,f){dashActiveFilter[n]=f;renderDash();}
-function toggleDashRecent(dkey){
-  dashOpenState[dkey]=!dashOpenState[dkey];
-  const el=document.getElementById('dash-recent-'+dkey),arrow=document.getElementById('dash-arrow-'+dkey);
-  if(el)el.style.display=dashOpenState[dkey]?'block':'none';
-  if(arrow)arrow.textContent=dashOpenState[dkey]?'▼':'▶';
-}
-function renderDashRecent(deptName){
-  const dkey='dk_'+deptName.replace(/[^a-zA-Z0-9]/g,'_');
-  const el=document.getElementById('dash-recent-'+dkey);if(!el)return;
-  const af=dashActiveFilter[deptName]||'all';
-  let rs=recs.filter(r=>r.dept===deptName);
-  if(af==='done')rs=rs.filter(r=>r.status==='completed');
-  else if(af==='wip')rs=rs.filter(r=>r.status!=='completed');
-  const show=rs.slice(0,5);
-  if(!show.length){el.innerHTML='<p style="font-size:12px;color:var(--tx2);padding:4px 0;">No records.</p>';return;}
-  el.innerHTML=show.map(r=>rCard(r,true)).join('');
-}
-function toggleManage(key){
-  manageOpenState[key]=!manageOpenState[key];
-  const body=document.getElementById('msec-'+key),arrow=document.getElementById('marr-'+key);
-  if(body)body.style.display=manageOpenState[key]?'block':'none';
-  if(arrow)arrow.textContent=manageOpenState[key]?'▼':'▶';
-}
-
-/* ══════════════════════════════════════════════════════
-   MAINTENANCE: NEW PM FORM
-══════════════════════════════════════════════════════ */
-function fillNewForm(){
-  const dept=role==='user'?curDept:(curDept||departments[0]);
-  document.getElementById('formDeptLabel').textContent=dept?deptIcon(dept.name)+' '+dept.name:'—';
-  const eEl=document.getElementById('fEquip');
-  eEl.innerHTML='<option value="">— Select equipment —</option>'+(dept?dept.equipment.map(e=>`<option value="${esc(eqId(e))}">${esc(eqId(e))}</option>`).join(''):'');
-  eEl.onchange=()=>onEquipChange(dept);
-  mkSelPIC('fPIC','— Select PIC —',pics);
-  mkSel('fType','— Select type —',types);
-  renderChips('partsGrid',dept?dept.parts:[],[]);
-  showHalfSel(!!(dept&&dept.name.toLowerCase()==='mold die'));
-  if(!deptHasPresses(dept))showPressSel([]);
-}
-
-function eqId(e){return typeof e==='string'?e:e.id||'';}
-function eqPresses(e){return typeof e==='object'&&e.presses?e.presses:[];}
-function deptHasPresses(dept){
-  if(!dept)return false;
-  const n=dept.name.toLowerCase();
-  return !!(dept.hasPresses||n==='transfer block'||n==='mold machine');
-}
-
-function mkSel(id,ph,arr){const el=document.getElementById(id);if(!el)return;el.innerHTML=`<option value="">${ph}</option>`+arr.map(v=>`<option>${esc(v)}</option>`).join('');}
-function mkSelPIC(id,ph,arr){const el=document.getElementById(id);if(!el)return;el.innerHTML='<option value="">'+ph+'</option>'+arr.map(p=>{const n=typeof p==='string'?p:(p.name||'');return`<option value="${esc(n)}">${esc(n)}</option>`;}).join('');}
-
-function renderChips(cid,arr,selected){
-  const g=document.getElementById(cid);if(!g)return;
-  if(!arr||!arr.length){g.innerHTML='<p style="color:var(--tx2);font-size:13px;">No parts/tools yet.</p>';return;}
-  g.innerHTML=arr.map(p=>{const sel=selected&&selected.includes(p);return`<div class="chip${sel?' sel':''}" data-part="${esc(p)}" onclick="this.classList.toggle('sel')"><div class="ck">✓</div>${esc(p)}</div>`;}).join('');
-}
-function getSelChips(cid){return[...document.querySelectorAll('#'+cid+' .chip.sel')].map(c=>c.dataset.part);}
-
-function onEquipChange(dept){
-  const val=document.getElementById('fEquip').value;
-  if(!dept||!deptHasPresses(dept)||!val){showPressSel([]);return;}
-  const equip=dept.equipment.find(e=>eqId(e)===val);
-  const presses=equip?eqPresses(equip):[];
-  showPressSel(presses.length?presses:['Press 1','Press 2','Press 3','Press 4']);
-}
-function showPressSel(presses){
-  const wrap=document.getElementById('pressWrap'),grid=document.getElementById('pressGrid');
-  if(!wrap||!grid)return;
-  if(!presses||!presses.length){wrap.style.display='none';selectedPresses=[];return;}
-  wrap.style.display='';
-  grid.innerHTML=presses.map(p=>`<div class="press-btn" data-press="${esc(p)}" onclick="togglePress(this)">${esc(p)}</div>`).join('');
-  selectedPresses=[];
-}
-function togglePress(btn){
-  const sel=[...document.querySelectorAll('#pressGrid .press-btn.sel')];
-  if(btn.classList.contains('sel')){btn.classList.remove('sel');selectedPresses=sel.filter(b=>b!==btn).map(b=>b.dataset.press);}
-  else if(sel.length>=4){toast('⚠️ Max 4 presses.');return;}
-  else{btn.classList.add('sel');selectedPresses=[...sel,btn].map(b=>b.dataset.press);}
-}
-function showHalfSel(show){
-  const wrap=document.getElementById('halfWrap');if(wrap)wrap.style.display=show?'':'none';
-  if(!show){selectedHalf=null;['halfTop','halfBottom','halfBoth'].forEach(id=>document.getElementById(id)?.classList.remove('active'));}
-}
-function pickHalf(h){
-  selectedHalf=h;
-  ['halfTop','halfBottom','halfBoth'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
-  ({top:'halfTop',bottom:'halfBottom',both:'halfBoth'})[h]&&document.getElementById(({top:'halfTop',bottom:'halfBottom',both:'halfBoth'})[h])?.classList.add('active');
-}
-function showEditHalfSel(show,current){
-  const wrap=document.getElementById('eHalfWrap');if(wrap)wrap.style.display=show?'':'none';
-  if(show&&current){editSelectedHalf=current;['eHalfTop','eHalfBottom','eHalfBoth'].forEach(id=>document.getElementById(id)?.classList.remove('active'));const m={top:'eHalfTop',bottom:'eHalfBottom',both:'eHalfBoth'};document.getElementById(m[current])?.classList.add('active');}
-  else if(!show)editSelectedHalf=null;
-}
-function pickEditHalf(h){editSelectedHalf=h;['eHalfTop','eHalfBottom','eHalfBoth'].forEach(id=>document.getElementById(id)?.classList.remove('active'));const m={top:'eHalfTop',bottom:'eHalfBottom',both:'eHalfBoth'};document.getElementById(m[h])?.classList.add('active');}
-function showEditPressSel(presses,selectedArr){
-  const wrap=document.getElementById('ePressWrap'),grid=document.getElementById('ePressGrid');
-  if(!wrap||!grid)return;
-  if(!presses||!presses.length){wrap.style.display='none';editSelectedPresses=[];return;}
-  wrap.style.display='';
-  grid.innerHTML=presses.map(p=>`<div class="press-btn${selectedArr&&selectedArr.includes(p)?' sel':''}" data-press="${esc(p)}" onclick="toggleEditPress(this)">${esc(p)}</div>`).join('');
-  editSelectedPresses=selectedArr||[];
-}
-function toggleEditPress(btn){
-  const sel=[...document.querySelectorAll('#ePressGrid .press-btn.sel')];
-  if(btn.classList.contains('sel')){btn.classList.remove('sel');editSelectedPresses=sel.filter(b=>b!==btn).map(b=>b.dataset.press);}
-  else if(sel.length>=4){toast('⚠️ Max 4 presses.');return;}
-  else{btn.classList.add('sel');editSelectedPresses=[...sel,btn].map(b=>b.dataset.press);}
-}
-
-/* ══════════════════════════════════════════════════════
-   PHOTOS
-══════════════════════════════════════════════════════ */
-function resetPhotos(){photoQueue=[];document.getElementById('photoGrid').innerHTML='';document.getElementById('upinfo').textContent='';document.getElementById('photoInput').value='';}
-function onPhotoPick(e){
-  const remaining=MAX_PHOTOS-photoQueue.filter(p=>p&&p.state!=='removed').length;
-  const files=[...e.target.files].slice(0,remaining);
-  if(files.length<[...e.target.files].length)toast(`⚠️ Max ${MAX_PHOTOS} photos.`);
-  files.forEach(file=>{
-    if(!file.type.startsWith('image/')){toast('⚠️ Images only.');return;}
-    const idx=photoQueue.length;const entry={idx,file,dataUrl:null,state:'reading'};photoQueue.push(entry);
-    const div=document.createElement('div');div.className='pi';div.id='pi-'+idx;
-    div.innerHTML='<div class="ov"><div class="pi-sp"></div></div>';
-    document.getElementById('photoGrid').appendChild(div);
-    const reader=new FileReader();
-    reader.onload=ev=>{entry.dataUrl=ev.target.result;entry.state='pending';div.innerHTML=`<img src="${ev.target.result}"><button class="pi-rm" onclick="removePhoto(${idx})">✕</button>`;};
-    reader.readAsDataURL(file);
-  });
-  e.target.value='';
-}
-function removePhoto(idx){const e=photoQueue.find(p=>p&&p.idx===idx);if(e)e.state='removed';document.getElementById('pi-'+idx)?.remove();}
-function compressImage(dataUrl,maxPx,q){return new Promise(res=>{const img=new Image();img.onload=()=>{let w=img.width,h=img.height;if(w>maxPx||h>maxPx){if(w>h){h=Math.round(h*maxPx/w);w=maxPx;}else{w=Math.round(w*maxPx/h);h=maxPx;}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res(c.toDataURL('image/jpeg',q));};img.src=dataUrl;});}
-async function uploadPhotoImgBB(entry){
-  const compressed=await compressImage(entry.dataUrl,IMG_MAX_PX,IMG_Q);
-  const form=new FormData();form.append('key',IMGBB_KEY);form.append('image',compressed.split(',')[1]);form.append('name','PM_'+Date.now()+'_'+entry.idx);
-  const resp=await fetch('https://api.imgbb.com/1/upload',{method:'POST',body:form});
-  if(!resp.ok)throw new Error('ImgBB HTTP '+resp.status);
-  const data=await resp.json();if(!data.success)throw new Error('ImgBB: '+(data.error?.message||'failed'));
-  return{thumbUrl:data.data.thumb?.url||data.data.display_url,viewUrl:data.data.url_viewer||data.data.url,deleteUrl:data.data.delete_url||''};
-}
-async function uploadAllPhotos(){
-  const pending=photoQueue.filter(p=>p&&p.state==='pending');if(!pending.length)return[];
-  document.getElementById('upinfo').textContent='📤 Uploading photos...';
-  const all=await Promise.all(pending.map(async entry=>{try{const r=await uploadPhotoImgBB(entry);entry.state='done';return{thumbUrl:r.thumbUrl,viewUrl:r.viewUrl,deleteUrl:r.deleteUrl||''};}catch(e){entry.state='fail';toast('⚠️ Photo failed: '+e.message);return null;}}));
-  const ok=all.filter(Boolean);document.getElementById('upinfo').textContent=ok.length?`✅ ${ok.length} photo${ok.length>1?'s':''} uploaded!`:'';
-  return ok;
-}
-
-/* ══════════════════════════════════════════════════════
-   SUBMIT PM (Maintenance)
-══════════════════════════════════════════════════════ */
-async function submitPM(){
-  const dept=role==='user'?curDept:(curDept||departments[0]);
-  if(!dept){toast('⚠️ No department selected.');return;}
-  const equip=document.getElementById('fEquip').value;
-  const pic=document.getElementById('fPIC').value;
-  const mtype=document.getElementById('fType').value;
-  const ds=document.getElementById('fDs').value;
-  const df=document.getElementById('fDf').value;
-  const det=document.getElementById('fDet').value.trim();
-  const parts=getSelChips('partsGrid');
-  const eEl=document.getElementById('formErr');
-  const hasPressesFlag=deptHasPresses(dept);
-  if(hasPressesFlag&&!selectedPresses.length){eEl.textContent='⚠️ Please select at least one press.';eEl.style.display='block';return;}
-  const needsHalf=!!(dept&&dept.name.toLowerCase()==='mold die');
-  if(needsHalf&&!selectedHalf){eEl.textContent='⚠️ Please select Top, Bottom or Both.';eEl.style.display='block';return;}
-  const hLbl=selectedHalf?selectedHalf.charAt(0).toUpperCase()+selectedHalf.slice(1):'';
-  const fullEquip=needsHalf&&hLbl?equip+' ('+hLbl+')':equip;
-  if(!equip||!pic||!mtype||!ds||!det){eEl.textContent='⚠️ Fill in all required fields.';eEl.style.display='block';return;}
-  if(!parts.length){eEl.textContent='⚠️ Select at least one part (use "NA" if nothing changed).';eEl.style.display='block';return;}
-  eEl.style.display='none';
-  const btn=document.getElementById('subBtn');btn.disabled=true;btn.textContent='⏳ Saving...';sy('sync');
-  try{
-    const uploaded=await uploadAllPhotos();
-    const pressesVal=hasPressesFlag?selectedPresses.join(', '):'';
-    const r=await jsonp({action:'addRecord',pic,dept:dept.name,equipment:fullEquip,maintenanceType:mtype,presses:pressesVal,dateStart:ds,dateFinish:df||'',details:det,parts:parts.join(', '),photos:JSON.stringify(uploaded)});
-    if(r.status==='ok'){recs.unshift(r.record);['fEquip','fPIC','fType','fDs','fDf','fDet'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.querySelectorAll('#partsGrid .chip.sel').forEach(c=>c.classList.remove('sel'));showHalfSel(false);showPressSel([]);resetPhotos();sy('ok');toast('✅ PM Record saved!');goSec('recs');}
-    else throw new Error(r.message||'Save failed');
-  }catch(e){sy('off');toast('❌ '+e.message);}
-  btn.disabled=false;btn.textContent='✔ Submit PM Record';
-}
-
-/* ══════════════════════════════════════════════════════
-   RECORDS
-══════════════════════════════════════════════════════ */
-function fillFDDs(){
-  const sv=document.getElementById('fFdept').value;mkSel('fFdept','All Departments',departments.map(d=>d.name));
-  mkSelPIC('fFpic','All PIC',pics);document.getElementById('fFdept').value=sv;
-}
-function applyF(){
-  const s=(document.getElementById('fSrch')?.value||'').toLowerCase();
-  const fd=document.getElementById('fFdept')?.value||'';
-  const fp=document.getElementById('fFpic')?.value||'';
-  const fs=document.getElementById('fFstat')?.value||'';
-  let rs=[...recs];
-  if(fd)rs=rs.filter(r=>r.dept===fd);if(fp)rs=rs.filter(r=>r.pic===fp);if(fs)rs=rs.filter(r=>r.status===fs);
-  if(s)rs=rs.filter(r=>[r.id,r.pic,r.dept,r.equipment,r.maintenanceType,r.details,r.parts].some(v=>(v||'').toLowerCase().includes(s)));
-  const el=document.getElementById('recList');if(!el)return;
-  el.innerHTML=rs.length?rs.map(r=>rCard(r,false)).join(''):'<div class="empty"><div class="ei">🔍</div><h4>No Records Found</h4></div>';
-}
-
-function rCard(r,mini){
-  const done=r.status==='completed';
-  const pList=(r.parts||'').split(',').map(p=>p.trim()).filter(Boolean);
-  const pTags=pList.map(p=>`<span class="ptag">${esc(p)}</span>`).join('');
-  let photosHTML='';
-  if(!mini){try{const photos=JSON.parse(r.photos||'[]');if(photos.length){photosHTML=`<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx2);margin:8px 0 5px">📷 Photos (${photos.length})</div><div class="photo-thumbs">${photos.map(ph=>`<img class="photo-thumb" src="${esc(ph.thumbUrl||'')}" onclick="openLB('${esc(ph.thumbUrl||'')}','${esc(ph.viewUrl||'')}')" loading="lazy">`).join('')}</div>`;}}catch(e){}}
-  let actions='';
-  if(!mini){
-    actions='<div class="rec-actions">';
-    if(!done)actions+=`<button class="btn btn-grn btn-xs" onclick="openDone('${r.id}')">✅ Mark Done</button>`;
-    else actions+=`<button class="btn btn-warn btn-xs" onclick="reopenRec('${r.id}')">🔄 Reopen</button>`;
-    actions+=`<button class="btn btn-blue btn-xs" onclick="openEdit('${r.id}')">✏️ Edit</button>`;
-    if(role==='admin')actions+=`<button class="btn btn-red btn-xs" onclick="delRec('${r.id}')">🗑️ Delete</button>`;
-    actions+='</div>';
-  }
-  return`<div class="rec${done?' done':''}">
-    <div class="rec-hdr">
-      <div><div class="rec-id">${esc(r.equipment||'—')}</div><div class="rec-sub">👷 ${esc(r.pic)} &nbsp;|&nbsp; 🆔 ${esc(r.id)}${r.presses?` &nbsp;|&nbsp; <span style="color:#58a6ff;">${esc(r.presses)}</span>`:''}</div></div>
-      <span class="sbadge ${done?'s-ok">✅ Done':'s-wip">🔄 WIP'}</span>
-    </div>
-    <span class="dept-tag">${deptIcon(r.dept||'')} ${esc(r.dept||'Unknown')}</span>${r.maintenanceType?`<span class="mtype-tag">${esc(r.maintenanceType)}</span>`:''}
-    <div class="rmeta">
-      <div class="rmi">📅 Start: <strong>${fdd(r.dateStart)}</strong></div>
-      ${r.dateFinish?`<div class="rmi">🏁 Finish: <strong>${fdd(r.dateFinish)}</strong></div>`:''}
-    </div>
-    ${!mini?`<div class="rdet">📝 ${esc(r.details)}</div>${pTags?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;">${pTags}</div>`:''}${photosHTML}${actions}`
-    :`${pTags?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;">${pTags}</div>`:''}`}
-  </div>`;
-}
-
-/* MARK DONE / REOPEN / EDIT / DELETE */
-function openDone(id){document.getElementById('doneId').value=id;document.getElementById('doneDf').value=new Date().toISOString().split('T')[0];document.getElementById('doneMod').classList.add('show');}
-async function confirmDone(){const id=document.getElementById('doneId').value,df=document.getElementById('doneDf').value;closeMod('doneMod');sy('sync');try{const r=await jsonp({action:'updateStatus',id,newStatus:'completed',dateFinish:df});if(r.status==='ok'){const rec=recs.find(x=>x.id===id);if(rec){rec.status='completed';rec.dateFinish=r.dateFinish;}sy('ok');toast('✅ Marked done!');applyF();renderDash();}else throw new Error(r.message);}catch(e){sy('off');toast('❌ '+e.message);}}
-async function reopenRec(id){sy('sync');try{const r=await jsonp({action:'updateStatus',id,newStatus:'in_progress',dateFinish:''});if(r.status==='ok'){const rec=recs.find(x=>x.id===id);if(rec){rec.status='in_progress';rec.dateFinish='';}sy('ok');toast('🔄 Reopened.');applyF();renderDash();}else throw new Error(r.message);}catch(e){sy('off');toast('❌ '+e.message);}}
-function openEdit(id){
-  const r=recs.find(x=>x.id===id);if(!r)return;
-  const dept=departments.find(d=>d.name===r.dept)||{name:r.dept,equipment:[r.equipment],parts:[]};
-  document.getElementById('editId').value=id;mkSelPIC('ePIC','— Select —',pics);mkSel('eEquip','— Select —',dept.equipment.map(e=>eqId(e)));mkSel('eType','— Select —',types);
-  document.getElementById('ePIC').value=r.pic;
-  const hm=r.equipment.match(/^(.+) \((Top|Bottom|Both)\)$/i);const baseEquip=hm?hm[1]:r.equipment;const existHalf=hm?hm[2].toLowerCase():null;
-  document.getElementById('eEquip').value=baseEquip;
-  const parsedPresses=r.presses?r.presses.split(', ').map(p=>p.trim()).filter(Boolean):[];
-  if(deptHasPresses(dept)){const eq=dept.equipment.find(e=>eqId(e)===baseEquip);showEditPressSel(eq?eqPresses(eq):['Press 1','Press 2','Press 3','Press 4'],parsedPresses);}else showEditPressSel([],[]);
-  showEditHalfSel(!!(dept&&dept.name.toLowerCase()==='mold die'),existHalf);
-  document.getElementById('eType').value=r.maintenanceType;document.getElementById('eDs').value=r.dateStart;document.getElementById('eDf').value=r.dateFinish||'';document.getElementById('eDet').value=r.details;
-  const selParts=(r.parts||'').split(',').map(p=>p.trim()).filter(Boolean);renderChips('editPartsGrid',dept.parts,selParts);
-  document.getElementById('editErr').style.display='none';document.getElementById('editMod').classList.add('show');
-}
-function closeEdit(){document.getElementById('editMod').classList.remove('show');}
-async function saveEdit(){
-  const id=document.getElementById('editId').value,pic=document.getElementById('ePIC').value,eqBase=document.getElementById('eEquip').value;
-  const recEdit=recs.find(x=>x.id===id);const deptEdit=recEdit?departments.find(d=>d.name===recEdit.dept):null;
-  const needsHalf2=!!(deptEdit&&deptEdit.name.toLowerCase()==='mold die');
-  const hLbl2=editSelectedHalf?editSelectedHalf.charAt(0).toUpperCase()+editSelectedHalf.slice(1):'';
-  const equip=needsHalf2&&hLbl2?eqBase+' ('+hLbl2+')':eqBase;
-  const mtype=document.getElementById('eType').value,ds=document.getElementById('eDs').value,df=document.getElementById('eDf').value;
-  const det=document.getElementById('eDet').value.trim(),parts=getSelChips('editPartsGrid');
-  const eEl=document.getElementById('editErr');
-  if(!pic||!equip||!mtype||!ds||!det){eEl.textContent='⚠️ All required fields must be filled.';eEl.style.display='block';return;}
-  if(!parts.length){eEl.textContent='⚠️ Select at least one part.';eEl.style.display='block';return;}
-  const btn=document.getElementById('saveEditBtn');btn.disabled=true;btn.textContent='Saving...';sy('sync');
-  try{const pressesVal2=deptHasPresses(deptEdit)?editSelectedPresses.join(', '):'';const r=await jsonp({action:'editRecord',id,pic,equipment:equip,maintenanceType:mtype,dateStart:ds,dateFinish:df||'',details:det,parts:parts.join(', '),presses:pressesVal2});if(r.status==='ok'){const idx=recs.findIndex(x=>x.id===id);if(idx>=0)recs[idx]={...recs[idx],...r.record};closeEdit();sy('ok');toast('✅ Updated!');applyF();renderDash();}else throw new Error(r.message||'Edit failed');}
-  catch(e){sy('off');toast('❌ '+e.message);}
-  btn.disabled=false;btn.textContent='💾 Save';
-}
-function delRec(id){if(role!=='admin'){toast('⚠️ Only admin can delete.');return;}delId=id;document.getElementById('delMod').classList.add('show');}
-async function confirmDel(){if(!delId)return;closeMod('delMod');sy('sync');try{const rec=recs.find(x=>x.id===delId);if(rec){try{JSON.parse(rec.photos||'[]').forEach(ph=>{if(ph.deleteUrl)fetch(ph.deleteUrl).catch(()=>{});});}catch(e){}}const r=await jsonp({action:'deleteRecord',id:delId});if(r.status==='ok'){recs=recs.filter(x=>x.id!==delId);delId=null;sy('ok');applyF();renderDash();toast('🗑️ Deleted.');}}catch(e){sy('off');toast('❌ Delete failed.');}}
-
-/* ══════════════════════════════════════════════════════
-   REPORT
-══════════════════════════════════════════════════════ */
-function fillReportFilters(){
-  const rd=document.getElementById('rFdept'),sv=rd.value;rd.innerHTML='<option value="">All Departments</option>'+departments.map(d=>`<option value="${esc(d.name)}">${esc(d.name)}</option>`).join('');rd.value=sv;
-  onRptDeptChange(true);
-  const rp=document.getElementById('rFpic'),svp=rp.value;rp.innerHTML='<option value="">All PIC</option>'+pics.map(p=>{const n=typeof p==='string'?p:p.name||'';return`<option value="${esc(n)}">${esc(n)}</option>`;}).join('');rp.value=svp;
-  const rm=document.getElementById('rFmtype'),svm=rm.value;rm.innerHTML='<option value="">All Types</option>'+types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');rm.value=svm;
-}
-function onRptDeptChange(pv){
-  const dn=document.getElementById('rFdept').value,re=document.getElementById('rFequip'),sv=pv?re.value:'';
-  re.innerHTML='<option value="">All Equipment</option>';
-  if(dn){const dept=departments.find(d=>d.name===dn);if(dept)dept.equipment.forEach(e=>{const o=document.createElement('option');o.value=esc(eqId(e));o.textContent=eqId(e);re.appendChild(o);});}
-  else{[...new Set(recs.map(r=>r.equipment).filter(Boolean))].sort().forEach(e=>{const o=document.createElement('option');o.value=esc(e);o.textContent=e;re.appendChild(o);});}
-  re.value=sv;renderReport();
-}
-function clearRptFilters(){['rFdept','rFequip','rFpic','rFmtype','rFstat','rFfrom','rFto'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});rptFreqDept='';rptHistDept='';onRptDeptChange(false);}
-function getFilteredRecs(){
-  const dept=document.getElementById('rFdept')?.value||'',equip=document.getElementById('rFequip')?.value||'',from=document.getElementById('rFfrom')?.value||'',to=document.getElementById('rFto')?.value||'',pic=document.getElementById('rFpic')?.value||'',mtype=document.getElementById('rFmtype')?.value||'',stat=document.getElementById('rFstat')?.value||'';
-  return recs.filter(r=>{if(dept&&r.dept!==dept)return false;if(equip&&r.equipment!==equip)return false;if(pic&&r.pic!==pic)return false;if(mtype&&r.maintenanceType!==mtype)return false;if(stat&&r.status!==stat)return false;if(from&&r.dateStart&&r.dateStart<from)return false;if(to&&r.dateStart&&r.dateStart>to)return false;return true;});
-}
-function setFreqDept(d){rptFreqDept=d;renderReport();}
-function setHistDept(d){rptHistDept=d;renderReport();}
-function rptDeptChips(cur,fn){
-  const dn=[...new Set(recs.map(r=>r.dept).filter(Boolean))].sort();if(!dn.length)return'';
-  return`<div class="rpt-dept-chips"><div class="rpt-dept-chip${cur===''?' active':''}" onclick="${fn}('')">All</div>${dn.map(n=>`<div class="rpt-dept-chip${cur===n?' active':''}" onclick="${fn}('${n.replace(/'/g,"\\'")}')">${deptIcon(n)} ${esc(n)}</div>`).join('')}</div>`;
-}
-function renderReport(){
-  const filtered=getFilteredRecs();
-  const summaryEl=document.getElementById('reportSummary'),contentEl=document.getElementById('reportContent');
-  if(!summaryEl||!contentEl)return;
-  if(freqChartInstance){freqChartInstance.destroy();freqChartInstance=null;}
-  if(!filtered.length){summaryEl.innerHTML='';contentEl.innerHTML='<div class="empty"><div class="ei">📄</div><h4>No records match filters</h4></div>';return;}
-  const done=filtered.filter(r=>r.status==='completed').length,wip=filtered.length-done;
-  const equips=[...new Set(filtered.map(r=>r.equipment).filter(Boolean))];const depts=[...new Set(filtered.map(r=>r.dept).filter(Boolean))];
-  const freqMap={};filtered.forEach(r=>{if(r.equipment)freqMap[r.equipment]=(freqMap[r.equipment]||0)+1;});
-  const topEquip=Object.entries(freqMap).sort((a,b)=>b[1]-a[1])[0];
-  summaryEl.innerHTML=`<div class="rpt-summary-grid"><div class="rpt-scard"><div class="rn">${filtered.length}</div><div class="rl">Total Services</div></div><div class="rpt-scard"><div class="rn" style="color:#3fb950">${done}</div><div class="rl">Completed</div></div><div class="rpt-scard"><div class="rn">${wip}</div><div class="rl">In Progress</div></div><div class="rpt-scard"><div class="rn">${equips.length}</div><div class="rl">Equipment</div></div><div class="rpt-scard"><div class="rn">${depts.length}</div><div class="rl">Departments</div></div>${topEquip?`<div class="rpt-scard"><div class="rn" style="font-size:18px;line-height:1.3">${esc(topEquip[0])}</div><div class="rl">Most Serviced (${topEquip[1]}x)</div></div>`:''}</div>`;
-
-  const freqRecs=rptFreqDept?filtered.filter(r=>r.dept===rptFreqDept):filtered;
-  const freqMapF={};freqRecs.forEach(r=>{if(r.equipment)freqMapF[r.equipment]=(freqMapF[r.equipment]||0)+1;});
-  const freqSorted=Object.entries(freqMapF).sort((a,b)=>b[1]-a[1]);
-  const maxFreq=Math.max(...Object.values(freqMapF),1);
-  const freqRows=freqSorted.map(([equip,cnt])=>{const pct=Math.round((cnt/maxFreq)*100);const dn=freqRecs.find(r=>r.equipment===equip)?.dept||'';return`<tr><td><strong>${esc(equip)}</strong></td><td><span class="dept-tag" style="font-size:10px;">${deptIcon(dn)} ${esc(dn)}</span></td><td style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:var(--acc);">${cnt}</td><td style="min-width:80px;"><div style="height:6px;background:rgba(240,165,0,.2);border-radius:3px;"><div style="width:${pct}%;height:6px;background:var(--acc);border-radius:3px;"></div></div></td></tr>`;}).join('');
-
-  const histRecs=rptHistDept?filtered.filter(r=>r.dept===rptHistDept):filtered;
-  const grouped={};histRecs.forEach(r=>{const key=r.equipment||'Unknown';if(!grouped[key])grouped[key]=[];grouped[key].push(r);});
-  const historyHTML=Object.entries(grouped).map(([equip,rs])=>{const dn=rs[0]?.dept||'';const doneCount=rs.filter(r=>r.status==='completed').length;const rows=rs.map(r=>{const parts=(r.parts||'').split(',').map(p=>p.trim()).filter(Boolean);const ptags=parts.map(p=>`<span class="ptag" style="font-size:10px;">${esc(p)}</span>`).join(' ');return`<tr><td>${fdd(r.dateStart)}</td><td>${r.dateFinish?fdd(r.dateFinish):'<span style="color:var(--tx2);">—</span>'}</td><td>${esc(r.pic)}</td><td>${esc(r.maintenanceType)}</td><td style="max-width:180px;font-size:12px;">${esc(r.details)}</td><td style="max-width:140px;">${ptags||'<span style="color:var(--tx2);font-size:11px;">—</span>'}</td><td><span class="sbadge ${r.status==='completed'?'s-ok">✅ Done':'s-wip">🔄 WIP'}</span></td></tr>`;}).join('');return`<div class="rpt-equip-block"><div class="rpt-equip-hdr"><div><div class="rpt-equip-name">${esc(equip)}</div><div style="margin-top:4px;"><span class="dept-tag" style="font-size:10px;">${deptIcon(dn)} ${esc(dn)}</span></div></div><div style="text-align:right;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--acc);">${rs.length}x</div><div style="font-size:11px;color:var(--tx2);">${doneCount} done · ${rs.length-doneCount} WIP</div></div></div><div style="overflow-x:auto;"><table class="rpt-table"><thead><tr><th>Date Start</th><th>Finish</th><th>PIC</th><th>Maint. Type</th><th>Findings</th><th>Parts</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;}).join('');
-
-  contentEl.innerHTML=`
-    <div class="block">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;padding-bottom:10px;border-bottom:1px solid var(--bor);margin-bottom:0;">
-        <h3 style="margin:0;padding:0;border:none;">📊 Service Frequency</h3>
-        <span style="font-size:11px;color:var(--tx2);">${freqSorted.length} equipment</span>
-      </div>
-      ${rptDeptChips(rptFreqDept,'setFreqDept')}
-      <div class="rpt-chart-wrap" style="margin-top:12px;padding:14px;">
-        <canvas id="freqChart" style="max-height:260px;"></canvas>
-      </div>
-      <div class="rpt-freq-scroll" style="overflow-x:auto;border:1px solid var(--bor);border-radius:8px;margin-top:8px;">
-        <table class="rpt-table"><thead><tr><th>Equipment</th><th>Department</th><th>Count</th><th>Frequency</th></tr></thead>
-        <tbody>${freqRows||'<tr><td colspan="4" style="text-align:center;color:var(--tx2);padding:20px;">No data</td></tr>'}</tbody></table>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">📋 Service History</div>
-      <span style="font-size:11px;color:var(--tx2);">${histRecs.length} records</span>
-    </div>
-    ${rptDeptChips(rptHistDept,'setHistDept')}
-    <div style="margin-top:10px;">${historyHTML||'<div class="empty"><div class="ei">📋</div><h4>No records.</h4></div>'}</div>`;
-
-  if(freqSorted.length){
-    const canvas=document.getElementById('freqChart');
-    if(canvas){
-      const labels=freqSorted.map(([e])=>e.length>18?e.slice(0,16)+'…':e);
-      const counts=freqSorted.map(([,c])=>c);
-      const bgColors=counts.map((c)=>{const alpha=0.4+0.6*(c/maxFreq);return`rgba(240,165,0,${alpha.toFixed(2)})`;});
-      freqChartInstance=new Chart(canvas,{
-        type:'bar',
-        data:{labels,datasets:[{label:'Services',data:counts,backgroundColor:bgColors,borderColor:'rgba(240,165,0,0.8)',borderWidth:1,borderRadius:4}]},
-        options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{callbacks:{title:i=>{const idx=i[0].dataIndex;return freqSorted[idx]?freqSorted[idx][0]:''}},backgroundColor:'#1e2530',titleColor:'#f0a500',bodyColor:'#e6edf3',borderColor:'#2a3441',borderWidth:1}},scales:{x:{ticks:{color:'#8b949e',font:{size:11},maxRotation:35,minRotation:0},grid:{color:'rgba(42,52,65,0.5)'}},y:{beginAtZero:true,ticks:{color:'#8b949e',font:{size:11},stepSize:1,precision:0},grid:{color:'rgba(42,52,65,0.5)'}}}}
-      });
-    }
-  }
-}
-
-/* ══════════════════════════════════════════════════════
-   MANAGE
-══════════════════════════════════════════════════════ */
-function renderMgmt(){renderDeptManageList();renderPICList();rL('typeList',types,'🗂️',i=>`delType(${i})`);}
-function renderDeptManageList(){
-  const el=document.getElementById('deptManageList');
-  if(!departments.length){el.innerHTML='<p style="color:var(--tx2);font-size:13px;">No departments yet.</p>';return;}
-  el.innerHTML=departments.map((d,di)=>`<div class="dept-manage-card">
-    <div class="dmc-hdr" onclick="toggleDMC(${di})"><h4>${deptIcon(d.name)} ${esc(d.name)}</h4>
-      <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:11px;color:var(--tx2);">${d.equipment.length} equip</span><button class="btn btn-red btn-xs" onclick="event.stopPropagation();deleteDept(${di})">Remove</button><span id="dmc-arrow-${di}" style="color:var(--tx2);">▶</span></div>
-    </div>
-    <div class="dmc-body" id="dmc-body-${di}">
-      <div style="margin-top:12px;"><div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx2);margin-bottom:8px;">Equipment</div>
-        <div class="add-r"><input type="text" id="addEquipIn-${di}" placeholder="e.g. MD-006..."><button class="btn btn-grn btn-xs" onclick="addEquipment(${di})">+ Add</button></div>
-        <div class="mlist">${d.equipment.length?d.equipment.map((e,ei)=>`<div class="mitem"><span>🔧 ${esc(eqId(e))}</span><button class="btn btn-red btn-xs" onclick="deleteEquipment(${di},${ei})">Remove</button></div>`).join(''):'<p style="color:var(--tx2);font-size:13px;">None yet.</p>'}</div>
-      </div>
-      <div style="margin-top:12px;"><div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--tx2);margin-bottom:8px;">Parts / Tools</div>
-        <div class="add-r"><input type="text" id="addPartIn-${di}" placeholder="e.g. Spring..."><button class="btn btn-grn btn-xs" onclick="addDeptPart(${di})">+ Add</button></div>
-        <div class="mlist">${d.parts.map((p,pi)=>`<div class="mitem"><span>🔩 ${esc(p)}</span><button class="btn btn-red btn-xs" onclick="deleteDeptPart(${di},${pi})">Remove</button></div>`).join('')||'<p style="color:var(--tx2);font-size:13px;">None yet.</p>'}</div>
-      </div>
-    </div>
-  </div>`).join('');
-}
-function toggleDMC(di){const body=document.getElementById('dmc-body-'+di),arrow=document.getElementById('dmc-arrow-'+di);const open=body.classList.toggle('open');if(arrow)arrow.textContent=open?'▼':'▶';}
-async function addDept(){const v=document.getElementById('addDeptIn').value.trim();if(!v)return;if(departments.some(d=>d.name.toLowerCase()===v.toLowerCase())){toast('⚠️ Already exists.');return;}sy('sync');try{const r=await jsonp({action:'addDept',deptName:v});if(r.status==='ok'){departments=r.departments;document.getElementById('addDeptIn').value='';renderDeptManageList();sy('ok');toast('✅ Department added!');}else toast('⚠️ '+(r.message||'Failed'));}catch(e){sy('off');toast('❌ '+e.message);}}
-async function deleteDept(di){if(!confirm('Remove department "'+departments[di].name+'"?'))return;sy('sync');try{const r=await jsonp({action:'deleteDept',deptName:departments[di].name});if(r.status==='ok'){departments=r.departments;renderDeptManageList();sy('ok');toast('🗑️ Removed.');}else toast('⚠️ '+(r.message||'Failed'));}catch(e){sy('off');toast('❌ '+e.message);}}
-async function addEquipment(di){const v=document.getElementById('addEquipIn-'+di).value.trim();if(!v)return;sy('sync');try{const r=await jsonp({action:'addEquipment',deptName:departments[di].name,equipment:v});if(r.status==='ok'){departments=r.departments;renderDeptManageList();sy('ok');toast('✅ Added!');}else toast('⚠️ '+(r.message||'Failed'));}catch(e){sy('off');toast('❌ '+e.message);}}
-async function deleteEquipment(di,ei){sy('sync');try{const r=await jsonp({action:'deleteEquipment',deptName:departments[di].name,equipment:departments[di].equipment[ei]});if(r.status==='ok'){departments=r.departments;renderDeptManageList();sy('ok');toast('🗑️ Removed.');}else toast('⚠️ '+(r.message||'Failed'));}catch(e){sy('off');toast('❌ '+e.message);}}
-async function addDeptPart(di){const v=document.getElementById('addPartIn-'+di).value.trim();if(!v)return;sy('sync');try{const r=await jsonp({action:'addDeptPart',deptName:departments[di].name,part:v});if(r.status==='ok'){departments=r.departments;renderDeptManageList();sy('ok');toast('✅ Added!');}else toast('⚠️ '+(r.message||'Failed'));}catch(e){sy('off');toast('❌ '+e.message);}}
-async function deleteDeptPart(di,pi){sy('sync');try{const r=await jsonp({action:'deleteDeptPart',deptName:departments[di].name,part:departments[di].parts[pi]});if(r.status==='ok'){departments=r.departments;renderDeptManageList();sy('ok');toast('🗑️ Removed.');}else toast('⚠️ '+(r.message||'Failed'));}catch(e){sy('off');toast('❌ '+e.message);}}
-function renderPICList(){const el=document.getElementById('picList');if(!pics.length){el.innerHTML='<p style="color:var(--tx2);font-size:13px;padding:4px;">None yet.</p>';return;}el.innerHTML=pics.map((p,i)=>{const name=typeof p==='string'?p:(p.name||'');return`<div class="mitem"><span>👷 ${esc(name)}</span><button class="btn btn-red btn-xs" onclick="delPIC(${i})">Remove</button></div>`;}).join('');}
-async function addPIC(){const n=document.getElementById('addPICIn').value.trim();if(!n)return;if(pics.some(p=>(typeof p==='string'?p:p.name)===n)){toast('⚠️ Already exists.');return;}sy('sync');try{const r=await jsonp({action:'addPIC',name:n,email:''});if(r.status==='ok'){pics=r.pics;document.getElementById('addPICIn').value='';renderPICList();sy('ok');toast('✅ Added.');}else toast('⚠️ '+(r.message||''));}catch(e){sy('off');toast('❌ '+e.message);}}
-async function delPIC(i){sy('sync');try{const n=typeof pics[i]==='string'?pics[i]:(pics[i].name||'');const r=await jsonp({action:'deletePIC',name:n});if(r.status==='ok'){pics=r.pics;renderPICList();sy('ok');toast('🗑️ Removed.');}else toast('⚠️ '+(r.message||''));}catch(e){sy('off');toast('❌ '+e.message);}}
-function rL(id,arr,icon,fn){document.getElementById(id).innerHTML=arr.length?arr.map((v,i)=>`<div class="mitem"><span>${icon} ${esc(v)}</span><button class="btn btn-red btn-xs" onclick="${fn(i)}">Remove</button></div>`).join(''):'<p style="color:var(--tx2);font-size:13px;padding:4px;">None yet.</p>';}
-async function addType(){const v=document.getElementById('addTypeIn').value.trim();if(!v)return;if(types.includes(v)){toast('⚠️ Already exists.');return;}sy('sync');try{const r=await jsonp({action:'addType',mtype:v});if(r.status==='ok'){types.push(v);document.getElementById('addTypeIn').value='';rL('typeList',types,'🗂️',i=>`delType(${i})`);sy('ok');toast('✅ Added.');}else toast('⚠️ '+(r.message||''));}catch(e){sy('off');toast('❌ '+e.message);}}
-async function delType(i){sy('sync');try{const r=await jsonp({action:'deleteType',mtype:types[i]});if(r.status==='ok'){types.splice(i,1);rL('typeList',types,'🗂️',i2=>`delType(${i2})`);sy('ok');toast('🗑️ Removed.');}else toast('⚠️ '+(r.message||''));}catch(e){sy('off');toast('❌ '+e.message);}}
-
-function openChangePwd(){document.getElementById('cpOldIn').value='';document.getElementById('cpNewIn').value='';document.getElementById('cpConfIn').value='';document.getElementById('cpErr').style.display='none';document.getElementById('cpOk').style.display='none';document.getElementById('changePwdMod').classList.add('show');}
-async function saveChangePwd(){
-  const old=document.getElementById('cpOldIn').value,nw=document.getElementById('cpNewIn').value.trim(),cf=document.getElementById('cpConfIn').value.trim();
-  const eEl=document.getElementById('cpErr'),oEl=document.getElementById('cpOk');eEl.style.display='none';oEl.style.display='none';
-  if(!old){eEl.textContent='❌ Enter current password.';eEl.style.display='block';return;}if(!nw){eEl.textContent='❌ New password empty.';eEl.style.display='block';return;}if(nw!==cf){eEl.textContent='❌ Passwords do not match.';eEl.style.display='block';return;}if(nw.length<4){eEl.textContent='❌ Min 4 characters.';eEl.style.display='block';return;}
-  sy('sync');try{const r=await jsonp({action:'changePassword',oldPass:old,newPass:nw});if(r.status==='ok'){ADMIN_PASS=nw;oEl.style.display='block';setTimeout(()=>closeMod('changePwdMod'),1500);toast('✅ Password updated!');sy('ok');}else{eEl.textContent='❌ '+(r.message||'Failed');eEl.style.display='block';sy('ok');}}catch(e){eEl.textContent='❌ '+e.message;eEl.style.display='block';sy('off');}
-}
-
-/* ══════════════════════════════════════════════════════
-   PM SCHEDULER: STATUS ENGINE
-══════════════════════════════════════════════════════ */
-function pmIsSlotDone(moldId,wkNum){return pmHistory.some(h=>h.moldId===moldId&&h.scheduledWkNum===wkNum&&h.fiscalYear===26);}
-function pmGetMoldStatus(m){
-  const sw=m.scheduledWeeks||[];
-  if(!sw.length)return{label:"NOT SET",color:"#6B7280",bg:"#6B728018",slots:[]};
-  const slots=sw.map(wkNum=>{const fwk=600+wkNum,done=pmIsSlotDone(m.id,wkNum);let slotStatus;if(done)slotStatus="DONE";else if(fwk<CURRENT_WK)slotStatus="OVERDUE";else if(fwk===CURRENT_WK)slotStatus="DUE NOW";else if(fwk===CURRENT_WK+1)slotStatus="DUE SOON";else slotStatus="UPCOMING";return{wkNum,fwk,done,slotStatus};});
-  const overdue=slots.filter(s=>s.slotStatus==="OVERDUE");const dueNow=slots.filter(s=>s.slotStatus==="DUE NOW");const dueSoon=slots.filter(s=>s.slotStatus==="DUE SOON");
-  if(overdue.length>0)return{label:"OVERDUE",color:"#FF3B30",bg:"#FF3B3018",slots,overdue};
-  if(dueNow.length>0)return{label:"DUE NOW",color:"#FF9500",bg:"#FF950018",slots,dueNow};
-  if(dueSoon.length>0)return{label:"DUE SOON",color:"#FFCC00",bg:"#FFCC0018",slots,dueSoon};
-  return{label:"OK",color:"#30D158",bg:"#30D15818",slots};
-}
-
-/* PM DASHBOARD */
-const pmDashOpen={overdue:true,duenow:true,duesoon:false,ok:false,notset:false};
-function pmToggleDash(key){
-  pmDashOpen[key]=!pmDashOpen[key];
-  const body=document.getElementById('pmdash-body-'+key),chev=document.getElementById('pmdash-chev-'+key);
-  if(body)body.style.display=pmDashOpen[key]?'grid':'none';if(chev)chev.textContent=pmDashOpen[key]?'▼':'▶';
-}
-function renderPMDashboard(){
-  const cur=getWk(CURRENT_WK);
-  const addBtn=role==='admin'?`<button onclick="pmOpenAddModal()" class="btn btn-pm" style="padding:9px 16px;font-size:13px;white-space:nowrap;">+ Add Mold</button>`:'';
-  const refreshBtn=`<button onclick="pmRefresh()" class="btn btn-ghost btn-sm" style="white-space:nowrap;">🔄 Refresh</button>`;
-  document.getElementById('pm-wk-banner').innerHTML=`
-    <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,149,0,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">📅</div>
-    <div style="flex:1;">
-      <div style="color:var(--pm-acc);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Current Fiscal Week · ${currentSchedType?.label||'PM Scheduler'}</div>
-      <div style="font-size:18px;font-weight:800;margin-top:3px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">WK${CURRENT_WK} (Week ${CURRENT_WKNUM}) · ${cur?cur.mth+' '+cur.period+' · '+cur.qtr:''}</div>
-      <div style="color:var(--tx2);font-size:13px;margin-top:2px;">Sun ${cur?.sun} – Sat ${cur?.sat} · <b style="color:var(--tx);">${pmMolds.length}</b> molds tracked · <span style="color:#3fb950;font-size:11px;">📊 Google Sheets</span></div>
-    </div>
-    <div style="display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;">${refreshBtn}${addBtn}</div>`;
-
-  const overdue=pmMolds.filter(m=>pmGetMoldStatus(m).label==="OVERDUE");
-  const dueNow=pmMolds.filter(m=>pmGetMoldStatus(m).label==="DUE NOW");
-  const dueSoon=pmMolds.filter(m=>pmGetMoldStatus(m).label==="DUE SOON");
-  const ok=pmMolds.filter(m=>pmGetMoldStatus(m).label==="OK");
-  const notSet=pmMolds.filter(m=>pmGetMoldStatus(m).label==="NOT SET");
-
-  function pmDashCard(key,label,emoji,color,list,showDone){
-    const isOpen=pmDashOpen[key];const emptyMsg=key==='notset'?"All molds configured ✓":"No molds in this category 🎉";
-    const rows=list.length?list.map(m=>pmMoldRowDash(m,showDone)).join(''):`<div style="padding:20px;text-align:center;color:var(--tx2);font-size:13px;">${emptyMsg}</div>`;
-    return`<div class="pm-dash-card" style="border-left:4px solid ${color};">
-      <div class="pm-dash-card-hdr" onclick="pmToggleDash('${key}')">
-        <div style="width:46px;height:46px;border-radius:11px;background:${color}18;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${emoji}</div>
-        <div style="flex:1;">
-          <div style="font-size:12px;font-weight:700;color:var(--tx2);text-transform:uppercase;letter-spacing:1px;">${label}</div>
-          <div style="font-size:30px;font-weight:900;color:${list.length>0?color:'var(--bor)'};line-height:1.1;margin-top:2px;font-family:'Barlow Condensed',sans-serif;">${list.length} <span style="font-size:13px;font-weight:500;color:var(--tx2);">mold${list.length!==1?'s':''}</span></div>
-        </div>
-        <span id="pmdash-chev-${key}" style="color:var(--tx2);">${isOpen?'▼':'▶'}</span>
-      </div>
-      <div id="pmdash-body-${key}" class="pm-dash-card-body" style="display:${isOpen?'grid':'none'};">${rows}</div>
-    </div>`;
-  }
-  document.getElementById('pm-dash-content').innerHTML=
-    pmDashCard("overdue","⛔ Overdue PM","⛔","#FF3B30",overdue,true)+
-    pmDashCard("duenow","🔧 Due This Week","🔧","#FF9500",dueNow,true)+
-    pmDashCard("duesoon","⏰ Due Soon","⏰","#FFCC00",dueSoon,false)+
-    pmDashCard("ok","✅ Up to Date","✅","#30D158",ok,false)+
-    pmDashCard("notset","⚙ Not Configured","⚙","#6B7280",notSet,false);
-}
-
-async function pmRefresh(){
-  load('Refreshing from Google Sheets...');
-  await pmLoadFromSheets(currentSchedType?.id||'mold-die');
-  unload();
-  renderPMDashboard();
-  toast('🔄 Refreshed from Google Sheets!');
-}
-
-function pmMoldRowDash(m,showDone){
-  const st=pmGetMoldStatus(m);const isNotSet=st.label==="NOT SET";
-  const sc={"OVERDUE":"#FF3B30","DUE NOW":"#FF9500","DUE SOON":"#FFCC00",UPCOMING:"#374151"};
-  const pendingSlots=(st.slots||[]).filter(s=>s.slotStatus!=="DONE");const doneSlots=(st.slots||[]).filter(s=>s.slotStatus==="DONE");
-  const slotChips=!isNotSet?(pendingSlots.slice(0,4).map(s=>{const cal=getWk(s.fwk);return`<span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;border:1px solid ${(sc[s.slotStatus]||"#374151")}44;color:${sc[s.slotStatus]||"#6B7280"};background:${(sc[s.slotStatus]||"#374151")}18;font-family:'DM Mono',monospace;">Wk${s.wkNum}${cal?' '+cal.mth:''} ${s.slotStatus==="OVERDUE"?"⚠":s.slotStatus==="DUE NOW"?"🔧":""}</span>`;}).join('')+
-    doneSlots.map(s=>`<span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;border:1px solid #30D15833;color:#30D158;background:#30D15810;font-family:'DM Mono',monospace;">Wk${s.wkNum} ✓</span>`).join('')):'';
-  const doneBtn=showDone&&!isNotSet?`<button onclick="pmOpenDoneModal(${m.id})" style="background:linear-gradient(135deg,#30D158,#25a244);border:none;border-radius:10px;padding:8px 14px;color:#fff;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0;">✅ Done</button>`:'';
-  const configBtn=isNotSet&&role==='admin'?`<button onclick="pmOpenEditModal(${m.id})" style="background:rgba(255,149,0,.15);border:1px solid rgba(255,149,0,.3);color:var(--pm-acc);border-radius:6px;padding:3px 10px;cursor:pointer;font-size:11px;font-weight:700;">⚙ Configure</button>`:'';
-  return`<div class="pm-mold-row" style="border-left:3px solid ${st.color};">
-    <div style="flex:1;min-width:160px;">
-      <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:4px;">
-        <span style="font-weight:700;font-size:13px;font-family:'DM Mono',monospace;">${esc(m.name)}</span>
-        ${m.machine?`<span style="font-size:11px;background:var(--sur2);color:var(--tx2);padding:2px 7px;border-radius:6px;">${esc(m.machine)}</span>`:''}
-        ${configBtn}
-      </div>
-      ${isNotSet?`<div style="color:var(--tx2);font-size:11px;font-style:italic;">No PM weeks configured</div>`:`<div style="display:flex;gap:5px;flex-wrap:wrap;">${slotChips}</div>`}
-    </div>${doneBtn}
-  </div>`;
-}
-
-/* PM ALL MOLDS */
-function renderPMMolds(){
-  const addBtn=role==='admin'?`<button onclick="pmOpenAddModal()" class="btn btn-pm" style="padding:9px 16px;font-size:13px;">+ Add</button>`:'';
-  document.getElementById('pmMoldsHdrBtns').innerHTML=addBtn;
-  const filters=[{k:'all',l:`All (${pmMolds.length})`},{k:'overdue',l:'Overdue'},{k:'duenow',l:'Due Now'},{k:'duesoon',l:'Due Soon'},{k:'ok',l:'OK'},{k:'notset',l:'Not Set'}];
-  document.getElementById('pm-filter-btns').innerHTML=filters.map(f=>`<button onclick="pmSetFilter('${f.k}')" class="pm-filter-btn${pmActiveFilter===f.k?' active':''}">${f.l}</button>`).join('');
-  const search=(document.getElementById('pm-mold-search')||{}).value||'';
-  const order={OVERDUE:0,"DUE NOW":1,"DUE SOON":2,OK:3,"NOT SET":4};
-  let filtered=[...pmMolds]
-    .filter(m=>{if(pmActiveFilter==='all')return true;const lbl=pmGetMoldStatus(m).label.toLowerCase().replace(/ /g,'');return lbl===pmActiveFilter;})
-    .filter(m=>!search||m.name.toLowerCase().includes(search.toLowerCase())||(m.group&&m.group.toLowerCase().includes(search.toLowerCase())))
-    .sort((a,b)=>(order[pmGetMoldStatus(a).label]||9)-(order[pmGetMoldStatus(b).label]||9));
-  const groups=[...new Set(filtered.map(m=>m.group||'Other'))].sort();
-  let html='';
-  groups.forEach(g=>{const gMolds=filtered.filter(m=>(m.group||'Other')===g);html+=`<div class="group-header"><span>${g}</span><span style="color:var(--tx2);font-size:11px;font-weight:500;">${gMolds.length} die${gMolds.length>1?'s':''}</span></div>`;html+=gMolds.map(m=>pmFullMoldRow(m)).join('');});
-  document.getElementById('pm-molds-list').innerHTML=html||`<div class="empty"><div class="ei">🔍</div><h4>No results found</h4></div>`;
-}
-function pmSetFilter(f){pmActiveFilter=f;renderPMMolds();}
-function pmFullMoldRow(m){
-  const st=pmGetMoldStatus(m);const isNotSet=st.label==="NOT SET";
-  const sc={"OVERDUE":"#FF3B30","DUE NOW":"#FF9500","DUE SOON":"#FFCC00",UPCOMING:"#9CA3AF",DONE:"#30D158"};
-  const chips=!isNotSet?(st.slots||[]).map(s=>{const cal=getWk(s.fwk);const icon=s.slotStatus==="DONE"?" ✓":s.slotStatus==="OVERDUE"?" ⚠":s.slotStatus==="DUE NOW"?" 🔧":"";return`<span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px;border:1px solid ${(sc[s.slotStatus]||"#374151")}44;color:${sc[s.slotStatus]||"#6B7280"};background:${(sc[s.slotStatus]||"#374151")}18;font-family:'DM Mono',monospace;">Wk${s.wkNum}${cal?' '+cal.mth:''}${icon}</span>`;}).join(''):'';
-  const actionBtns=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
-    ${!isNotSet?`<button onclick="pmOpenDoneModal(${m.id})" style="background:rgba(48,209,88,.15);border:1px solid rgba(48,209,88,.3);color:#30D158;border-radius:8px;padding:6px 11px;cursor:pointer;font-size:12px;font-weight:600;">✅ Done</button>`:''}
-    ${role==='admin'?`<button onclick="pmOpenEditModal(${m.id})" style="background:rgba(255,149,0,.12);border:1px solid rgba(255,149,0,.3);color:var(--pm-acc);border-radius:8px;padding:6px 9px;cursor:pointer;font-size:12px;">✏</button>
-    <button onclick="pmDeleteMold(${m.id})" style="background:rgba(218,54,51,.12);border:1px solid rgba(218,54,51,.3);color:var(--red);border-radius:8px;padding:6px 9px;cursor:pointer;font-size:12px;">🗑</button>`:''}
-  </div>`;
-  return`<div style="background:var(--sur);border:1px solid var(--bor);border-left:3px solid ${st.color};border-radius:12px;padding:13px 15px;${isNotSet?'opacity:0.75;':''}">
-    <div style="display:flex;align-items:flex-start;gap:12px;">
-      <div style="width:36px;height:36px;border-radius:9px;background:${st.bg};display:flex;align-items:center;justify-content:center;color:${st.color};flex-shrink:0;margin-top:2px;">🔧</div>
-      <div style="flex:1;min-width:0;">
-        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:4px;">
-          <span style="font-weight:700;font-size:13px;font-family:'DM Mono',monospace;">${esc(m.name)}</span>
-          <span class="pm-badge" style="background:${st.bg};color:${st.color};border:1px solid ${st.color}44;">${st.label}</span>
-          ${m.machine?`<span style="font-size:11px;background:var(--sur2);color:var(--tx2);padding:2px 7px;border-radius:6px;">${esc(m.machine)}</span>`:''}
-        </div>
-        ${isNotSet?`<div style="color:var(--tx2);font-size:11px;font-style:italic;">No scheduled weeks${role==='admin'?' — click ✏ to configure':''}</div>`:`<div style="display:flex;gap:5px;flex-wrap:wrap;">${chips}</div>`}
-        ${actionBtns}
-      </div>
-    </div>
-  </div>`;
-}
-
-/* PM CALENDAR */
-function renderPMCalendar(){
-  const qtrs=[...new Set(CALENDAR.map(w=>w.qtr))];
-  document.getElementById('pm-qtr-tabs').innerHTML=qtrs.map(q=>`<button onclick="pmSetQtr('${q}')" class="qtr-btn${pmActiveQtr===q?' active':''}">${q}</button>`).join('');
-  const qtrWeeks=CALENDAR.filter(w=>w.qtr===pmActiveQtr);const months=[...new Set(qtrWeeks.map(w=>w.mth))];
-  document.getElementById('pm-calendar-content').innerHTML=months.map(mth=>{
-    const mthWeeks=qtrWeeks.filter(w=>w.mth===mth);
-    return`<div style="margin-bottom:22px;">
-      <div style="color:var(--tx2);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">${mth}</div>
-      <div style="display:grid;gap:8px;">${mthWeeks.map(w=>{
-        const scheduled=pmMolds.filter(m=>(m.scheduledWeeks||[]).includes(w.wkNum));const isCur=w.wk===CURRENT_WK;
-        const badges=scheduled.length?scheduled.map(m=>{const done=pmIsSlotDone(m.id,w.wkNum);const fwk=600+w.wkNum;let color='#9CA3AF';if(done)color='#30D158';else if(fwk<CURRENT_WK)color='#FF3B30';else if(fwk===CURRENT_WK)color='#FF9500';else if(fwk===CURRENT_WK+1)color='#FFCC00';return`<span style="background:${color}18;color:${color};font-size:11px;font-weight:600;padding:2px 8px;border-radius:16px;border:1px solid ${color}44;font-family:'DM Mono',monospace;white-space:nowrap;">${esc(m.name)}${done?' ✓':''}</span>`;}).join('') :`<span style="color:var(--tx2);font-size:12px;">No PM scheduled</span>`;
-        return`<div class="pm-cal-week${isCur?' current-wk':''}">
-          <div style="text-align:center;min-width:50px;">
-            <div style="color:${isCur?'var(--pm-acc)':'var(--tx2)'};font-size:10px;font-weight:700;letter-spacing:1px;">WK${w.wk}</div>
-            <div style="color:${isCur?'var(--pm-acc)':'var(--tx)'};font-size:18px;font-weight:900;font-family:'Barlow Condensed',monospace;line-height:1.1;">Wk${w.wkNum}</div>
-            ${isCur?`<div style="color:var(--pm-acc);font-size:9px;font-weight:700;letter-spacing:1px;">NOW</div>`:''}
-          </div>
-          <div style="flex:1;min-width:0;">
-            <div style="color:var(--tx2);font-size:11px;margin-bottom:6px;">Sun ${w.sun} – Sat ${w.sat} · ${w.period}</div>
-            <div style="display:flex;gap:4px;flex-wrap:wrap;">${badges}</div>
-          </div>
-        </div>`;
-      }).join('')}</div>
-    </div>`;
-  }).join('');
-}
-function pmSetQtr(q){pmActiveQtr=q;renderPMCalendar();}
-
-/* PM HISTORY */
-function renderPMHistory(){
-  const search=(document.getElementById('pm-history-search')||{}).value||'';const wkFilter=(document.getElementById('pm-hist-wk')||{}).value||'';
-  const filtered=pmHistory.filter(h=>{const q=search.toLowerCase();const matchS=!q||(h.moldName||'').toLowerCase().includes(q)||(h.doneBy||'').toLowerCase().includes(q)||(h.notes||'').toLowerCase().includes(q);const matchW=!wkFilter||String(h.fiscalWeek||'').includes(wkFilter)||String(h.scheduledWkNum||'').includes(wkFilter);return matchS&&matchW;});
-  const el=document.getElementById('pm-history-list');
-  document.getElementById('pm-history-count').textContent=filtered.length===pmHistory.length?`${pmHistory.length} records`:`${filtered.length} of ${pmHistory.length}`;
-  if(!pmHistory.length){el.innerHTML='<div class="empty"><div class="ei">📋</div><h4>No PM history yet</h4></div>';return;}
-  if(!filtered.length){el.innerHTML='<div class="empty"><div class="ei">🔍</div><h4>No records match</h4></div>';return;}
-  el.innerHTML=[...filtered].reverse().map(h=>`<div class="pm-hist-row" style="border-left:3px solid #30D158;flex-wrap:wrap;gap:10px;align-items:flex-start;">
-    <div style="width:32px;height:32px;border-radius:8px;background:#30D15822;display:flex;align-items:center;justify-content:center;color:#30D158;flex-shrink:0;font-size:14px;">✓</div>
-    <div style="flex:1;min-width:160px;">
-      <div style="font-weight:700;font-family:'DM Mono',monospace;font-size:12px;">${esc(h.moldName)}</div>
-      ${h.moldGroup?`<div style="color:var(--tx2);font-size:11px;">${esc(h.moldGroup)}</div>`:''}
-      <div style="color:var(--tx2);font-size:11px;margin-top:2px;">Scheduled: <b style="color:var(--tx);">Week ${h.scheduledWkNum||'—'}</b>${h.fiscalWeek?' (WK'+h.fiscalWeek+')':''}</div>
-      ${h.notes?`<div style="color:var(--tx2);font-size:11px;margin-top:3px;font-style:italic;">"${esc(h.notes)}"</div>`:''}
-    </div>
-    <div style="text-align:right;flex-shrink:0;">
-      <div style="color:#30D158;font-size:12px;font-weight:600;">PM Completed</div>
-      <div style="color:var(--tx);font-size:12px;margin-top:1px;">${esc(h.doneDate||'—')}</div>
-      <div style="color:var(--tx2);font-size:11px;margin-top:1px;">By: <b style="color:var(--tx2);">${esc(h.doneBy||'—')}</b></div>
-    </div>
-  </div>`).join('');
-}
-function clearPMHistFilters(){const s=document.getElementById('pm-history-search');if(s)s.value='';const w=document.getElementById('pm-hist-wk');if(w)w.value='';renderPMHistory();}
-
-/* PM USERS */
-function renderPMUsers(){
-  document.getElementById('pm-user-count').textContent=pmUsers.length+' technician'+(pmUsers.length!==1?'s':'');
-  const el=document.getElementById('pm-users-list');
-  if(!pmUsers.length){el.innerHTML='<div class="empty"><div class="ei">👤</div><h4>No technicians yet</h4></div>';return;}
-  el.innerHTML=pmUsers.map((u,i)=>`<div style="background:var(--sur);border:1px solid var(--bor);border-radius:12px;padding:13px 15px;display:flex;align-items:center;gap:12px;">
-    <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#1D4ED8);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#fff;flex-shrink:0;text-transform:uppercase;">${u.name.charAt(0)}</div>
-    <div style="flex:1;"><div style="font-weight:700;font-size:14px;">${esc(u.name)}</div><div style="color:var(--tx2);font-size:11px;margin-top:2px;">Added ${u.addedAt||'—'}</div></div>
-    ${role==='admin'?`<button onclick="pmDeleteUser(${i})" style="background:rgba(218,54,51,.12);border:1px solid rgba(218,54,51,.3);color:var(--red);border-radius:8px;padding:7px 12px;cursor:pointer;font-size:12px;font-weight:600;">🗑 Remove</button>`:''}
-  </div>`).join('');
-}
-async function pmAddUser(){
-  const inp=document.getElementById('pm-new-user');const name=inp.value.trim();
-  if(!name){inp.focus();return;}
-  if(pmUsers.some(u=>u.name.toLowerCase()===name.toLowerCase())){toast('⚠️ Already exists.');return;}
-  const user={name,addedAt:new Date().toLocaleDateString('en-MY')};
-  inp.value='';
-  try{
-    await pmSaveNewUser(user);
-    pmUsers.push(user);
-    renderPMUsers();
-    toast('✅ Technician added!');
-  }catch(e){toast('⚠️ Save failed: '+e.message);}
-}
-async function pmDeleteUser(idx){
-  const u=pmUsers[idx];if(!confirm(`Remove "${u.name}"?`))return;
-  try{
-    await pmSaveDeleteUser(u.name);
-    pmUsers.splice(idx,1);renderPMUsers();
-    toast('🗑️ Removed.');
-  }catch(e){toast('⚠️ Save failed: '+e.message);}
-}
-
-/* PM WEEK TAGS */
-function populatePMWeekSelects(){
-  ['pmAddWeekSel','pmEditWeekSel'].forEach(selId=>{
-    const sel=document.getElementById(selId);if(!sel)return;
-    sel.innerHTML=`<option value="">— Select week number —</option>`;
-    for(let i=1;i<=52;i++){const cal=CALENDAR.find(w=>w.wkNum===i);const label=cal?`Week ${i} — ${cal.mth} (WK${cal.wk})`:`Week ${i}`;sel.innerHTML+=`<option value="${i}">${label}</option>`;}
-  });
-}
-function pmRenderWeekTags(formId,state){
-  const container=document.getElementById(`pm${formId.charAt(0).toUpperCase()+formId.slice(1)}WeekTags`);if(!container)return;
-  if(!state.length){container.innerHTML=`<span style="color:var(--tx2);font-size:12px;">No weeks added yet</span>`;return;}
-  const sorted=[...state].sort((a,b)=>a-b);
-  container.innerHTML=sorted.map(n=>{const cal=CALENDAR.find(w=>w.wkNum===n);const mthLabel=cal?' '+cal.mth:'';return`<span class="pm-wk-chip">Week ${n}${mthLabel} <button class="wk-chip-rm" onclick="pmRemoveWeekTag('${formId}',${n})">×</button></span>`;}).join('');
-}
-function pmAddWeekTag(formId){
-  const selId=formId==='add'?'pmAddWeekSel':'pmEditWeekSel';const sel=document.getElementById(selId);const val=parseInt(sel.value);if(!val)return;
-  const state=formId==='add'?pmAddWeekState:pmEditWeekState;
-  if(state.includes(val)){toast('Week '+val+' already added.');return;}
-  if(formId==='add')pmAddWeekState.push(val);else pmEditWeekState.push(val);
-  sel.value='';pmRenderWeekTags(formId,formId==='add'?pmAddWeekState:pmEditWeekState);
-}
-function pmRemoveWeekTag(formId,wkNum){
-  if(formId==='add')pmAddWeekState=pmAddWeekState.filter(n=>n!==wkNum);else pmEditWeekState=pmEditWeekState.filter(n=>n!==wkNum);
-  pmRenderWeekTags(formId,formId==='add'?pmAddWeekState:pmEditWeekState);
-}
-
-/* PM ADD/EDIT MOLD — saves to Google Sheets */
-function pmOpenAddModal(){pmAddWeekState=[];populatePMWeekSelects();pmRenderWeekTags('add',pmAddWeekState);['pmAddName','pmAddGroup','pmAddMachine','pmAddInterval'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('pmAddMoldMod').classList.add('show');}
-async function pmDoAddMold(){
-  const name=document.getElementById('pmAddName').value.trim();if(!name){toast('⚠️ Enter a Mold Die name.');return;}
-  const btn=document.getElementById('pmAddSubmitBtn');btn.disabled=true;btn.textContent='Saving...';
-  const mold={id:Date.now(),name,group:document.getElementById('pmAddGroup').value.trim(),machine:document.getElementById('pmAddMachine').value.trim(),pmIntervalWeeks:parseInt(document.getElementById('pmAddInterval').value)||null,scheduledWeeks:[...pmAddWeekState]};
-  try{
-    await pmSaveNewMold(mold);
-    pmMolds.push(mold);
-    closeMod('pmAddMoldMod');renderPMMolds();toast('✅ Mold added!');
-  }catch(e){toast('⚠️ Save failed: '+e.message);}
-  btn.disabled=false;btn.textContent='Add Mold Die';
-}
-function pmOpenEditModal(id){
-  const m=pmMolds.find(x=>x.id===id);if(!m)return;
-  document.getElementById('pmEditId').value=id;document.getElementById('pmEditName').value=m.name;document.getElementById('pmEditGroup').value=m.group||'';document.getElementById('pmEditMachine').value=m.machine||'';document.getElementById('pmEditInterval').value=m.pmIntervalWeeks!=null?m.pmIntervalWeeks:'';
-  pmEditWeekState=[...(m.scheduledWeeks||[])];populatePMWeekSelects();pmRenderWeekTags('edit',pmEditWeekState);document.getElementById('pmEditMoldMod').classList.add('show');
-}
-async function pmDoEditMold(){
-  const id=parseInt(document.getElementById('pmEditId').value);const btn=document.getElementById('pmEditSubmitBtn');btn.disabled=true;btn.textContent='Saving...';const intVal=document.getElementById('pmEditInterval').value;
-  const updated=pmMolds.map(x=>x.id===id?{...x,name:document.getElementById('pmEditName').value.trim(),group:document.getElementById('pmEditGroup').value.trim(),machine:document.getElementById('pmEditMachine').value.trim(),pmIntervalWeeks:intVal?parseInt(intVal):null,scheduledWeeks:[...pmEditWeekState]}:x);
-  const mold=updated.find(x=>x.id===id);
-  try{
-    await pmSaveUpdatedMold(mold);
-    pmMolds=updated;
-    closeMod('pmEditMoldMod');renderPMMolds();toast('✅ Saved!');
-  }catch(e){toast('⚠️ Save failed: '+e.message);}
-  btn.disabled=false;btn.textContent='Save Changes';
-}
-async function pmDeleteMold(id){
-  if(!confirm('Delete this mold die?'))return;
-  try{
-    await pmSaveDeleteMold(id);
-    pmMolds=pmMolds.filter(x=>x.id!==id);
-    renderPMMolds();renderPMDashboard();
-    toast('🗑️ Deleted.');
-  }catch(e){toast('⚠️ Save failed: '+e.message);}
-}
-
-/* PM MARK DONE MODAL */
-function pmOpenDoneModal(id){
-  const m=pmMolds.find(x=>x.id===id);if(!m)return;
-  const st=pmGetMoldStatus(m);pmDoneMoldId=id;
-  document.getElementById('pmDoneMoldName').textContent=m.name;
-  document.getElementById('pmDoneDate').value='';document.getElementById('pmDoneNotes').value='';
-  const personSel=document.getElementById('pmDonePerson');personSel.innerHTML='<option value="">— Select technician —</option>';
-  if(!pmUsers.length)personSel.innerHTML+='<option disabled>No technicians yet — add in Users tab</option>';
-  else pmUsers.forEach(u=>personSel.innerHTML+=`<option value="${esc(u.name)}">${esc(u.name)}</option>`);
-  const sel=document.getElementById('pmDoneSchedWk');sel.innerHTML='';
-  const pendingSlots=(st.slots||[]).filter(s=>s.slotStatus!=='DONE');
-  if(!pendingSlots.length)sel.innerHTML='<option value="">All scheduled PMs done ✓</option>';
-  else pendingSlots.forEach(s=>{const cal=getWk(s.fwk);const statusLabel={OVERDUE:' ⚠ OVERDUE',"DUE NOW":' 🔧 DUE NOW',"DUE SOON":' ⏰ DUE SOON',UPCOMING:''}[s.slotStatus]||'';sel.innerHTML+=`<option value="${s.wkNum}">Week ${s.wkNum}${cal?' — '+cal.mth+' (WK'+s.fwk+')':''}${statusLabel}</option>`;});
-  document.getElementById('pmDoneDueInfo').textContent=pendingSlots.length?`${pendingSlots.length} pending slot${pendingSlots.length>1?'s':''}`:'' ;
-  document.getElementById('pmDoneMod').classList.add('show');
-  setTimeout(()=>document.getElementById('pmDoneDate').focus(),100);
-}
-async function pmConfirmDone(){
-  const id=pmDoneMoldId;if(!id)return;const m=pmMolds.find(x=>x.id===id);if(!m)return;
-  const dateVal=document.getElementById('pmDoneDate').value,person=document.getElementById('pmDonePerson').value,notes=document.getElementById('pmDoneNotes').value.trim(),wkNumVal=parseInt(document.getElementById('pmDoneSchedWk').value);
-  if(!dateVal){toast('⚠️ Please enter the PM date.');return;}if(!person){toast('⚠️ Please select a technician.');return;}if(!wkNumVal){toast('⚠️ Please select the scheduled week.');return;}
-  const btn=document.getElementById('pmDoneConfirmBtn');btn.textContent='Saving...';btn.disabled=true;
-  const entry={moldId:id,moldName:m.name,moldGroup:m.group||'',scheduledWkNum:wkNumVal,fiscalYear:26,fiscalWeek:600+wkNumVal,doneDate:dateVal,doneBy:person||'—',notes:notes||'',recordedAt:new Date().toLocaleDateString('en-MY'),source:'manual'};
-  try{
-    await pmSaveHistoryEntry(entry);
-    pmHistory.push(entry);
-    closeMod('pmDoneMod');renderPMDashboard();renderPMMolds();renderPMHistory();
-    toast('✅ PM marked done!');
-  }catch(e){toast('⚠️ Save failed: '+e.message);}
-  btn.textContent='✅ Confirm Done';btn.disabled=false;
-}
-
-/* ══════════════════════════════════════════════════════
-   MODALS / UTILS
-══════════════════════════════════════════════════════ */
-function closeMod(id){document.getElementById(id).classList.remove('show');}
-function openLB(thumb,view){document.getElementById('lbImg').src=thumb||view;document.getElementById('lightbox').classList.add('show');}
-function closeLB(){document.getElementById('lightbox').classList.remove('show');document.getElementById('lbImg').src='';}
-document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this)closeLB();});
-function load(m){document.getElementById('lTxt').textContent=m||'Loading...';document.getElementById('lOver').classList.add('show');}
-function unload(){document.getElementById('lOver').classList.remove('show');}
-function toast(msg){document.querySelectorAll('.toast').forEach(t=>t.remove());const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),4000);}
-function fdd(d){if(!d)return'—';try{const dt=new Date(d);return isNaN(dt.getTime())?d:dt.toLocaleDateString('en-MY',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return String(d);}}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-const DEPT_ICONS_MAP={'mold die':'🔩','transfer block':'⚙️','mold machine':'🏗️','dejunk':'✂️','forming':'🔧','assembly':'🔨','welding':'⚡','painting':'🎨','quality':'🔬','maintenance':'🛠️'};
-function deptIcon(name){return DEPT_ICONS_MAP[(name||'').toLowerCase()]||'🏭';}
-
-/* ══════════════════════════════════════════════════════
-   BOOT
-══════════════════════════════════════════════════════ */
-init();
 </script>
 </body>
 </html>
