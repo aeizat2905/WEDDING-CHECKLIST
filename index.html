@@ -52,10 +52,7 @@
     pointer-events: none;
   }
 
-  .petals {
-    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-  }
-
+  .petals { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
   .petal {
     position: absolute;
     width: 6px; height: 10px;
@@ -83,64 +80,15 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .landing-ornament {
-    font-size: 1.5rem;
-    color: var(--gold);
-    letter-spacing: 0.5rem;
-    margin-bottom: 1.5rem;
-    opacity: 0.7;
-  }
+  .landing-ornament { font-size: 1.5rem; color: var(--gold); letter-spacing: 0.5rem; margin-bottom: 1.5rem; opacity: 0.7; }
+  .landing-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 8vw, 5rem); font-weight: 300; color: var(--ink); line-height: 1.1; margin-bottom: 0.5rem; }
+  .landing-title em { font-style: italic; color: var(--rose); }
+  .landing-subtitle { font-size: 0.8rem; letter-spacing: 0.25rem; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.5rem; }
+  .landing-dates { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--gold); letter-spacing: 0.1rem; margin-bottom: 3rem; }
+  .landing-divider { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 1.5rem auto; }
+  .landing-prompt { font-size: 0.75rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 2rem; }
 
-  .landing-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.8rem, 8vw, 5rem);
-    font-weight: 300;
-    color: var(--ink);
-    line-height: 1.1;
-    margin-bottom: 0.5rem;
-  }
-
-  .landing-title em {
-    font-style: italic;
-    color: var(--rose);
-  }
-
-  .landing-subtitle {
-    font-size: 0.8rem;
-    letter-spacing: 0.25rem;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 0.5rem;
-  }
-
-  .landing-dates {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    color: var(--gold);
-    letter-spacing: 0.1rem;
-    margin-bottom: 3rem;
-  }
-
-  .landing-divider {
-    width: 80px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 1.5rem auto;
-  }
-
-  .landing-prompt {
-    font-size: 0.75rem;
-    letter-spacing: 0.2rem;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 2rem;
-  }
-
-  .user-cards {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  .user-cards { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
 
   .user-card {
     background: rgba(255,255,255,0.7);
@@ -165,26 +113,13 @@
 
   .user-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--rose); }
   .user-card:hover::before { opacity: 1; }
-
   .user-card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-  .user-card-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem;
-    font-weight: 400;
-    color: var(--ink);
-    margin-bottom: 0.3rem;
-  }
-  .user-card-role {
-    font-size: 0.7rem;
-    letter-spacing: 0.15rem;
-    text-transform: uppercase;
-    color: var(--rose);
-  }
+  .user-card-name { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; color: var(--ink); margin-bottom: 0.3rem; }
+  .user-card-role { font-size: 0.7rem; letter-spacing: 0.15rem; text-transform: uppercase; color: var(--rose); }
 
   /* ── APP ── */
   #app { display: none; min-height: 100vh; }
 
-  /* Header */
   .app-header {
     background: rgba(255,255,255,0.92);
     backdrop-filter: blur(12px);
@@ -194,140 +129,54 @@
   }
 
   .header-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 0;
-    gap: 1rem;
-    flex-wrap: wrap;
+    max-width: 900px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 0; gap: 1rem; flex-wrap: wrap;
   }
 
-  .header-brand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
-    color: var(--ink);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
+  .header-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--ink); display: flex; align-items: center; gap: 0.5rem; }
   .header-brand span { color: var(--rose); }
 
-  .header-user {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
+  .header-user { display: flex; align-items: center; gap: 0.8rem; }
 
   .header-avatar {
-    width: 36px; height: 36px;
-    border-radius: 50%;
+    width: 36px; height: 36px; border-radius: 50%;
     background: linear-gradient(135deg, var(--rose), var(--gold));
     display: flex; align-items: center; justify-content: center;
     font-size: 1rem; color: white;
   }
 
-  .header-username {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--ink-soft);
-  }
+  .header-username { font-size: 0.85rem; font-weight: 500; color: var(--ink-soft); }
 
   .btn-logout {
-    background: none;
-    border: 1px solid rgba(200,134,106,0.3);
-    border-radius: 8px;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
-    color: var(--rose);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Jost', sans-serif;
+    background: none; border: 1px solid rgba(200,134,106,0.3); border-radius: 8px;
+    padding: 0.4rem 0.8rem; font-size: 0.7rem; letter-spacing: 0.1rem; text-transform: uppercase;
+    color: var(--rose); cursor: pointer; transition: all 0.2s; font-family: 'Jost', sans-serif;
   }
   .btn-logout:hover { background: var(--rose); color: white; }
 
-  .sync-status {
-    display: flex; align-items: center; gap: 0.4rem;
-    font-size: 0.7rem;
-    color: var(--ink-muted);
-    letter-spacing: 0.05rem;
-  }
-  .sync-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--sage);
-    animation: pulse 2s infinite;
-  }
+  .sync-status { display: flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; color: var(--ink-muted); letter-spacing: 0.05rem; }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-  /* Content */
-  .app-content {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-  }
+  .app-content { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
-  /* Phase header */
-  .phase-block {
-    margin-bottom: 3rem;
-  }
+  .phase-block { margin-bottom: 3rem; }
 
   .phase-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.5rem; padding-bottom: 1rem;
     border-bottom: 1px solid var(--rose-light);
   }
 
-  .phase-badge {
-    background: linear-gradient(135deg, var(--rose), #d4926f);
-    color: white;
-    font-size: 0.65rem;
-    letter-spacing: 0.15rem;
-    text-transform: uppercase;
-    padding: 0.4rem 0.8rem;
-    border-radius: 20px;
-    white-space: nowrap;
-  }
-
+  .phase-badge { background: linear-gradient(135deg, var(--rose), #d4926f); color: white; font-size: 0.65rem; letter-spacing: 0.15rem; text-transform: uppercase; padding: 0.4rem 0.8rem; border-radius: 20px; white-space: nowrap; }
   .phase-badge.gold { background: linear-gradient(135deg, var(--gold), #c9a87a); }
+  .phase-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; color: var(--ink); }
+  .phase-date { margin-left: auto; font-size: 0.75rem; color: var(--rose); letter-spacing: 0.1rem; text-transform: uppercase; white-space: nowrap; }
 
-  .phase-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem;
-    font-weight: 400;
-    color: var(--ink);
-  }
+  .period-group { margin-bottom: 1.5rem; }
+  .period-label { font-size: 0.68rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 0.8rem; padding-left: 0.5rem; }
 
-  .phase-date {
-    margin-left: auto;
-    font-size: 0.75rem;
-    color: var(--rose);
-    letter-spacing: 0.1rem;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  /* Period group */
-  .period-group {
-    margin-bottom: 1.5rem;
-  }
-
-  .period-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.2rem;
-    text-transform: uppercase;
-    color: var(--gold);
-    font-weight: 500;
-    margin-bottom: 0.8rem;
-    padding-left: 0.5rem;
-  }
-
-  /* Checklist item */
   .checklist-item {
     background: var(--white);
     border: 1px solid rgba(200,134,106,0.12);
@@ -341,98 +190,46 @@
   .checklist-item.done { background: #fdfaf8; opacity: 0.75; }
   .checklist-item.done .item-text { text-decoration: line-through; color: var(--ink-muted); }
 
-  .item-main {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem 1.2rem;
-    cursor: pointer;
-  }
+  .item-main { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.2rem; cursor: pointer; }
 
   .item-checkbox {
-    flex-shrink: 0;
-    width: 22px; height: 22px;
-    border: 2px solid var(--rose-light);
-    border-radius: 6px;
+    flex-shrink: 0; width: 22px; height: 22px;
+    border: 2px solid var(--rose-light); border-radius: 6px;
     display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-    margin-top: 1px;
-    background: white;
+    transition: all 0.2s; margin-top: 1px; background: white;
   }
 
-  .checklist-item.done .item-checkbox {
-    background: var(--rose);
-    border-color: var(--rose);
-  }
-
+  .checklist-item.done .item-checkbox { background: var(--rose); border-color: var(--rose); }
   .item-checkbox svg { display: none; }
   .checklist-item.done .item-checkbox svg { display: block; }
 
   .item-body { flex: 1; }
   .item-text { font-size: 0.9rem; line-height: 1.4; color: var(--ink-soft); }
 
-  .item-meta {
-    display: flex; align-items: center; gap: 0.5rem;
-    margin-top: 0.4rem; flex-wrap: wrap;
-  }
+  .item-meta { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; flex-wrap: wrap; }
 
-  .item-tag {
-    font-size: 0.65rem;
-    letter-spacing: 0.08rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: 10px;
-    border: 1px solid;
-  }
-
+  .item-tag { font-size: 0.65rem; letter-spacing: 0.08rem; padding: 0.15rem 0.5rem; border-radius: 10px; border: 1px solid; }
   .tag-done { background: #eef6ee; color: #5a8c5a; border-color: #c0dcc0; }
   .tag-comment { background: #f0f4ff; color: #6070b0; border-color: #c0caee; }
   .tag-file { background: #fff0f0; color: #b05050; border-color: #eec0c0; }
 
-  .item-actions {
-    display: flex; gap: 0.5rem;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
+  .item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; margin-top: 1px; }
 
   .action-btn {
-    background: none;
-    border: 1px solid rgba(200,134,106,0.2);
-    border-radius: 8px;
-    width: 30px; height: 30px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    color: var(--ink-muted);
-    font-size: 0.85rem;
+    background: none; border: 1px solid rgba(200,134,106,0.2); border-radius: 8px;
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; color: var(--ink-muted); font-size: 0.85rem;
   }
-
   .action-btn:hover { background: var(--rose-pale); border-color: var(--rose); color: var(--rose); }
 
-  /* Expand panel */
-  .item-panel {
-    display: none;
-    padding: 0 1.2rem 1.2rem;
-    border-top: 1px solid var(--rose-light);
-    animation: slideDown 0.2s ease;
-  }
-
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
+  .item-panel { display: none; padding: 0 1.2rem 1.2rem; border-top: 1px solid var(--rose-light); animation: slideDown 0.2s ease; }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
   .item-panel.open { display: block; }
 
   .panel-section { margin-top: 0.8rem; }
-  .panel-label {
-    font-size: 0.68rem;
-    letter-spacing: 0.15rem;
-    text-transform: uppercase;
-    color: var(--ink-muted);
-    margin-bottom: 0.4rem;
-    font-weight: 500;
-  }
+  .panel-label { font-size: 0.68rem; letter-spacing: 0.15rem; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.4rem; font-weight: 500; }
 
+  /* ── COMMENT STYLES ── */
   .comment-list { margin-bottom: 0.5rem; }
 
   .comment-entry {
@@ -442,75 +239,85 @@
     margin-bottom: 0.4rem;
     font-size: 0.82rem;
     color: var(--ink-soft);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
   }
 
+  .comment-entry-header { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.3rem; }
   .comment-author { font-weight: 500; color: var(--rose); flex-shrink: 0; }
-  .comment-text { flex: 1; }
-  .comment-time { font-size: 0.65rem; color: var(--ink-muted); flex-shrink: 0; margin-top: 2px; }
+  .comment-time { font-size: 0.65rem; color: var(--ink-muted); flex-shrink: 0; margin-top: 2px; margin-left: auto; }
 
-  .comment-input-row {
-    display: flex; gap: 0.5rem;
+  .comment-entry-actions { display: flex; gap: 0.3rem; flex-shrink: 0; }
+
+  .comment-action-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 0.72rem; color: var(--ink-muted); padding: 0.1rem 0.3rem;
+    border-radius: 4px; transition: all 0.15s; line-height: 1;
   }
+  .comment-action-btn:hover { background: rgba(200,134,106,0.15); color: var(--rose); }
+  .comment-action-btn.del:hover { background: rgba(200,80,80,0.12); color: #c05050; }
+
+  /* Rendered bullet list inside comment */
+  .comment-body { line-height: 1.5; }
+  .comment-body ul { list-style: none; padding: 0; margin: 0; }
+  .comment-body ul li { padding-left: 1rem; position: relative; margin-bottom: 0.15rem; }
+  .comment-body ul li::before { content: '•'; position: absolute; left: 0; color: var(--rose); font-size: 0.9rem; }
+
+  /* Edit mode textarea */
+  .comment-edit-area {
+    width: 100%; border: 1px solid var(--rose-light); border-radius: 8px;
+    padding: 0.5rem 0.8rem; font-size: 0.82rem; font-family: 'Jost', sans-serif;
+    outline: none; resize: vertical; min-height: 60px; color: var(--ink);
+    background: white; transition: border-color 0.2s; margin-top: 0.3rem;
+  }
+  .comment-edit-area:focus { border-color: var(--rose); }
+
+  .comment-edit-btns { display: flex; gap: 0.4rem; margin-top: 0.4rem; }
+  .btn-save-edit { background: var(--rose); color: white; border: none; border-radius: 6px; padding: 0.3rem 0.7rem; font-size: 0.75rem; cursor: pointer; font-family: 'Jost', sans-serif; transition: background 0.2s; }
+  .btn-save-edit:hover { background: #b87055; }
+  .btn-cancel-edit { background: none; border: 1px solid var(--rose-light); border-radius: 6px; padding: 0.3rem 0.7rem; font-size: 0.75rem; cursor: pointer; font-family: 'Jost', sans-serif; color: var(--ink-muted); transition: all 0.2s; }
+  .btn-cancel-edit:hover { border-color: var(--rose); color: var(--rose); }
+
+  /* Hint text */
+  .comment-hint { font-size: 0.68rem; color: var(--ink-muted); margin-bottom: 0.4rem; line-height: 1.5; }
+  .comment-hint code { background: rgba(200,134,106,0.12); border-radius: 3px; padding: 0 0.25rem; font-family: monospace; font-size: 0.72rem; color: var(--rose); }
+
+  .comment-input-row { display: flex; gap: 0.5rem; }
 
   .comment-input {
-    flex: 1;
-    border: 1px solid var(--rose-light);
-    border-radius: 8px;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.85rem;
-    font-family: 'Jost', sans-serif;
-    outline: none;
-    transition: border-color 0.2s;
-    background: white;
-    color: var(--ink);
+    flex: 1; border: 1px solid var(--rose-light); border-radius: 8px;
+    padding: 0.5rem 0.8rem; font-size: 0.85rem; font-family: 'Jost', sans-serif;
+    outline: none; transition: border-color 0.2s; background: white; color: var(--ink);
+    resize: vertical; min-height: 38px;
   }
-
   .comment-input:focus { border-color: var(--rose); }
 
-  .btn-send {
-    background: var(--rose);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    cursor: pointer;
-    font-family: 'Jost', sans-serif;
-    transition: background 0.2s;
-    white-space: nowrap;
-  }
+  .btn-send { background: var(--rose); color: white; border: none; border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.8rem; cursor: pointer; font-family: 'Jost', sans-serif; transition: background 0.2s; white-space: nowrap; align-self: flex-end; }
   .btn-send:hover { background: #b87055; }
 
+  /* ── FILE STYLES ── */
   .file-list { margin-bottom: 0.5rem; }
 
   .file-entry {
     display: flex; align-items: center; gap: 0.5rem;
     padding: 0.4rem 0.6rem;
-    background: #fff8f5;
-    border: 1px solid rgba(200,134,106,0.15);
-    border-radius: 8px;
-    margin-bottom: 0.3rem;
-    font-size: 0.8rem;
-    color: var(--ink-soft);
+    background: #fff8f5; border: 1px solid rgba(200,134,106,0.15); border-radius: 8px;
+    margin-bottom: 0.3rem; font-size: 0.8rem; color: var(--ink-soft);
   }
 
   .file-entry a { color: var(--rose); text-decoration: none; flex: 1; }
   .file-entry a:hover { text-decoration: underline; }
   .file-entry-icon { font-size: 1rem; }
 
-  .upload-area {
-    border: 2px dashed rgba(200,134,106,0.3);
-    border-radius: 10px;
-    padding: 1rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
+  .file-delete-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 0.8rem; color: var(--ink-muted); padding: 0.1rem 0.3rem;
+    border-radius: 4px; transition: all 0.15s; line-height: 1; flex-shrink: 0;
   }
+  .file-delete-btn:hover { background: rgba(200,80,80,0.12); color: #c05050; }
 
+  .upload-area {
+    border: 2px dashed rgba(200,134,106,0.3); border-radius: 10px;
+    padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; position: relative;
+  }
   .upload-area:hover { border-color: var(--rose); background: var(--rose-pale); }
   .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .upload-area-text { font-size: 0.78rem; color: var(--ink-muted); }
@@ -518,86 +325,35 @@
 
   /* Progress */
   .progress-bar-wrap {
-    background: var(--white);
-    border: 1px solid rgba(200,134,106,0.15);
-    border-radius: 14px;
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+    background: var(--white); border: 1px solid rgba(200,134,106,0.15); border-radius: 14px;
+    padding: 1.2rem 1.5rem; margin-bottom: 2rem;
+    display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
   }
-
-  .progress-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    color: var(--ink);
-    white-space: nowrap;
-  }
-
-  .progress-track {
-    flex: 1;
-    height: 6px;
-    background: var(--rose-light);
-    border-radius: 3px;
-    overflow: hidden;
-    min-width: 100px;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--rose), var(--gold));
-    border-radius: 3px;
-    transition: width 0.5s ease;
-  }
-
-  .progress-pct {
-    font-size: 0.8rem;
-    color: var(--rose);
-    font-weight: 500;
-    white-space: nowrap;
-  }
+  .progress-label { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--ink); white-space: nowrap; }
+  .progress-track { flex: 1; height: 6px; background: var(--rose-light); border-radius: 3px; overflow: hidden; min-width: 100px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--rose), var(--gold)); border-radius: 3px; transition: width 0.5s ease; }
+  .progress-pct { font-size: 0.8rem; color: var(--rose); font-weight: 500; white-space: nowrap; }
 
   /* Toast */
   #toast {
-    position: fixed;
-    bottom: 2rem; right: 2rem;
-    background: var(--ink);
-    color: white;
-    padding: 0.8rem 1.2rem;
-    border-radius: 10px;
-    font-size: 0.82rem;
-    z-index: 999;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s;
-    pointer-events: none;
-    max-width: 280px;
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--ink); color: white;
+    padding: 0.8rem 1.2rem; border-radius: 10px; font-size: 0.82rem;
+    z-index: 999; opacity: 0; transform: translateY(10px);
+    transition: all 0.3s; pointer-events: none; max-width: 280px;
   }
   #toast.show { opacity: 1; transform: translateY(0); }
 
-  /* Loading overlay */
+  /* Loading */
   #loading {
-    position: fixed; inset: 0;
-    background: rgba(250,247,242,0.92);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    z-index: 500;
-    gap: 1rem;
+    position: fixed; inset: 0; background: rgba(250,247,242,0.92);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 500; gap: 1rem;
   }
-
-  .loading-spinner {
-    width: 40px; height: 40px;
-    border: 2px solid var(--rose-light);
-    border-top-color: var(--rose);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
+  .loading-spinner { width: 40px; height: 40px; border: 2px solid var(--rose-light); border-top-color: var(--rose); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-text { font-size: 0.8rem; color: var(--ink-muted); letter-spacing: 0.1rem; }
 
-  /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--rose-light); border-radius: 3px; }
@@ -642,9 +398,7 @@
 <div id="app">
   <header class="app-header">
     <div class="header-inner">
-      <div class="header-brand">
-        <span>♡</span> Hafiza & Aeizat
-      </div>
+      <div class="header-brand"><span>♡</span> Hafiza & Aeizat</div>
       <div class="sync-status" id="syncStatus">
         <div class="sync-dot"></div> Sync aktif
       </div>
@@ -657,13 +411,11 @@
   </header>
 
   <div class="app-content">
-    <!-- Progress -->
     <div class="progress-bar-wrap">
       <div class="progress-label">Kemajuan Keseluruhan</div>
       <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
       <div class="progress-pct" id="progressPct">0%</div>
     </div>
-
     <div id="checklistContainer"></div>
   </div>
 </div>
@@ -675,18 +427,15 @@
 </div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────────────
-// Replace with your deployed Google Apps Script Web App URL:
+// ── CONFIG ────────────────────────────────────────────────────────────────────
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyA5kv2G-KOYShg3dGxMvm50mpWUsTT9cHprXiiSjOwjR4n830JHr-4arGD_rn-B1Ik/exec';
 const DRIVE_FOLDER = 'https://drive.google.com/drive/folders/1jRcBD1xTyifIfS83VusqKC8J1ZYcv3Iw';
 
-// ── DATA ─────────────────────────────────────────────────────────────────────
+// ── CHECKLIST DATA ────────────────────────────────────────────────────────────
 const CHECKLIST = [
   {
     phase: 'FASA 1: MAJLIS PERTUNANGAN',
-    badge: 'Fasa 1',
-    badgeClass: '',
-    date: '30 Ogos 2026',
+    badge: 'Fasa 1', badgeClass: '', date: '30 Ogos 2026',
     periods: [
       {
         label: 'April – Mei 2026 · 4–5 Bulan Sebelum Tunang',
@@ -721,9 +470,7 @@ const CHECKLIST = [
   },
   {
     phase: 'FASA 2: MAJLIS PERKAHWINAN',
-    badge: 'Fasa 2',
-    badgeClass: 'gold',
-    date: '3 Januari 2027',
+    badge: 'Fasa 2', badgeClass: 'gold', date: '3 Januari 2027',
     periods: [
       {
         label: 'September 2026 · 4 Bulan Sebelum Kahwin',
@@ -790,7 +537,7 @@ CHECKLIST.forEach((phase, pi) => {
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let currentUser = null;
-let state = {}; // { itemId: { done, comments: [{author,text,time}], files: [{name,url}] } }
+let state = {};
 
 // ── PETALS ────────────────────────────────────────────────────────────────────
 function createPetals() {
@@ -867,11 +614,8 @@ async function uploadFile(itemId, file) {
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({
-          action: 'upload',
-          itemId,
-          fileName: file.name,
-          fileData: base64,
-          mimeType: file.type,
+          action: 'upload', itemId,
+          fileName: file.name, fileData: base64, mimeType: file.type,
         }),
       });
       const json = await res.json();
@@ -882,6 +626,7 @@ async function uploadFile(itemId, file) {
         state[itemId].files.push({ name: file.name, url: json.url, uploader: currentUser });
         await saveData();
         renderAll();
+        setTimeout(() => openPanel(itemId), 50);
         showToast('Fail berjaya dimuat naik! 📎');
       } else {
         showToast('Gagal memuat naik fail.');
@@ -892,6 +637,36 @@ async function uploadFile(itemId, file) {
     hideLoading();
     showToast('Ralat semasa memuat naik fail.');
   }
+}
+
+// ── BULLET LIST PARSER ────────────────────────────────────────────────────────
+// Converts lines starting with * or - into an HTML bullet list
+function parseComment(text) {
+  if (!text) return '';
+  const lines = text.split('\n');
+  let html = '';
+  let inList = false;
+
+  lines.forEach(line => {
+    const bulletMatch = line.match(/^[\*\-]\s+(.+)/);
+    if (bulletMatch) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += `<li>${escapeHtml(bulletMatch[1])}</li>`;
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      if (line.trim()) html += `<span>${escapeHtml(line)}</span><br>`;
+      else html += '<br>';
+    }
+  });
+
+  if (inList) html += '</ul>';
+  // clean up trailing <br>
+  html = html.replace(/(<br>)+$/, '');
+  return html;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
@@ -933,6 +708,33 @@ function renderAll() {
           files.length ? `<span class="item-tag tag-file">📎 ${files.length}</span>` : '',
         ].filter(Boolean).join('');
 
+        // Build comment HTML
+        const commentsHtml = comments.map((c, ci) => `
+          <div class="comment-entry" id="comment-${id}-${ci}">
+            <div class="comment-entry-header">
+              <span class="comment-author">${escapeHtml(c.author)}:</span>
+              <span class="comment-time">${c.time}</span>
+              <div class="comment-entry-actions">
+                ${c.author === currentUser ? `
+                  <button class="comment-action-btn" title="Edit" onclick="startEditComment('${id}', ${ci})">✏️</button>
+                  <button class="comment-action-btn del" title="Padam" onclick="deleteComment('${id}', ${ci})">🗑️</button>
+                ` : ''}
+              </div>
+            </div>
+            <div class="comment-body" id="comment-body-${id}-${ci}">${parseComment(c.text)}</div>
+          </div>
+        `).join('');
+
+        // Build files HTML
+        const filesHtml = files.map((f, fi) => `
+          <div class="file-entry" id="file-${id}-${fi}">
+            <span class="file-entry-icon">📎</span>
+            <a href="${f.url}" target="_blank">${escapeHtml(f.name)}</a>
+            <span style="font-size:0.68rem;color:var(--ink-muted)">${escapeHtml(f.uploader||'')}</span>
+            ${f.uploader === currentUser ? `<button class="file-delete-btn" title="Padam fail" onclick="deleteFile('${id}', ${fi})">🗑️</button>` : ''}
+          </div>
+        `).join('');
+
         item.innerHTML = `
           <div class="item-main" onclick="toggleExpand('${id}')">
             <div class="item-checkbox" onclick="event.stopPropagation(); toggleDone('${id}')">
@@ -945,39 +747,25 @@ function renderAll() {
               <div class="item-meta">${tags}</div>
             </div>
             <div class="item-actions">
-              <button class="action-btn" title="Komen / Fail" onclick="event.stopPropagation(); openPanel('${id}')">
-                ✎
-              </button>
+              <button class="action-btn" title="Komen / Fail" onclick="event.stopPropagation(); openPanel('${id}')">✎</button>
             </div>
           </div>
           <div class="item-panel" id="panel-${id}">
             <div class="panel-section">
               <div class="panel-label">Komen</div>
-              <div class="comment-list" id="comments-${id}">
-                ${comments.map(c => `
-                  <div class="comment-entry">
-                    <span class="comment-author">${c.author}:</span>
-                    <span class="comment-text">${c.text}</span>
-                    <span class="comment-time">${c.time}</span>
-                  </div>
-                `).join('')}
+              <div class="comment-hint">
+                Tulis senarai dengan <code>* item</code> atau <code>- item</code> di setiap baris.
               </div>
+              <div class="comment-list" id="comments-${id}">${commentsHtml}</div>
               <div class="comment-input-row">
-                <input class="comment-input" id="ci-${id}" placeholder="Tulis komen..." onkeydown="if(event.key==='Enter') addComment('${id}')">
+                <textarea class="comment-input" id="ci-${id}" placeholder="Tulis komen... (guna * atau - untuk senarai)" rows="2" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); addComment('${id}'); }"></textarea>
                 <button class="btn-send" onclick="addComment('${id}')">Hantar</button>
               </div>
+              <div style="font-size:0.65rem;color:var(--ink-muted);margin-top:0.3rem;">Enter = hantar &nbsp;|&nbsp; Shift+Enter = baris baru</div>
             </div>
             <div class="panel-section">
               <div class="panel-label">Lampiran Fail</div>
-              <div class="file-list" id="files-${id}">
-                ${files.map(f => `
-                  <div class="file-entry">
-                    <span class="file-entry-icon">📎</span>
-                    <a href="${f.url}" target="_blank">${f.name}</a>
-                    <span style="font-size:0.68rem;color:var(--ink-muted)">${f.uploader||''}</span>
-                  </div>
-                `).join('')}
-              </div>
+              <div class="file-list" id="files-${id}">${filesHtml}</div>
               <div class="upload-area">
                 <input type="file" onchange="handleFileUpload('${id}', this)">
                 <div class="upload-area-icon">☁</div>
@@ -1012,27 +800,19 @@ async function toggleDone(id) {
   if (!state[id].files) state[id].files = [];
 
   const item = document.getElementById(`item-${id}`);
-  if (state[id].done) {
-    item.classList.add('done');
-    showToast('✓ Ditandakan selesai!');
-  } else {
-    item.classList.remove('done');
-    showToast('Ditandakan belum selesai.');
-  }
+  if (state[id].done) { item.classList.add('done'); showToast('✓ Ditandakan selesai!'); }
+  else { item.classList.remove('done'); showToast('Ditandakan belum selesai.'); }
 
   updateProgress();
   await saveData();
   renderAll();
 }
 
-function toggleExpand(id) {
-  openPanel(id);
-}
+function toggleExpand(id) { openPanel(id); }
 
 function openPanel(id) {
   const panel = document.getElementById(`panel-${id}`);
   const isOpen = panel.classList.contains('open');
-  // Close all
   document.querySelectorAll('.item-panel.open').forEach(p => p.classList.remove('open'));
   if (!isOpen) panel.classList.add('open');
 }
@@ -1055,9 +835,82 @@ async function addComment(id) {
   input.value = '';
   await saveData();
   renderAll();
-  // Re-open panel
   setTimeout(() => openPanel(id), 50);
   showToast('Komen ditambah!');
+}
+
+// ── COMMENT EDIT / DELETE ─────────────────────────────────────────────────────
+function startEditComment(itemId, commentIndex) {
+  const s = state[itemId];
+  if (!s || !s.comments || !s.comments[commentIndex]) return;
+
+  const originalText = s.comments[commentIndex].text;
+  const bodyEl = document.getElementById(`comment-body-${itemId}-${commentIndex}`);
+  const entryEl = document.getElementById(`comment-${itemId}-${commentIndex}`);
+
+  // Replace body with edit textarea
+  bodyEl.style.display = 'none';
+
+  // Remove any existing edit form
+  const existing = entryEl.querySelector('.comment-edit-wrap');
+  if (existing) existing.remove();
+
+  const wrap = document.createElement('div');
+  wrap.className = 'comment-edit-wrap';
+  wrap.innerHTML = `
+    <textarea class="comment-edit-area" id="edit-ta-${itemId}-${commentIndex}">${escapeHtml(originalText)}</textarea>
+    <div class="comment-edit-btns">
+      <button class="btn-save-edit" onclick="saveEditComment('${itemId}', ${commentIndex})">Simpan</button>
+      <button class="btn-cancel-edit" onclick="cancelEditComment('${itemId}', ${commentIndex})">Batal</button>
+    </div>
+  `;
+  entryEl.appendChild(wrap);
+
+  const ta = document.getElementById(`edit-ta-${itemId}-${commentIndex}`);
+  ta.focus();
+  ta.setSelectionRange(ta.value.length, ta.value.length);
+}
+
+async function saveEditComment(itemId, commentIndex) {
+  const ta = document.getElementById(`edit-ta-${itemId}-${commentIndex}`);
+  if (!ta) return;
+  const newText = ta.value.trim();
+  if (!newText) { showToast('Komen tidak boleh kosong.'); return; }
+
+  state[itemId].comments[commentIndex].text = newText;
+  state[itemId].comments[commentIndex].edited = true;
+
+  await saveData();
+  renderAll();
+  setTimeout(() => openPanel(itemId), 50);
+  showToast('Komen dikemaskini! ✏️');
+}
+
+function cancelEditComment(itemId, commentIndex) {
+  const bodyEl = document.getElementById(`comment-body-${itemId}-${commentIndex}`);
+  if (bodyEl) bodyEl.style.display = '';
+  const entryEl = document.getElementById(`comment-${itemId}-${commentIndex}`);
+  const wrap = entryEl && entryEl.querySelector('.comment-edit-wrap');
+  if (wrap) wrap.remove();
+}
+
+async function deleteComment(itemId, commentIndex) {
+  if (!confirm('Padam komen ini?')) return;
+  state[itemId].comments.splice(commentIndex, 1);
+  await saveData();
+  renderAll();
+  setTimeout(() => openPanel(itemId), 50);
+  showToast('Komen dipadam.');
+}
+
+// ── FILE DELETE ───────────────────────────────────────────────────────────────
+async function deleteFile(itemId, fileIndex) {
+  if (!confirm('Padam lampiran ini? (Fail di Google Drive tidak akan dipadam secara automatik)')) return;
+  state[itemId].files.splice(fileIndex, 1);
+  await saveData();
+  renderAll();
+  setTimeout(() => openPanel(itemId), 50);
+  showToast('Lampiran dipadam dari senarai.');
 }
 
 function handleFileUpload(id, input) {
@@ -1079,9 +932,7 @@ function showLoading(msg) {
   document.getElementById('loadingText').textContent = msg || 'Memuatkan...';
   document.getElementById('loading').style.display = 'flex';
 }
-function hideLoading() {
-  document.getElementById('loading').style.display = 'none';
-}
+function hideLoading() { document.getElementById('loading').style.display = 'none'; }
 
 let toastTimer;
 function showToast(msg) {
@@ -1094,10 +945,7 @@ function showToast(msg) {
 
 // Auto-refresh every 30s
 setInterval(async () => {
-  if (currentUser) {
-    await loadData();
-    renderAll();
-  }
+  if (currentUser) { await loadData(); renderAll(); }
 }, 30000);
 </script>
 </body>
