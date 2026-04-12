@@ -538,6 +538,7 @@ CHECKLIST.forEach((phase, pi) => {
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let currentUser = null;
 let state = {};
+let openPanelId = null; // track which panel is open
 
 // ── PETALS ────────────────────────────────────────────────────────────────────
 function createPetals() {
@@ -671,6 +672,12 @@ function escapeHtml(str) {
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
 function renderAll() {
+  // Save any text currently being typed before re-render
+  let savedDraft = null;
+  if (openPanelId) {
+    const inputEl = document.getElementById(`ci-${openPanelId}`);
+    if (inputEl) savedDraft = inputEl.value;
+  }
   const container = document.getElementById('checklistContainer');
   container.innerHTML = '';
 
@@ -790,6 +797,21 @@ function renderAll() {
   });
 
   updateProgress();
+
+  // Restore open panel after re-render
+  if (openPanelId) {
+    const panel = document.getElementById(`panel-${openPanelId}`);
+    if (panel) panel.classList.add('open');
+    // Restore any draft text the user was typing
+    if (savedDraft !== null) {
+      const inputEl = document.getElementById(`ci-${openPanelId}`);
+      if (inputEl) {
+        inputEl.value = savedDraft;
+        // Put cursor at end
+        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+      }
+    }
+  }
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
@@ -814,7 +836,12 @@ function openPanel(id) {
   const panel = document.getElementById(`panel-${id}`);
   const isOpen = panel.classList.contains('open');
   document.querySelectorAll('.item-panel.open').forEach(p => p.classList.remove('open'));
-  if (!isOpen) panel.classList.add('open');
+  if (!isOpen) {
+    panel.classList.add('open');
+    openPanelId = id;
+  } else {
+    openPanelId = null;
+  }
 }
 
 async function addComment(id) {
@@ -943,9 +970,15 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// Auto-refresh every 30s
+// Auto-refresh every 30s — skip if user is actively typing
 setInterval(async () => {
-  if (currentUser) { await loadData(); renderAll(); }
+  if (!currentUser) return;
+  // Don't refresh if user is focused on any input/textarea
+  const active = document.activeElement;
+  const isTyping = active && (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT');
+  if (isTyping) return;
+  await loadData();
+  renderAll();
 }, 30000);
 </script>
 </body>
