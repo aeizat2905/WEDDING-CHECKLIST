@@ -395,6 +395,89 @@
 
   .tag-custom { background: #f5f0ff; color: #8060b0; border-color: #d0c0ee; }
 
+  /* ── PHASE HEADER ACTIONS ── */
+  .phase-header-actions {
+    display: flex; gap: 0.4rem; margin-left: auto; flex-shrink: 0;
+  }
+
+  .hdr-btn {
+    background: none; border: 1px solid rgba(200,134,106,0.2); border-radius: 8px;
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 0.85rem; transition: all 0.2s; color: var(--ink-muted);
+  }
+  .hdr-btn:hover { background: var(--rose-pale); border-color: var(--rose); }
+  .hdr-btn-del:hover { background: #fff0f0; border-color: #e08080; }
+
+  /* ── PERIOD LABEL ROW ── */
+  .period-label-row {
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-bottom: 0.8rem; padding-left: 0.5rem;
+  }
+
+  .period-label { font-size: 0.68rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+
+  .period-actions { display: flex; gap: 0.3rem; margin-left: auto; }
+
+  .period-btn {
+    background: none; border: none; cursor: pointer; font-size: 0.75rem;
+    color: var(--ink-muted); padding: 0.15rem 0.3rem; border-radius: 4px; transition: all 0.15s; line-height: 1;
+  }
+  .period-btn:hover { background: rgba(200,134,106,0.15); color: var(--rose); }
+  .period-btn-del:hover { background: rgba(200,80,80,0.12); color: #c05050; }
+
+  /* ── ADD PERIOD ROW ── */
+  .add-period-row {
+    margin: 0.5rem 0 1.5rem; padding: 0 0.2rem;
+  }
+
+  .btn-add-period {
+    background: none; border: 1.5px dashed rgba(184,151,106,0.35); border-radius: 10px;
+    padding: 0.45rem 1rem; font-size: 0.78rem; color: var(--gold); cursor: pointer;
+    font-family: 'Jost', sans-serif; transition: all 0.2s; width: 100%; text-align: left;
+  }
+  .btn-add-period:hover { background: #fdf8f0; border-color: var(--gold); }
+
+  /* ── ADD PHASE ── */
+  .btn-add-phase {
+    background: none; border: 2px dashed rgba(200,134,106,0.3); border-radius: 14px;
+    padding: 0.8rem 1.5rem; font-size: 0.85rem; color: var(--rose); cursor: pointer;
+    font-family: 'Jost', sans-serif; transition: all 0.2s; width: 100%; text-align: center;
+    letter-spacing: 0.05rem;
+  }
+  .btn-add-phase:hover { background: var(--rose-pale); border-color: var(--rose); }
+
+  .add-phase-form {
+    background: var(--white); border: 1px solid var(--rose-light);
+    border-radius: 14px; padding: 1.2rem; margin-top: 0.8rem;
+  }
+
+  .form-row { margin-bottom: 0.6rem; }
+  .form-label { display: block; font-size: 0.68rem; letter-spacing: 0.12rem; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.3rem; font-weight: 500; }
+
+  /* ── ADD ITEM ROW ── */
+  .add-item-row { margin: 0.4rem 0 0.8rem; padding: 0 0.2rem; }
+
+  .btn-add-item {
+    background: none; border: 1.5px dashed rgba(200,134,106,0.35); border-radius: 10px;
+    padding: 0.5rem 1rem; font-size: 0.8rem; color: var(--rose); cursor: pointer;
+    font-family: 'Jost', sans-serif; transition: all 0.2s; width: 100%; text-align: left; letter-spacing: 0.05rem;
+  }
+  .btn-add-item:hover { background: var(--rose-pale); border-color: var(--rose); }
+
+  .add-item-form {
+    background: var(--white); border: 1px solid var(--rose-light); border-radius: 12px; padding: 0.8rem 1rem;
+  }
+
+  .add-item-input {
+    width: 100%; border: 1px solid var(--rose-light); border-radius: 8px;
+    padding: 0.5rem 0.8rem; font-size: 0.88rem; font-family: 'Jost', sans-serif;
+    outline: none; color: var(--ink); background: white; transition: border-color 0.2s;
+    margin-bottom: 0.5rem; display: block;
+  }
+  .add-item-input:focus { border-color: var(--rose); }
+
+  .add-item-btns { display: flex; gap: 0.5rem; }
+
   /* ── COUNTDOWN ── */
   .countdown-wrap {
     display: grid;
@@ -619,138 +702,100 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyA5kv2G-KOYShg3dGxMvm50mpWUsTT9cHprXiiSjOwjR4n830JHr-4arGD_rn-B1Ik/exec';
 const DRIVE_FOLDER = 'https://drive.google.com/drive/folders/1jRcBD1xTyifIfS83VusqKC8J1ZYcv3Iw';
 
-// ── CHECKLIST DATA ────────────────────────────────────────────────────────────
-const CHECKLIST = [
+// ── DEFAULT DATA (seeded on first run) ────────────────────────────────────────
+const DEFAULT_DATA = [
   {
-    phase: 'FASA 1: MAJLIS PERTUNANGAN',
+    id: 'phase_0', label: 'FASA 1: MAJLIS PERTUNANGAN',
     badge: 'Fasa 1', badgeClass: '', date: '30 Ogos 2026',
     periods: [
-      {
-        label: 'April – Mei 2026 · 4–5 Bulan Sebelum Tunang',
-        items: [
-          'Bincang dengan kedua-dua belah keluarga (bajet, lokasi, dan jumlah jemputan).',
-          'Tetapkan tema warna majlis.',
-          'Beli/tempah cincin risik dan cincin tunang.',
-          'Cari inspirasi dan senaraikan barang dulang hantaran (contoh: 5 berbalas 7).',
-        ]
-      },
-      {
-        label: 'Jun – Julai 2026 · 1–2 Bulan Sebelum Tunang',
-        items: [
-          'Tempah baju tunang.',
-          'Tempah jurusolek (MUA) dan jurugambar (jika perlu).',
-          'Tempah mini pelamin (jika buat di rumah) atau tempah lokasi.',
-          'Beli barang hantaran dan gubahan dulang.',
-          'Tempah katering atau rancang menu masakan keluarga.',
-          'Sediakan cenderahati (doorgift) ringkas untuk tetamu.',
-        ]
-      },
-      {
-        label: 'Ogos 2026 · Bulan Pertunangan',
-        items: [
-          'Fitting baju tunang.',
-          'Siapkan gubahan hantaran sepenuhnya.',
-          'Bersihkan dan kemaskan kawasan rumah/lokasi majlis.',
-          '🌟 30 Ogos 2026: MAJLIS PERTUNANGAN',
-        ]
-      },
+      { id: 'period_0_0', label: 'April – Mei 2026 · 4–5 Bulan Sebelum Tunang', items: [
+        { id: 'item_0_0_0', text: 'Bincang dengan kedua-dua belah keluarga (bajet, lokasi, dan jumlah jemputan).' },
+        { id: 'item_0_0_1', text: 'Tetapkan tema warna majlis.' },
+        { id: 'item_0_0_2', text: 'Beli/tempah cincin risik dan cincin tunang.' },
+        { id: 'item_0_0_3', text: 'Cari inspirasi dan senaraikan barang dulang hantaran (contoh: 5 berbalas 7).' },
+      ]},
+      { id: 'period_0_1', label: 'Jun – Julai 2026 · 1–2 Bulan Sebelum Tunang', items: [
+        { id: 'item_0_1_0', text: 'Tempah baju tunang.' },
+        { id: 'item_0_1_1', text: 'Tempah jurusolek (MUA) dan jurugambar (jika perlu).' },
+        { id: 'item_0_1_2', text: 'Tempah mini pelamin (jika buat di rumah) atau tempah lokasi.' },
+        { id: 'item_0_1_3', text: 'Beli barang hantaran dan gubahan dulang.' },
+        { id: 'item_0_1_4', text: 'Tempah katering atau rancang menu masakan keluarga.' },
+        { id: 'item_0_1_5', text: 'Sediakan cenderahati (doorgift) ringkas untuk tetamu.' },
+      ]},
+      { id: 'period_0_2', label: 'Ogos 2026 · Bulan Pertunangan', items: [
+        { id: 'item_0_2_0', text: 'Fitting baju tunang.' },
+        { id: 'item_0_2_1', text: 'Siapkan gubahan hantaran sepenuhnya.' },
+        { id: 'item_0_2_2', text: 'Bersihkan dan kemaskan kawasan rumah/lokasi majlis.' },
+        { id: 'item_0_2_3', text: '🌟 30 Ogos 2026: MAJLIS PERTUNANGAN' },
+      ]},
     ]
   },
   {
-    phase: 'FASA 2: MAJLIS PERKAHWINAN',
+    id: 'phase_1', label: 'FASA 2: MAJLIS PERKAHWINAN',
     badge: 'Fasa 2', badgeClass: 'gold', date: '3 Januari 2027',
     periods: [
-      {
-        label: 'September 2026 · 4 Bulan Sebelum Kahwin',
-        items: [
-          'Hadir Kursus Pra-Perkahwinan (jika belum).',
-          'Bincang bajet keseluruhan majlis perkahwinan.',
-          'Tempah lokasi/dewan majlis dan khemah (jika buat di rumah).',
-          'Tempah katering untuk majlis perkahwinan.',
-          'Tempah Pakej Perkahwinan (Pelamin, Baju Nikah & Sanding).',
-          'Tempah MUA, Jurugambar dan Juruvideo.',
-        ]
-      },
-      {
-        label: 'Oktober 2026 · 3 Bulan Sebelum Kahwin',
-        items: [
-          'Buat Ujian Saringan HIV di klinik kesihatan.',
-          'Sediakan dokumen dan isi borang kebenaran berkahwin (online/pejabat agama).',
-          'Cari Tok Kadi dan tetapkan masa akad nikah.',
-          'Bincang dan senaraikan barang hantaran kahwin (contoh: 7 berbalas 9).',
-          'Beli cincin/gelang batal air sembahyang.',
-        ]
-      },
-      {
-        label: 'November 2026 · 2 Bulan Sebelum Kahwin',
-        items: [
-          'Cetak kad jemputan (fizikal) dan buat kad jemputan digital (e-card).',
-          'Beli barang hantaran dan mula tempah gubahan hantaran.',
-          'Tempah cenderahati (doorgift) tetamu.',
-          'Lantik ahli keluarga/rakan sebagai jawatankuasa majlis (penyambut tetamu, penjaga hadiah, dll).',
-        ]
-      },
-      {
-        label: 'Disember 2026 · 1 Bulan Sebelum Kahwin',
-        items: [
-          'Edarkan kad jemputan (fizikal dan digital).',
-          'Hantar borang nikah yang telah lengkap ke Pejabat Agama.',
-          'Fitting baju nikah dan sanding buat kali terakhir.',
-          'Sahkan (finalize) jumlah tetamu dengan pihak katering.',
-          'Siapkan semua gubahan hantaran.',
-          'Beli barang keperluan bilik pengantin.',
-        ]
-      },
-      {
-        label: 'Januari 2027 · Bulan Perkahwinan',
-        items: [
-          'Ambil baju pengantin dari butik.',
-          'Rehat yang cukup dan jaga kesihatan mental/fizikal.',
-          '💍 3 Januari 2027: MAJLIS AKAD NIKAH & RESEPSI',
-        ]
-      },
+      { id: 'period_1_0', label: 'September 2026 · 4 Bulan Sebelum Kahwin', items: [
+        { id: 'item_1_0_0', text: 'Hadir Kursus Pra-Perkahwinan (jika belum).' },
+        { id: 'item_1_0_1', text: 'Bincang bajet keseluruhan majlis perkahwinan.' },
+        { id: 'item_1_0_2', text: 'Tempah lokasi/dewan majlis dan khemah (jika buat di rumah).' },
+        { id: 'item_1_0_3', text: 'Tempah katering untuk majlis perkahwinan.' },
+        { id: 'item_1_0_4', text: 'Tempah Pakej Perkahwinan (Pelamin, Baju Nikah & Sanding).' },
+        { id: 'item_1_0_5', text: 'Tempah MUA, Jurugambar dan Juruvideo.' },
+      ]},
+      { id: 'period_1_1', label: 'Oktober 2026 · 3 Bulan Sebelum Kahwin', items: [
+        { id: 'item_1_1_0', text: 'Buat Ujian Saringan HIV di klinik kesihatan.' },
+        { id: 'item_1_1_1', text: 'Sediakan dokumen dan isi borang kebenaran berkahwin (online/pejabat agama).' },
+        { id: 'item_1_1_2', text: 'Cari Tok Kadi dan tetapkan masa akad nikah.' },
+        { id: 'item_1_1_3', text: 'Bincang dan senaraikan barang hantaran kahwin (contoh: 7 berbalas 9).' },
+        { id: 'item_1_1_4', text: 'Beli cincin/gelang batal air sembahyang.' },
+      ]},
+      { id: 'period_1_2', label: 'November 2026 · 2 Bulan Sebelum Kahwin', items: [
+        { id: 'item_1_2_0', text: 'Cetak kad jemputan (fizikal) dan buat kad jemputan digital (e-card).' },
+        { id: 'item_1_2_1', text: 'Beli barang hantaran dan mula tempah gubahan hantaran.' },
+        { id: 'item_1_2_2', text: 'Tempah cenderahati (doorgift) tetamu.' },
+        { id: 'item_1_2_3', text: 'Lantik ahli keluarga/rakan sebagai jawatankuasa majlis (penyambut tetamu, penjaga hadiah, dll).' },
+      ]},
+      { id: 'period_1_3', label: 'Disember 2026 · 1 Bulan Sebelum Kahwin', items: [
+        { id: 'item_1_3_0', text: 'Edarkan kad jemputan (fizikal dan digital).' },
+        { id: 'item_1_3_1', text: 'Hantar borang nikah yang telah lengkap ke Pejabat Agama.' },
+        { id: 'item_1_3_2', text: 'Fitting baju nikah dan sanding buat kali terakhir.' },
+        { id: 'item_1_3_3', text: 'Sahkan (finalize) jumlah tetamu dengan pihak katering.' },
+        { id: 'item_1_3_4', text: 'Siapkan semua gubahan hantaran.' },
+        { id: 'item_1_3_5', text: 'Beli barang keperluan bilik pengantin.' },
+      ]},
+      { id: 'period_1_4', label: 'Januari 2027 · Bulan Perkahwinan', items: [
+        { id: 'item_1_4_0', text: 'Ambil baju pengantin dari butik.' },
+        { id: 'item_1_4_1', text: 'Rehat yang cukup dan jaga kesihatan mental/fizikal.' },
+        { id: 'item_1_4_2', text: '💍 3 Januari 2027: MAJLIS AKAD NIKAH & RESEPSI' },
+      ]},
     ]
   }
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let currentUser = null;
-let state = {};
+let state = {};        // { itemId: { done, comments, files } }
+let structure = [];    // [ { id, label, badge, badgeClass, date, periods: [ { id, label, items: [{id,text}] } ] } ]
 let openPanelId = null;
-let allItemIds = [];
 let countdownStarted = false;
 
-// ── CUSTOM ITEMS ──────────────────────────────────────────────────────────────
-function getCustomItems(pi, ri) {
-  if (!state._custom) state._custom = {};
-  const key = pi + '_' + ri;
-  if (!state._custom[key]) state._custom[key] = [];
-  return state._custom[key];
-}
-
-function buildAllItemIds() {
-  allItemIds = [];
-  CHECKLIST.forEach(function(phase, pi) {
-    phase.periods.forEach(function(period, ri) {
-      period.items.forEach(function(_, ii) { allItemIds.push(pi + '_' + ri + '_' + ii); });
-      getCustomItems(pi, ri).forEach(function(ci) { allItemIds.push(ci.id); });
-    });
-  });
+function uid() {
+  return 'x' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 }
 
 // ── PETALS ────────────────────────────────────────────────────────────────────
 function createPetals() {
-  const container = document.getElementById('petals');
+  const c = document.getElementById('petals');
   for (let i = 0; i < 15; i++) {
     const p = document.createElement('div');
     p.className = 'petal';
     p.style.left = Math.random() * 100 + '%';
-    p.style.width = (4 + Math.random() * 6) + 'px';
+    p.style.width  = (4 + Math.random() * 6) + 'px';
     p.style.height = (7 + Math.random() * 8) + 'px';
     p.style.animationDuration = (8 + Math.random() * 12) + 's';
-    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.animationDelay   = (Math.random() * 10) + 's';
     p.style.opacity = 0.1 + Math.random() * 0.2;
-    container.appendChild(p);
+    c.appendChild(p);
   }
 }
 createPetals();
@@ -778,27 +823,36 @@ function logout() {
 // ── DATA I/O ──────────────────────────────────────────────────────────────────
 async function loadData() {
   try {
-    const res = await fetch(`${SCRIPT_URL}?action=load`);
+    const res  = await fetch(SCRIPT_URL + '?action=load');
     const json = await res.json();
-    if (json.ok) state = json.data || {};
-    else showToast('Gagal memuatkan data. Menggunakan data tempatan.');
+    if (json.ok) {
+      state     = json.data.state     || {};
+      structure = json.data.structure || [];
+    }
   } catch (e) {
-    showToast('Offline — data tempatan digunakan.');
-    const saved = localStorage.getItem('weddingState');
-    if (saved) state = JSON.parse(saved);
+    const saved = localStorage.getItem('weddingApp');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state     = parsed.state     || {};
+      structure = parsed.structure || [];
+    }
   }
-  buildAllItemIds();
+  // Seed structure from DEFAULT_DATA if empty
+  if (!structure || structure.length === 0) {
+    structure = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
 }
 
 async function saveData() {
-  localStorage.setItem('weddingState', JSON.stringify(state));
+  const payload = { state: state, structure: structure };
+  localStorage.setItem('weddingApp', JSON.stringify(payload));
   try {
     await fetch(SCRIPT_URL, {
       method: 'POST',
-      body: JSON.stringify({ action: 'save', data: state }),
+      body: JSON.stringify({ action: 'save', data: payload }),
     });
     document.getElementById('syncStatus').innerHTML = '<div class="sync-dot"></div> Disimpan ✓';
-    setTimeout(() => {
+    setTimeout(function() {
       document.getElementById('syncStatus').innerHTML = '<div class="sync-dot"></div> Sync aktif';
     }, 2000);
   } catch (e) {
@@ -810,14 +864,11 @@ async function uploadFile(itemId, file) {
   showLoading('Memuat naik fail ke Google Drive...');
   try {
     const reader = new FileReader();
-    reader.onload = async () => {
+    reader.onload = async function() {
       const base64 = reader.result.split(',')[1];
-      const res = await fetch(SCRIPT_URL, {
+      const res  = await fetch(SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify({
-          action: 'upload', itemId,
-          fileName: file.name, fileData: base64, mimeType: file.type,
-        }),
+        body: JSON.stringify({ action: 'upload', itemId: itemId, fileName: file.name, fileData: base64, mimeType: file.type }),
       });
       const json = await res.json();
       hideLoading();
@@ -827,236 +878,276 @@ async function uploadFile(itemId, file) {
         state[itemId].files.push({ name: file.name, url: json.url, uploader: currentUser });
         await saveData();
         renderAll();
-        setTimeout(() => openPanel(itemId), 50);
+        setTimeout(function() { openPanel(itemId); }, 50);
         showToast('Fail berjaya dimuat naik! 📎');
-      } else {
-        showToast('Gagal memuat naik fail.');
-      }
+      } else { showToast('Gagal memuat naik fail.'); }
     };
     reader.readAsDataURL(file);
-  } catch (e) {
-    hideLoading();
-    showToast('Ralat semasa memuat naik fail.');
-  }
+  } catch (e) { hideLoading(); showToast('Ralat semasa memuat naik fail.'); }
 }
 
-// ── BULLET LIST PARSER ────────────────────────────────────────────────────────
-// Converts lines starting with * or - into an HTML bullet list
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function parseComment(text) {
   if (!text) return '';
   const lines = text.split('\n');
-  let html = '';
-  let inList = false;
-
-  lines.forEach(line => {
-    const bulletMatch = line.match(/^[\*\-]\s+(.+)/);
-    if (bulletMatch) {
+  let html = '', inList = false;
+  lines.forEach(function(line) {
+    const m = line.match(/^[*\-]\s+(.+)/);
+    if (m) {
       if (!inList) { html += '<ul>'; inList = true; }
-      html += `<li>${escapeHtml(bulletMatch[1])}</li>`;
+      html += '<li>' + escapeHtml(m[1]) + '</li>';
     } else {
       if (inList) { html += '</ul>'; inList = false; }
-      if (line.trim()) html += `<span>${escapeHtml(line)}</span><br>`;
+      if (line.trim()) html += '<span>' + escapeHtml(line) + '</span><br>';
       else html += '<br>';
     }
   });
-
   if (inList) html += '</ul>';
-  // clean up trailing <br>
   html = html.replace(/(<br>)+$/, '');
   return html;
 }
 
-function escapeHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function getAllItemIds() {
+  const ids = [];
+  structure.forEach(function(phase) {
+    phase.periods.forEach(function(period) {
+      period.items.forEach(function(item) { ids.push(item.id); });
+    });
+  });
+  return ids;
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
 function renderAll() {
-  // Save draft
   let savedDraft = null;
   if (openPanelId) {
-    const inputEl = document.getElementById(`ci-${openPanelId}`);
-    if (inputEl) savedDraft = inputEl.value;
+    const el = document.getElementById('ci-' + openPanelId);
+    if (el) savedDraft = el.value;
   }
-
-  buildAllItemIds();
 
   const container = document.getElementById('checklistContainer');
   container.innerHTML = '';
 
-  CHECKLIST.forEach((phase, pi) => {
-    const phaseBlock = document.createElement('div');
-    phaseBlock.className = 'phase-block';
-
-    phaseBlock.innerHTML = `
-      <div class="phase-header">
-        <div class="phase-badge ${phase.badgeClass}">${phase.badge}</div>
-        <div class="phase-title">${phase.phase}</div>
-        <div class="phase-date">📅 ${phase.date}</div>
-      </div>
-    `;
-
-    phase.periods.forEach((period, ri) => {
-      const pg = document.createElement('div');
-      pg.className = 'period-group';
-      pg.innerHTML = `<div class="period-label">${period.label}</div>`;
-
-      // ── Built-in items ──
-      period.items.forEach((text, ii) => {
-        pg.appendChild(buildItemEl(`${pi}_${ri}_${ii}`, text, pi, ri, ii, false));
-      });
-
-      // ── Custom items ──
-      const customItems = getCustomItems(pi, ri);
-      customItems.forEach((ci, idx) => {
-        pg.appendChild(buildItemEl(ci.id, ci.text, pi, ri, null, true, idx));
-      });
-
-      // ── Add item row ──
-      const addRow = document.createElement('div');
-      addRow.className = 'add-item-row';
-      addRow.id = `add-row-${pi}-${ri}`;
-      addRow.innerHTML = `
-        <button class="btn-add-item" onclick="showAddItemForm(${pi}, ${ri})">＋ Tambah item</button>
-        <div class="add-item-form" id="add-form-${pi}-${ri}" style="display:none">
-          <input class="add-item-input" id="add-input-${pi}-${ri}" placeholder="Tulis tugasan baru..." onkeydown="if(event.key==='Enter') addCustomItem(${pi},${ri})">
-          <div class="add-item-btns">
-            <button class="btn-save-edit" onclick="addCustomItem(${pi},${ri})">Tambah</button>
-            <button class="btn-cancel-edit" onclick="hideAddItemForm(${pi},${ri})">Batal</button>
-          </div>
-        </div>
-      `;
-      pg.appendChild(addRow);
-      phaseBlock.appendChild(pg);
-    });
-
-    container.appendChild(phaseBlock);
+  structure.forEach(function(phase, pi) {
+    container.appendChild(buildPhaseEl(phase, pi));
   });
+
+  // ── Add Phase button ──
+  const addPhaseRow = document.createElement('div');
+  addPhaseRow.style.cssText = 'margin:1rem 0 2rem;';
+  addPhaseRow.innerHTML =
+    '<button class="btn-add-phase" onclick="showAddPhaseForm()">＋ Tambah Fasa Baru</button>' +
+    '<div id="add-phase-form" style="display:none" class="add-phase-form">' +
+      '<div class="form-row"><label class="form-label">Nama Fasa</label>' +
+        '<input class="add-item-input" id="ap-label" placeholder="Contoh: FASA 3: MAJLIS KENDURI"></div>' +
+      '<div class="form-row"><label class="form-label">Tarikh</label>' +
+        '<input class="add-item-input" id="ap-date" placeholder="Contoh: 10 Mac 2027"></div>' +
+      '<div class="form-row"><label class="form-label">Warna Badge</label>' +
+        '<select class="add-item-input" id="ap-badge"><option value="">Rose (default)</option><option value="gold">Gold</option></select></div>' +
+      '<div class="add-item-btns">' +
+        '<button class="btn-save-edit" onclick="addPhase()">Tambah Fasa</button>' +
+        '<button class="btn-cancel-edit" onclick="hideAddPhaseForm()">Batal</button>' +
+      '</div>' +
+    '</div>';
+  container.appendChild(addPhaseRow);
 
   updateProgress();
 
-  // Restore open panel
   if (openPanelId) {
-    const panel = document.getElementById(`panel-${openPanelId}`);
+    const panel = document.getElementById('panel-' + openPanelId);
     if (panel) panel.classList.add('open');
     if (savedDraft !== null) {
-      const inputEl = document.getElementById(`ci-${openPanelId}`);
-      if (inputEl) {
-        inputEl.value = savedDraft;
-        inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
-      }
+      const el = document.getElementById('ci-' + openPanelId);
+      if (el) { el.value = savedDraft; el.setSelectionRange(el.value.length, el.value.length); }
     }
   }
 }
 
-function buildItemEl(id, text, pi, ri, ii, isCustom, customIdx) {
-  const s = state[id] || {};
-  const done = s.done || false;
-  const comments = s.comments || [];
-  const files = s.files || [];
+function buildPhaseEl(phase, pi) {
+  const phaseBlock = document.createElement('div');
+  phaseBlock.className = 'phase-block';
+  phaseBlock.id = 'phase-block-' + phase.id;
 
-  const item = document.createElement('div');
-  item.className = 'checklist-item' + (done ? ' done' : '') + (isCustom ? ' custom-item' : '');
-  item.id = `item-${id}`;
+  // Phase header with edit/delete
+  const header = document.createElement('div');
+  header.className = 'phase-header';
+  header.innerHTML =
+    '<div class="phase-badge ' + escapeHtml(phase.badgeClass) + '" id="phase-badge-' + phase.id + '">' + escapeHtml(phase.badge) + '</div>' +
+    '<div class="phase-title" id="phase-title-' + phase.id + '">' + escapeHtml(phase.label) + '</div>' +
+    '<div class="phase-date" id="phase-date-' + phase.id + '">📅 ' + escapeHtml(phase.date) + '</div>' +
+    '<div class="phase-header-actions">' +
+      '<button class="hdr-btn" title="Edit Fasa" onclick="startEditPhase(\'' + phase.id + '\')">✏️</button>' +
+      '<button class="hdr-btn hdr-btn-del" title="Padam Fasa" onclick="deletePhase(\'' + phase.id + '\')">🗑️</button>' +
+    '</div>';
+  phaseBlock.appendChild(header);
 
-  const tags = [
-    done ? '<span class="item-tag tag-done">✓ Selesai</span>' : '',
-    comments.length ? `<span class="item-tag tag-comment">💬 ${comments.length}</span>` : '',
-    files.length ? `<span class="item-tag tag-file">📎 ${files.length}</span>` : '',
-    isCustom ? '<span class="item-tag tag-custom">+ Ditambah</span>' : '',
-  ].filter(Boolean).join('');
+  // Periods
+  phase.periods.forEach(function(period, ri) {
+    phaseBlock.appendChild(buildPeriodEl(phase, pi, period, ri));
+  });
 
-  const commentsHtml = comments.map((c, ci) => `
-    <div class="comment-entry" id="comment-${id}-${ci}">
-      <div class="comment-entry-header">
-        <span class="comment-author">${escapeHtml(c.author)}:</span>
-        <span class="comment-time">${c.time}</span>
-        <div class="comment-entry-actions">
-          ${c.author === currentUser ? `
-            <button class="comment-action-btn" title="Edit" onclick="startEditComment('${id}', ${ci})">✏️</button>
-            <button class="comment-action-btn del" title="Padam" onclick="deleteComment('${id}', ${ci})">🗑️</button>
-          ` : ''}
-        </div>
-      </div>
-      <div class="comment-body" id="comment-body-${id}-${ci}">${parseComment(c.text)}</div>
-    </div>
-  `).join('');
+  // Add Period button
+  const addPRow = document.createElement('div');
+  addPRow.className = 'add-period-row';
+  addPRow.id = 'add-period-row-' + phase.id;
+  addPRow.innerHTML =
+    '<button class="btn-add-period" onclick="showAddPeriodForm(\'' + phase.id + '\')">＋ Tambah Kumpulan Tempoh</button>' +
+    '<div id="add-period-form-' + phase.id + '" style="display:none" class="add-item-form">' +
+      '<input class="add-item-input" id="add-period-input-' + phase.id + '" placeholder="Contoh: Februari 2027 · 1 Bulan Sebelum Majlis">' +
+      '<div class="add-item-btns">' +
+        '<button class="btn-save-edit" onclick="addPeriod(\'' + phase.id + '\')">Tambah</button>' +
+        '<button class="btn-cancel-edit" onclick="hideAddPeriodForm(\'' + phase.id + '\')">Batal</button>' +
+      '</div>' +
+    '</div>';
+  phaseBlock.appendChild(addPRow);
 
-  const filesHtml = files.map((f, fi) => `
-    <div class="file-entry" id="file-${id}-${fi}">
-      <span class="file-entry-icon">📎</span>
-      <a href="${f.url}" target="_blank">${escapeHtml(f.name)}</a>
-      <span style="font-size:0.68rem;color:var(--ink-muted)">${escapeHtml(f.uploader||'')}</span>
-      ${f.uploader === currentUser ? `<button class="file-delete-btn" title="Padam fail" onclick="deleteFile('${id}', ${fi})">🗑️</button>` : ''}
-    </div>
-  `).join('');
-
-  // Edit/delete buttons for custom items only
-  const customControls = isCustom ? `
-    <button class="action-btn" title="Edit item" onclick="event.stopPropagation(); startEditItem('${id}', ${pi}, ${ri}, ${Number(customIdx)})">✏️</button>
-    <button class="action-btn" title="Padam item" onclick="event.stopPropagation(); deleteCustomItem('${id}', ${pi}, ${ri}, ${Number(customIdx)})">🗑️</button>
-  ` : '';
-
-  item.innerHTML = `
-    <div class="item-main" onclick="toggleExpand('${id}')">
-      <div class="item-checkbox" onclick="event.stopPropagation(); toggleDone('${id}')">
-        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
-          <path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="item-body">
-        <div class="item-text" id="item-text-${id}">${escapeHtml(text)}</div>
-        <div class="item-meta">${tags}</div>
-      </div>
-      <div class="item-actions">
-        ${customControls}
-        <button class="action-btn" title="Komen / Fail" onclick="event.stopPropagation(); openPanel('${id}')">✎</button>
-      </div>
-    </div>
-    <div class="item-panel" id="panel-${id}">
-      <div class="panel-section">
-        <div class="panel-label">Komen</div>
-        <div class="comment-hint">
-          Tulis senarai dengan <code>* item</code> atau <code>- item</code> di setiap baris.
-        </div>
-        <div class="comment-list" id="comments-${id}">${commentsHtml}</div>
-        <div class="comment-input-row">
-          <textarea class="comment-input" id="ci-${id}" placeholder="Tulis komen... (guna * atau - untuk senarai)" rows="2" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); addComment('${id}'); }"></textarea>
-          <button class="btn-send" onclick="addComment('${id}')">Hantar</button>
-        </div>
-        <div style="font-size:0.65rem;color:var(--ink-muted);margin-top:0.3rem;">Enter = hantar &nbsp;|&nbsp; Shift+Enter = baris baru</div>
-      </div>
-      <div class="panel-section">
-        <div class="panel-label">Lampiran Fail</div>
-        <div class="file-list" id="files-${id}">${filesHtml}</div>
-        <div class="upload-area">
-          <input type="file" onchange="handleFileUpload('${id}', this)">
-          <div class="upload-area-icon">☁</div>
-          <div class="upload-area-text">Klik atau seret fail ke sini<br><small>Fail akan disimpan di Google Drive</small></div>
-        </div>
-        <div style="margin-top:0.5rem;text-align:right">
-          <a href="${DRIVE_FOLDER}" target="_blank" style="font-size:0.72rem;color:var(--gold);text-decoration:none;">
-            📁 Buka Folder Google Drive →
-          </a>
-        </div>
-      </div>
-    </div>
-  `;
-
-  return item;
+  return phaseBlock;
 }
 
-// ── ACTIONS ───────────────────────────────────────────────────────────────────
+function buildPeriodEl(phase, pi, period, ri) {
+  const pg = document.createElement('div');
+  pg.className = 'period-group';
+  pg.id = 'period-group-' + period.id;
+
+  // Period label row with edit/delete
+  const labelRow = document.createElement('div');
+  labelRow.className = 'period-label-row';
+  labelRow.innerHTML =
+    '<span class="period-label" id="period-label-' + period.id + '">' + escapeHtml(period.label) + '</span>' +
+    '<div class="period-actions">' +
+      '<button class="period-btn" title="Edit tempoh" onclick="startEditPeriod(\'' + phase.id + '\',\'' + period.id + '\')">✏️</button>' +
+      '<button class="period-btn period-btn-del" title="Padam tempoh" onclick="deletePeriod(\'' + phase.id + '\',\'' + period.id + '\')">🗑️</button>' +
+    '</div>';
+  pg.appendChild(labelRow);
+
+  // Items
+  period.items.forEach(function(item, ii) {
+    pg.appendChild(buildItemEl(item, phase.id, period.id));
+  });
+
+  // Add item row
+  const addRow = document.createElement('div');
+  addRow.className = 'add-item-row';
+  addRow.id = 'add-row-' + period.id;
+  addRow.innerHTML =
+    '<button class="btn-add-item" onclick="showAddItemForm(\'' + phase.id + '\',\'' + period.id + '\')">＋ Tambah item</button>' +
+    '<div class="add-item-form" id="add-form-' + period.id + '" style="display:none">' +
+      '<input class="add-item-input" id="add-input-' + period.id + '" placeholder="Tulis tugasan baru...">' +
+      '<div class="add-item-btns">' +
+        '<button class="btn-save-edit" onclick="addItem(\'' + phase.id + '\',\'' + period.id + '\')">Tambah</button>' +
+        '<button class="btn-cancel-edit" onclick="hideAddItemForm(\'' + period.id + '\')">Batal</button>' +
+      '</div>' +
+    '</div>';
+  pg.appendChild(addRow);
+
+  return pg;
+}
+
+function buildItemEl(item, phaseId, periodId) {
+  const s        = state[item.id] || {};
+  const done     = s.done     || false;
+  const comments = s.comments || [];
+  const files    = s.files    || [];
+
+  const el = document.createElement('div');
+  el.className = 'checklist-item' + (done ? ' done' : '');
+  el.id = 'item-' + item.id;
+
+  const tags = [
+    done     ? '<span class="item-tag tag-done">✓ Selesai</span>' : '',
+    comments.length ? '<span class="item-tag tag-comment">💬 ' + comments.length + '</span>' : '',
+    files.length    ? '<span class="item-tag tag-file">📎 '    + files.length    + '</span>' : '',
+  ].filter(Boolean).join('');
+
+  const commentsHtml = comments.map(function(c, ci) {
+    const mine = c.author === currentUser;
+    return '<div class="comment-entry" id="comment-' + item.id + '-' + ci + '">' +
+      '<div class="comment-entry-header">' +
+        '<span class="comment-author">' + escapeHtml(c.author) + ':</span>' +
+        '<span class="comment-time">' + escapeHtml(c.time) + '</span>' +
+        '<div class="comment-entry-actions">' +
+          (mine ? '<button class="comment-action-btn" onclick="startEditComment(\'' + item.id + '\',' + ci + ')">✏️</button>' +
+                  '<button class="comment-action-btn del" onclick="deleteComment(\'' + item.id + '\',' + ci + ')">🗑️</button>' : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="comment-body" id="comment-body-' + item.id + '-' + ci + '">' + parseComment(c.text) + '</div>' +
+    '</div>';
+  }).join('');
+
+  const filesHtml = files.map(function(f, fi) {
+    return '<div class="file-entry">' +
+      '<span class="file-entry-icon">📎</span>' +
+      '<a href="' + escapeHtml(f.url) + '" target="_blank">' + escapeHtml(f.name) + '</a>' +
+      '<span style="font-size:0.68rem;color:var(--ink-muted)">' + escapeHtml(f.uploader || '') + '</span>' +
+      (f.uploader === currentUser ? '<button class="file-delete-btn" onclick="deleteFile(\'' + item.id + '\',' + fi + ')">🗑️</button>' : '') +
+    '</div>';
+  }).join('');
+
+  el.innerHTML =
+    '<div class="item-main" onclick="toggleExpand(\'' + item.id + '\')">' +
+      '<div class="item-checkbox" onclick="event.stopPropagation(); toggleDone(\'' + item.id + '\')">' +
+        '<svg width="12" height="9" viewBox="0 0 12 9" fill="none">' +
+          '<path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '</svg>' +
+      '</div>' +
+      '<div class="item-body">' +
+        '<div class="item-text" id="item-text-' + item.id + '">' + escapeHtml(item.text) + '</div>' +
+        '<div class="item-meta">' + tags + '</div>' +
+      '</div>' +
+      '<div class="item-actions">' +
+        '<button class="action-btn" title="Edit item" onclick="event.stopPropagation(); startEditItem(\'' + item.id + '\',\'' + phaseId + '\',\'' + periodId + '\')">✏️</button>' +
+        '<button class="action-btn" title="Padam item" onclick="event.stopPropagation(); deleteItem(\'' + item.id + '\',\'' + phaseId + '\',\'' + periodId + '\')">🗑️</button>' +
+        '<button class="action-btn" title="Komen / Fail" onclick="event.stopPropagation(); openPanel(\'' + item.id + '\')">✎</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="item-panel" id="panel-' + item.id + '">' +
+      '<div class="panel-section">' +
+        '<div class="panel-label">Komen</div>' +
+        '<div class="comment-hint">Tulis senarai dengan <code>* item</code> atau <code>- item</code> di setiap baris.</div>' +
+        '<div class="comment-list" id="comments-' + item.id + '">' + commentsHtml + '</div>' +
+        '<div class="comment-input-row">' +
+          '<textarea class="comment-input" id="ci-' + item.id + '" placeholder="Tulis komen..." rows="2" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();addComment(\'' + item.id + '\')}"></textarea>' +
+          '<button class="btn-send" onclick="addComment(\'' + item.id + '\')">Hantar</button>' +
+        '</div>' +
+        '<div style="font-size:0.65rem;color:var(--ink-muted);margin-top:0.3rem;">Enter = hantar &nbsp;|&nbsp; Shift+Enter = baris baru</div>' +
+      '</div>' +
+      '<div class="panel-section">' +
+        '<div class="panel-label">Lampiran Fail</div>' +
+        '<div class="file-list" id="files-' + item.id + '">' + filesHtml + '</div>' +
+        '<div class="upload-area"><input type="file" onchange="handleFileUpload(\'' + item.id + '\',this)">' +
+          '<div class="upload-area-icon">☁</div>' +
+          '<div class="upload-area-text">Klik atau seret fail ke sini<br><small>Fail akan disimpan di Google Drive</small></div>' +
+        '</div>' +
+        '<div style="margin-top:0.5rem;text-align:right">' +
+          '<a href="' + DRIVE_FOLDER + '" target="_blank" style="font-size:0.72rem;color:var(--gold);text-decoration:none;">📁 Buka Folder Google Drive →</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  return el;
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────────────────
+function updateProgress() {
+  const ids  = getAllItemIds();
+  const done = ids.filter(function(id) { return state[id] && state[id].done; }).length;
+  const pct  = ids.length ? Math.round(done / ids.length * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = done + '/' + ids.length + ' · ' + pct + '%';
+}
+
+// ── ITEM TOGGLE ───────────────────────────────────────────────────────────────
 async function toggleDone(id) {
   if (!state[id]) state[id] = {};
   state[id].done = !state[id].done;
-  if (!state[id].comments) state[id].comments = [];
-  if (!state[id].files) state[id].files = [];
-
-  const item = document.getElementById(`item-${id}`);
-  if (state[id].done) { item.classList.add('done'); showToast('✓ Ditandakan selesai!'); }
-  else { item.classList.remove('done'); showToast('Ditandakan belum selesai.'); }
-
+  const el = document.getElementById('item-' + id);
+  if (state[id].done) { el.classList.add('done'); showToast('✓ Ditandakan selesai!'); }
+  else { el.classList.remove('done'); showToast('Ditandakan belum selesai.'); }
   updateProgress();
   await saveData();
   renderAll();
@@ -1065,227 +1156,404 @@ async function toggleDone(id) {
 function toggleExpand(id) { openPanel(id); }
 
 function openPanel(id) {
-  const panel = document.getElementById(`panel-${id}`);
-  const isOpen = panel.classList.contains('open');
-  document.querySelectorAll('.item-panel.open').forEach(p => p.classList.remove('open'));
-  if (!isOpen) {
-    panel.classList.add('open');
-    openPanelId = id;
-  } else {
-    openPanelId = null;
-  }
+  const panel  = document.getElementById('panel-' + id);
+  const isOpen = panel && panel.classList.contains('open');
+  document.querySelectorAll('.item-panel.open').forEach(function(p) { p.classList.remove('open'); });
+  if (!isOpen && panel) { panel.classList.add('open'); openPanelId = id; }
+  else { openPanelId = null; }
 }
 
-async function addComment(id) {
-  const input = document.getElementById(`ci-${id}`);
-  const text = input.value.trim();
-  if (!text) return;
-
-  if (!state[id]) state[id] = {};
-  if (!state[id].comments) state[id].comments = [];
-
-  const now = new Date();
-  state[id].comments.push({
-    author: currentUser,
-    text,
-    time: now.toLocaleDateString('ms-MY', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }),
-  });
-
-  input.value = '';
-  await saveData();
-  renderAll();
-  setTimeout(() => openPanel(id), 50);
-  showToast('Komen ditambah!');
-}
-
-// ── COMMENT EDIT / DELETE ─────────────────────────────────────────────────────
-function startEditComment(itemId, commentIndex) {
-  const s = state[itemId];
-  if (!s || !s.comments || !s.comments[commentIndex]) return;
-
-  const originalText = s.comments[commentIndex].text;
-  const bodyEl = document.getElementById(`comment-body-${itemId}-${commentIndex}`);
-  const entryEl = document.getElementById(`comment-${itemId}-${commentIndex}`);
-
-  // Replace body with edit textarea
-  bodyEl.style.display = 'none';
-
-  // Remove any existing edit form
-  const existing = entryEl.querySelector('.comment-edit-wrap');
-  if (existing) existing.remove();
-
-  const wrap = document.createElement('div');
-  wrap.className = 'comment-edit-wrap';
-  wrap.innerHTML = `
-    <textarea class="comment-edit-area" id="edit-ta-${itemId}-${commentIndex}">${escapeHtml(originalText)}</textarea>
-    <div class="comment-edit-btns">
-      <button class="btn-save-edit" onclick="saveEditComment('${itemId}', ${commentIndex})">Simpan</button>
-      <button class="btn-cancel-edit" onclick="cancelEditComment('${itemId}', ${commentIndex})">Batal</button>
-    </div>
-  `;
-  entryEl.appendChild(wrap);
-
-  const ta = document.getElementById(`edit-ta-${itemId}-${commentIndex}`);
-  ta.focus();
-  ta.setSelectionRange(ta.value.length, ta.value.length);
-}
-
-async function saveEditComment(itemId, commentIndex) {
-  const ta = document.getElementById(`edit-ta-${itemId}-${commentIndex}`);
-  if (!ta) return;
-  const newText = ta.value.trim();
-  if (!newText) { showToast('Komen tidak boleh kosong.'); return; }
-
-  state[itemId].comments[commentIndex].text = newText;
-  state[itemId].comments[commentIndex].edited = true;
-
-  await saveData();
-  renderAll();
-  setTimeout(() => openPanel(itemId), 50);
-  showToast('Komen dikemaskini! ✏️');
-}
-
-function cancelEditComment(itemId, commentIndex) {
-  const bodyEl = document.getElementById(`comment-body-${itemId}-${commentIndex}`);
-  if (bodyEl) bodyEl.style.display = '';
-  const entryEl = document.getElementById(`comment-${itemId}-${commentIndex}`);
-  const wrap = entryEl && entryEl.querySelector('.comment-edit-wrap');
-  if (wrap) wrap.remove();
-}
-
-async function deleteComment(itemId, commentIndex) {
-  if (!confirm('Padam komen ini?')) return;
-  state[itemId].comments.splice(commentIndex, 1);
-  await saveData();
-  renderAll();
-  setTimeout(() => openPanel(itemId), 50);
-  showToast('Komen dipadam.');
-}
-
-// ── FILE DELETE ───────────────────────────────────────────────────────────────
-async function deleteFile(itemId, fileIndex) {
-  if (!confirm('Padam lampiran ini? (Fail di Google Drive tidak akan dipadam secara automatik)')) return;
-  state[itemId].files.splice(fileIndex, 1);
-  await saveData();
-  renderAll();
-  setTimeout(() => openPanel(itemId), 50);
-  showToast('Lampiran dipadam dari senarai.');
-}
-
-// ── CUSTOM ITEM CRUD ──────────────────────────────────────────────────────────
-function showAddItemForm(pi, ri) {
-  const form = document.getElementById(`add-form-${pi}-${ri}`);
-  const btn = document.querySelector(`#add-row-${pi}-${ri} .btn-add-item`);
-  form.style.display = 'block';
-  btn.style.display = 'none';
-  const input = document.getElementById(`add-input-${pi}-${ri}`);
-  input.focus();
-}
-
-function hideAddItemForm(pi, ri) {
-  const form = document.getElementById(`add-form-${pi}-${ri}`);
-  const btn = document.querySelector(`#add-row-${pi}-${ri} .btn-add-item`);
-  form.style.display = 'none';
-  btn.style.display = '';
-  document.getElementById(`add-input-${pi}-${ri}`).value = '';
-}
-
-async function addCustomItem(pi, ri) {
-  const input = document.getElementById(`add-input-${pi}-${ri}`);
-  const text = input.value.trim();
-  if (!text) { showToast('Sila tulis tugasan terlebih dahulu.'); return; }
-
-  if (!state._custom) state._custom = {};
-  const key = `${pi}_${ri}`;
-  if (!state._custom[key]) state._custom[key] = [];
-
-  const uid = `custom_${pi}_${ri}_${Date.now()}`;
-  state._custom[key].push({ id: uid, text, addedBy: currentUser, addedAt: new Date().toISOString() });
-
-  await saveData();
-  renderAll();
-  showToast('✅ Item baru ditambah!');
-}
-
-function startEditItem(id, pi, ri, customIdx) {
-  const customItems = getCustomItems(pi, ri);
-  const item = customItems[customIdx];
+// ── ITEM EDIT / DELETE ────────────────────────────────────────────────────────
+function startEditItem(itemId, phaseId, periodId) {
+  const phase  = structure.find(function(p) { return p.id === phaseId; });
+  const period = phase && phase.periods.find(function(p) { return p.id === periodId; });
+  const item   = period && period.items.find(function(i) { return i.id === itemId; });
   if (!item) return;
 
-  const textEl = document.getElementById('item-text-' + id);
+  const textEl = document.getElementById('item-text-' + itemId);
   if (!textEl) return;
-  const originalText = item.text;
-
   textEl.style.display = 'none';
 
-  const existingEdit = document.getElementById('inline-edit-' + id);
-  if (existingEdit) existingEdit.remove();
+  const ex = document.getElementById('inline-edit-' + itemId);
+  if (ex) ex.remove();
 
   const wrap = document.createElement('div');
-  wrap.id = 'inline-edit-' + id;
+  wrap.id = 'inline-edit-' + itemId;
   wrap.style.flex = '1';
-  wrap.innerHTML =
-    '<input class="add-item-input" id="edit-item-input-' + id + '" style="width:100%;margin-bottom:0.4rem">' +
-    '<div class="add-item-btns">' +
-    '<button class="btn-save-edit" onclick="saveEditItem(\'' + id + '\',' + pi + ',' + ri + ',' + customIdx + ')">Simpan</button>' +
-    '<button class="btn-cancel-edit" onclick="cancelEditItem(\'' + id + '\')">Batal</button>' +
-    '</div>';
+  const inp = document.createElement('input');
+  inp.className = 'add-item-input';
+  inp.value = item.text;
+  inp.style.cssText = 'width:100%;margin-bottom:0.4rem';
+  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') saveEditItem(itemId, phaseId, periodId); });
+  const btns = document.createElement('div');
+  btns.className = 'add-item-btns';
+  btns.innerHTML =
+    '<button class="btn-save-edit" onclick="saveEditItem(\'' + itemId + '\',\'' + phaseId + '\',\'' + periodId + '\')">Simpan</button>' +
+    '<button class="btn-cancel-edit" onclick="cancelEditItem(\'' + itemId + '\')">Batal</button>';
+  wrap.appendChild(inp);
+  wrap.appendChild(btns);
   textEl.parentNode.insertBefore(wrap, textEl);
-
-  const inp = document.getElementById('edit-item-input-' + id);
-  inp.value = originalText;
   inp.focus();
   inp.setSelectionRange(inp.value.length, inp.value.length);
-  inp.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') saveEditItem(id, pi, ri, customIdx);
-  });
 }
 
-async function saveEditItem(id, pi, ri, customIdx) {
-  const inp = document.getElementById('edit-item-input-' + id);
-  if (!inp) return;
-  const newText = inp.value.trim();
+async function saveEditItem(itemId, phaseId, periodId) {
+  const wrap = document.getElementById('inline-edit-' + itemId);
+  if (!wrap) return;
+  const inp     = wrap.querySelector('input');
+  const newText = inp ? inp.value.trim() : '';
   if (!newText) { showToast('Tugasan tidak boleh kosong.'); return; }
 
-  const customItems = getCustomItems(pi, ri);
-  if (customItems[customIdx]) customItems[customIdx].text = newText;
+  const phase  = structure.find(function(p) { return p.id === phaseId; });
+  const period = phase && phase.periods.find(function(p) { return p.id === periodId; });
+  const item   = period && period.items.find(function(i) { return i.id === itemId; });
+  if (item) item.text = newText;
 
   await saveData();
   renderAll();
   showToast('✏️ Item dikemaskini!');
 }
 
-function cancelEditItem(id) {
-  const wrap = document.getElementById('inline-edit-' + id);
+function cancelEditItem(itemId) {
+  const wrap = document.getElementById('inline-edit-' + itemId);
   if (wrap) wrap.remove();
-  const textEl = document.getElementById('item-text-' + id);
+  const textEl = document.getElementById('item-text-' + itemId);
   if (textEl) textEl.style.display = '';
 }
 
-async function deleteCustomItem(id, pi, ri, customIdx) {
+async function deleteItem(itemId, phaseId, periodId) {
   if (!confirm('Padam item ini?')) return;
-  const key = pi + '_' + ri;
-  if (state._custom && state._custom[key]) {
-    state._custom[key].splice(customIdx, 1);
-    delete state[id];
-  }
+  const phase  = structure.find(function(p) { return p.id === phaseId; });
+  const period = phase && phase.periods.find(function(p) { return p.id === periodId; });
+  if (period) period.items = period.items.filter(function(i) { return i.id !== itemId; });
+  delete state[itemId];
   await saveData();
   renderAll();
   showToast('🗑️ Item dipadam.');
 }
 
-function handleFileUpload(id, input) {
-  const file = input.files[0];
-  if (!file) return;
-  uploadFile(id, file);
+// ── ADD ITEM ──────────────────────────────────────────────────────────────────
+function showAddItemForm(phaseId, periodId) {
+  document.getElementById('add-form-' + periodId).style.display = 'block';
+  const btn = document.querySelector('#add-row-' + periodId + ' .btn-add-item');
+  if (btn) btn.style.display = 'none';
+  const inp = document.getElementById('add-input-' + periodId);
+  if (inp) { inp.focus(); inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') addItem(phaseId, periodId); }); }
 }
 
-function updateProgress() {
-  const total = allItemIds.length;
-  const done = allItemIds.filter(id => state[id] && state[id].done).length;
-  const pct = total ? Math.round(done / total * 100) : 0;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = `${done}/${total} · ${pct}%`;
+function hideAddItemForm(periodId) {
+  document.getElementById('add-form-' + periodId).style.display = 'none';
+  const btn = document.querySelector('#add-row-' + periodId + ' .btn-add-item');
+  if (btn) btn.style.display = '';
+  const inp = document.getElementById('add-input-' + periodId);
+  if (inp) inp.value = '';
+}
+
+async function addItem(phaseId, periodId) {
+  const inp  = document.getElementById('add-input-' + periodId);
+  const text = inp ? inp.value.trim() : '';
+  if (!text) { showToast('Sila tulis tugasan terlebih dahulu.'); return; }
+
+  const phase  = structure.find(function(p) { return p.id === phaseId; });
+  const period = phase && phase.periods.find(function(p) { return p.id === periodId; });
+  if (!period) return;
+  period.items.push({ id: 'item_' + uid(), text: text });
+
+  await saveData();
+  renderAll();
+  showToast('✅ Item baru ditambah!');
+}
+
+// ── PERIOD EDIT / DELETE / ADD ────────────────────────────────────────────────
+function startEditPeriod(phaseId, periodId) {
+  const phase  = structure.find(function(p) { return p.id === phaseId; });
+  const period = phase && phase.periods.find(function(p) { return p.id === periodId; });
+  if (!period) return;
+
+  const labelEl = document.getElementById('period-label-' + periodId);
+  if (!labelEl) return;
+  labelEl.style.display = 'none';
+
+  const ex = document.getElementById('period-edit-' + periodId);
+  if (ex) ex.remove();
+
+  const wrap = document.createElement('div');
+  wrap.id = 'period-edit-' + periodId;
+  wrap.style.flex = '1';
+  const inp = document.createElement('input');
+  inp.className = 'add-item-input';
+  inp.value = period.label;
+  inp.style.cssText = 'width:100%;margin-bottom:0.3rem';
+  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') saveEditPeriod(phaseId, periodId); });
+  const btns = document.createElement('div');
+  btns.className = 'add-item-btns';
+  btns.innerHTML =
+    '<button class="btn-save-edit" onclick="saveEditPeriod(\'' + phaseId + '\',\'' + periodId + '\')">Simpan</button>' +
+    '<button class="btn-cancel-edit" onclick="cancelEditPeriod(\'' + periodId + '\')">Batal</button>';
+  wrap.appendChild(inp);
+  wrap.appendChild(btns);
+  labelEl.parentNode.insertBefore(wrap, labelEl);
+  inp.focus();
+  inp.setSelectionRange(inp.value.length, inp.value.length);
+}
+
+async function saveEditPeriod(phaseId, periodId) {
+  const wrap = document.getElementById('period-edit-' + periodId);
+  if (!wrap) return;
+  const inp      = wrap.querySelector('input');
+  const newLabel = inp ? inp.value.trim() : '';
+  if (!newLabel) { showToast('Label tidak boleh kosong.'); return; }
+
+  const phase  = structure.find(function(p) { return p.id === phaseId; });
+  const period = phase && phase.periods.find(function(p) { return p.id === periodId; });
+  if (period) period.label = newLabel;
+
+  await saveData();
+  renderAll();
+  showToast('✏️ Tempoh dikemaskini!');
+}
+
+function cancelEditPeriod(periodId) {
+  const wrap = document.getElementById('period-edit-' + periodId);
+  if (wrap) wrap.remove();
+  const labelEl = document.getElementById('period-label-' + periodId);
+  if (labelEl) labelEl.style.display = '';
+}
+
+async function deletePeriod(phaseId, periodId) {
+  if (!confirm('Padam kumpulan tempoh ini dan SEMUA item di dalamnya?')) return;
+  const phase = structure.find(function(p) { return p.id === phaseId; });
+  if (!phase) return;
+  const period = phase.periods.find(function(p) { return p.id === periodId; });
+  if (period) period.items.forEach(function(i) { delete state[i.id]; });
+  phase.periods = phase.periods.filter(function(p) { return p.id !== periodId; });
+  await saveData();
+  renderAll();
+  showToast('🗑️ Tempoh dipadam.');
+}
+
+function showAddPeriodForm(phaseId) {
+  document.getElementById('add-period-form-' + phaseId).style.display = 'block';
+  const btn = document.querySelector('#add-period-row-' + phaseId + ' .btn-add-period');
+  if (btn) btn.style.display = 'none';
+  const inp = document.getElementById('add-period-input-' + phaseId);
+  if (inp) { inp.focus(); inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') addPeriod(phaseId); }); }
+}
+
+function hideAddPeriodForm(phaseId) {
+  document.getElementById('add-period-form-' + phaseId).style.display = 'none';
+  const btn = document.querySelector('#add-period-row-' + phaseId + ' .btn-add-period');
+  if (btn) btn.style.display = '';
+  const inp = document.getElementById('add-period-input-' + phaseId);
+  if (inp) inp.value = '';
+}
+
+async function addPeriod(phaseId) {
+  const inp   = document.getElementById('add-period-input-' + phaseId);
+  const label = inp ? inp.value.trim() : '';
+  if (!label) { showToast('Sila tulis label tempoh.'); return; }
+
+  const phase = structure.find(function(p) { return p.id === phaseId; });
+  if (!phase) return;
+  phase.periods.push({ id: 'period_' + uid(), label: label, items: [] });
+
+  await saveData();
+  renderAll();
+  showToast('✅ Kumpulan tempoh ditambah!');
+}
+
+// ── PHASE EDIT / DELETE / ADD ─────────────────────────────────────────────────
+function startEditPhase(phaseId) {
+  const phase = structure.find(function(p) { return p.id === phaseId; });
+  if (!phase) return;
+
+  const titleEl = document.getElementById('phase-title-' + phaseId);
+  const dateEl  = document.getElementById('phase-date-' + phaseId);
+  if (!titleEl) return;
+
+  // hide existing
+  titleEl.style.display = 'none';
+  dateEl.style.display  = 'none';
+
+  const ex = document.getElementById('phase-edit-' + phaseId);
+  if (ex) ex.remove();
+
+  const wrap = document.createElement('div');
+  wrap.id = 'phase-edit-' + phaseId;
+  wrap.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:0.4rem;';
+  wrap.innerHTML =
+    '<input class="add-item-input" id="pe-label-' + phaseId + '" placeholder="Nama Fasa" value="' + escapeHtml(phase.label) + '">' +
+    '<input class="add-item-input" id="pe-date-' + phaseId + '" placeholder="Tarikh" value="' + escapeHtml(phase.date) + '">' +
+    '<div class="add-item-btns">' +
+      '<button class="btn-save-edit" onclick="saveEditPhase(\'' + phaseId + '\')">Simpan</button>' +
+      '<button class="btn-cancel-edit" onclick="cancelEditPhase(\'' + phaseId + '\')">Batal</button>' +
+    '</div>';
+  titleEl.parentNode.insertBefore(wrap, titleEl);
+
+  document.getElementById('pe-label-' + phaseId).focus();
+}
+
+async function saveEditPhase(phaseId) {
+  const labelInp = document.getElementById('pe-label-' + phaseId);
+  const dateInp  = document.getElementById('pe-date-'  + phaseId);
+  const newLabel = labelInp ? labelInp.value.trim() : '';
+  const newDate  = dateInp  ? dateInp.value.trim()  : '';
+  if (!newLabel) { showToast('Nama Fasa tidak boleh kosong.'); return; }
+
+  const phase = structure.find(function(p) { return p.id === phaseId; });
+  if (phase) { phase.label = newLabel; phase.date = newDate; }
+
+  await saveData();
+  renderAll();
+  showToast('✏️ Fasa dikemaskini!');
+}
+
+function cancelEditPhase(phaseId) {
+  const wrap = document.getElementById('phase-edit-' + phaseId);
+  if (wrap) wrap.remove();
+  const titleEl = document.getElementById('phase-title-' + phaseId);
+  const dateEl  = document.getElementById('phase-date-'  + phaseId);
+  if (titleEl) titleEl.style.display = '';
+  if (dateEl)  dateEl.style.display  = '';
+}
+
+async function deletePhase(phaseId) {
+  if (!confirm('Padam fasa ini dan SEMUA kandungannya?')) return;
+  const phase = structure.find(function(p) { return p.id === phaseId; });
+  if (phase) {
+    phase.periods.forEach(function(period) {
+      period.items.forEach(function(i) { delete state[i.id]; });
+    });
+  }
+  structure = structure.filter(function(p) { return p.id !== phaseId; });
+  await saveData();
+  renderAll();
+  showToast('🗑️ Fasa dipadam.');
+}
+
+function showAddPhaseForm() {
+  document.getElementById('add-phase-form').style.display = 'block';
+  document.querySelector('.btn-add-phase').style.display = 'none';
+  document.getElementById('ap-label').focus();
+}
+
+function hideAddPhaseForm() {
+  document.getElementById('add-phase-form').style.display = 'none';
+  document.querySelector('.btn-add-phase').style.display = '';
+  document.getElementById('ap-label').value = '';
+  document.getElementById('ap-date').value  = '';
+}
+
+async function addPhase() {
+  const label = document.getElementById('ap-label').value.trim();
+  const date  = document.getElementById('ap-date').value.trim();
+  const badge = document.getElementById('ap-badge').value;
+  if (!label) { showToast('Sila tulis nama Fasa.'); return; }
+
+  const num = structure.length + 1;
+  structure.push({
+    id: 'phase_' + uid(),
+    label: label,
+    badge: 'Fasa ' + num,
+    badgeClass: badge,
+    date: date || '',
+    periods: [],
+  });
+
+  await saveData();
+  renderAll();
+  showToast('✅ Fasa baru ditambah!');
+}
+
+// ── COMMENTS ──────────────────────────────────────────────────────────────────
+async function addComment(id) {
+  const inp  = document.getElementById('ci-' + id);
+  const text = inp ? inp.value.trim() : '';
+  if (!text) return;
+  if (!state[id]) state[id] = {};
+  if (!state[id].comments) state[id].comments = [];
+  const now = new Date();
+  state[id].comments.push({
+    author: currentUser, text: text,
+    time: now.toLocaleDateString('ms-MY', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }),
+  });
+  inp.value = '';
+  await saveData();
+  renderAll();
+  setTimeout(function() { openPanel(id); }, 50);
+  showToast('Komen ditambah!');
+}
+
+function startEditComment(itemId, ci) {
+  const s = state[itemId];
+  if (!s || !s.comments || !s.comments[ci]) return;
+  const bodyEl  = document.getElementById('comment-body-' + itemId + '-' + ci);
+  const entryEl = document.getElementById('comment-' + itemId + '-' + ci);
+  if (!bodyEl || !entryEl) return;
+  bodyEl.style.display = 'none';
+  const ex = entryEl.querySelector('.comment-edit-wrap');
+  if (ex) ex.remove();
+  const wrap = document.createElement('div');
+  wrap.className = 'comment-edit-wrap';
+  const ta = document.createElement('textarea');
+  ta.className = 'comment-edit-area';
+  ta.id = 'edit-ta-' + itemId + '-' + ci;
+  ta.value = s.comments[ci].text;
+  const btns = document.createElement('div');
+  btns.className = 'comment-edit-btns';
+  btns.innerHTML =
+    '<button class="btn-save-edit" onclick="saveEditComment(\'' + itemId + '\',' + ci + ')">Simpan</button>' +
+    '<button class="btn-cancel-edit" onclick="cancelEditComment(\'' + itemId + '\',' + ci + ')">Batal</button>';
+  wrap.appendChild(ta);
+  wrap.appendChild(btns);
+  entryEl.appendChild(wrap);
+  ta.focus();
+  ta.setSelectionRange(ta.value.length, ta.value.length);
+}
+
+async function saveEditComment(itemId, ci) {
+  const ta = document.getElementById('edit-ta-' + itemId + '-' + ci);
+  if (!ta) return;
+  const newText = ta.value.trim();
+  if (!newText) { showToast('Komen tidak boleh kosong.'); return; }
+  state[itemId].comments[ci].text   = newText;
+  state[itemId].comments[ci].edited = true;
+  await saveData();
+  renderAll();
+  setTimeout(function() { openPanel(itemId); }, 50);
+  showToast('✏️ Komen dikemaskini!');
+}
+
+function cancelEditComment(itemId, ci) {
+  const bodyEl  = document.getElementById('comment-body-' + itemId + '-' + ci);
+  const entryEl = document.getElementById('comment-' + itemId + '-' + ci);
+  if (bodyEl)  bodyEl.style.display = '';
+  const wrap = entryEl && entryEl.querySelector('.comment-edit-wrap');
+  if (wrap) wrap.remove();
+}
+
+async function deleteComment(itemId, ci) {
+  if (!confirm('Padam komen ini?')) return;
+  state[itemId].comments.splice(ci, 1);
+  await saveData();
+  renderAll();
+  setTimeout(function() { openPanel(itemId); }, 50);
+  showToast('Komen dipadam.');
+}
+
+// ── FILES ─────────────────────────────────────────────────────────────────────
+async function deleteFile(itemId, fi) {
+  if (!confirm('Padam lampiran ini?')) return;
+  state[itemId].files.splice(fi, 1);
+  await saveData();
+  renderAll();
+  setTimeout(function() { openPanel(itemId); }, 50);
+  showToast('Lampiran dipadam.');
+}
+
+function handleFileUpload(id, input) {
+  const file = input.files[0];
+  if (file) uploadFile(id, file);
 }
 
 // ── UI HELPERS ────────────────────────────────────────────────────────────────
@@ -1301,33 +1569,23 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2500);
 }
 
 // ── COUNTDOWN ─────────────────────────────────────────────────────────────────
-function renderCountdown(targetDate, boxesId, cardClass) {
-  const boxesEl = document.getElementById(boxesId);
-  if (!boxesEl) return;
-
-  const now = new Date();
-  const diff = targetDate - now;
-
-  if (diff <= 0) {
-    boxesEl.innerHTML = `<div class="cd-done">🎉 Selamat Hari Bahagia!</div>`;
-    return;
-  }
-
-  const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const secs  = Math.floor((diff % (1000 * 60)) / 1000);
-
-  const fmt = n => String(n).padStart(2, '0');
-  boxesEl.innerHTML = [days, hours, mins, secs].map(n => `
-    <div class="cd-box">
-      <span class="cd-num">${fmt(n)}</span>
-    </div>
-  `).join('');
+function renderCountdown(targetDate, boxesId) {
+  const el   = document.getElementById(boxesId);
+  if (!el) return;
+  const diff = targetDate - new Date();
+  if (diff <= 0) { el.innerHTML = '<div class="cd-done">🎉 Selamat Hari Bahagia!</div>'; return; }
+  const days  = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000)  / 60000);
+  const secs  = Math.floor((diff % 60000)    / 1000);
+  const fmt   = function(n) { return String(n).padStart(2,'0'); };
+  el.innerHTML = [days, hours, mins, secs].map(function(n) {
+    return '<div class="cd-box"><span class="cd-num">' + fmt(n) + '</span></div>';
+  }).join('');
 }
 
 function tickCountdowns() {
@@ -1335,7 +1593,6 @@ function tickCountdowns() {
   renderCountdown(new Date('2027-01-03T00:00:00'), 'cd-kahwin-boxes');
 }
 
-// Start ticking once app is visible
 function startCountdowns() {
   if (countdownStarted) return;
   countdownStarted = true;
@@ -1343,13 +1600,11 @@ function startCountdowns() {
   setInterval(tickCountdowns, 1000);
 }
 
-// Auto-refresh every 30s — skip if user is actively typing
-setInterval(async () => {
+// ── AUTO REFRESH ──────────────────────────────────────────────────────────────
+setInterval(async function() {
   if (!currentUser) return;
-  // Don't refresh if user is focused on any input/textarea
   const active = document.activeElement;
-  const isTyping = active && (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT');
-  if (isTyping) return;
+  if (active && (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT')) return;
   await loadData();
   renderAll();
 }, 30000);
