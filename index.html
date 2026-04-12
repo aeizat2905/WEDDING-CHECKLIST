@@ -716,32 +716,27 @@ const CHECKLIST = [
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let currentUser = null;
 let state = {};
-let openPanelId = null; // track which panel is open
+let openPanelId = null;
+let allItemIds = [];
+let countdownStarted = false;
 
-// ── CUSTOM ITEMS (user-added, stored in state) ────────────────────────────────
-// state._custom = { "pi_ri": [ {id, text, addedBy, addedAt}, ... ] }
-// Custom item IDs: "custom_pi_ri_uuid"
-
+// ── CUSTOM ITEMS ──────────────────────────────────────────────────────────────
 function getCustomItems(pi, ri) {
   if (!state._custom) state._custom = {};
-  const key = `${pi}_${ri}`;
+  const key = pi + '_' + ri;
   if (!state._custom[key]) state._custom[key] = [];
   return state._custom[key];
 }
 
 function buildAllItemIds() {
   allItemIds = [];
-  CHECKLIST.forEach((phase, pi) => {
-    phase.periods.forEach((period, ri) => {
-      period.items.forEach((_, ii) => allItemIds.push(`${pi}_${ri}_${ii}`));
-      getCustomItems(pi, ri).forEach(ci => allItemIds.push(ci.id));
+  CHECKLIST.forEach(function(phase, pi) {
+    phase.periods.forEach(function(period, ri) {
+      period.items.forEach(function(_, ii) { allItemIds.push(pi + '_' + ri + '_' + ii); });
+      getCustomItems(pi, ri).forEach(function(ci) { allItemIds.push(ci.id); });
     });
   });
 }
-
-// Build flat item ID list
-let allItemIds = [];
-buildAllItemIds();
 
 // ── PETALS ────────────────────────────────────────────────────────────────────
 function createPetals() {
@@ -1339,6 +1334,8 @@ function tickCountdowns() {
 
 // Start ticking once app is visible
 function startCountdowns() {
+  if (countdownStarted) return;
+  countdownStarted = true;
   tickCountdowns();
   setInterval(tickCountdowns, 1000);
 }
