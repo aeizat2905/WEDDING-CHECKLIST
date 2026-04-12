@@ -334,6 +334,177 @@
   .progress-fill { height: 100%; background: linear-gradient(90deg, var(--rose), var(--gold)); border-radius: 3px; transition: width 0.5s ease; }
   .progress-pct { font-size: 0.8rem; color: var(--rose); font-weight: 500; white-space: nowrap; }
 
+  /* ── ADD ITEM ROW ── */
+  .add-item-row {
+    margin: 0.4rem 0 0.8rem;
+    padding: 0 0.2rem;
+  }
+
+  .btn-add-item {
+    background: none;
+    border: 1.5px dashed rgba(200,134,106,0.35);
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--rose);
+    cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: left;
+    letter-spacing: 0.05rem;
+  }
+
+  .btn-add-item:hover {
+    background: var(--rose-pale);
+    border-color: var(--rose);
+  }
+
+  .add-item-form {
+    background: var(--white);
+    border: 1px solid var(--rose-light);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+  }
+
+  .add-item-input {
+    width: 100%;
+    border: 1px solid var(--rose-light);
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.88rem;
+    font-family: 'Jost', sans-serif;
+    outline: none;
+    color: var(--ink);
+    background: white;
+    transition: border-color 0.2s;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .add-item-input:focus { border-color: var(--rose); }
+
+  .add-item-btns {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .custom-item {
+    border-left: 3px solid rgba(200,134,106,0.4);
+  }
+
+  .tag-custom { background: #f5f0ff; color: #8060b0; border-color: #d0c0ee; }
+
+  /* ── COUNTDOWN ── */
+  .countdown-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .countdown-card {
+    background: var(--white);
+    border: 1px solid rgba(200,134,106,0.18);
+    border-radius: 16px;
+    padding: 1.2rem 1rem 1rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .countdown-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--rose), #d4926f);
+  }
+
+  .countdown-card.gold::before {
+    background: linear-gradient(90deg, var(--gold), #c9a87a);
+  }
+
+  .cd-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+    color: var(--rose);
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+  }
+
+  .countdown-card.gold .cd-label { color: var(--gold); }
+
+  .cd-date-str {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+    margin-bottom: 0.8rem;
+    font-style: italic;
+  }
+
+  .cd-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .cd-box {
+    background: var(--rose-pale);
+    border: 1px solid var(--rose-light);
+    border-radius: 8px;
+    min-width: 44px;
+    padding: 0.4rem 0.3rem 0.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .countdown-card.gold .cd-box {
+    background: #fdf8f0;
+    border-color: var(--gold-light);
+  }
+
+  .cd-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--rose);
+  }
+
+  .countdown-card.gold .cd-num { color: var(--gold); }
+
+  .cd-units {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .cd-units span {
+    min-width: 44px;
+    text-align: center;
+    font-size: 0.6rem;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .cd-done {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--sage);
+    font-style: italic;
+    padding: 0.5rem 0;
+  }
+
+  @media (max-width: 500px) {
+    .countdown-wrap { grid-template-columns: 1fr; }
+    .cd-box { min-width: 38px; }
+    .cd-num { font-size: 1.3rem; }
+    .cd-units span { min-width: 38px; }
+  }
+
   /* Toast */
   #toast {
     position: fixed; bottom: 2rem; right: 2rem;
@@ -411,6 +582,23 @@
   </header>
 
   <div class="app-content">
+
+    <!-- Countdown -->
+    <div class="countdown-wrap">
+      <div class="countdown-card">
+        <div class="cd-label">💍 Majlis Pertunangan</div>
+        <div class="cd-date-str">30 Ogos 2026</div>
+        <div class="cd-boxes" id="cd-tunang-boxes"></div>
+        <div class="cd-units"><span>Hari</span><span>Jam</span><span>Minit</span><span>Saat</span></div>
+      </div>
+      <div class="countdown-card gold">
+        <div class="cd-label">🌸 Majlis Perkahwinan</div>
+        <div class="cd-date-str">3 Januari 2027</div>
+        <div class="cd-boxes" id="cd-kahwin-boxes"></div>
+        <div class="cd-units"><span>Hari</span><span>Jam</span><span>Minit</span><span>Saat</span></div>
+      </div>
+    </div>
+
     <div class="progress-bar-wrap">
       <div class="progress-label">Kemajuan Keseluruhan</div>
       <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
@@ -525,15 +713,30 @@ const CHECKLIST = [
   }
 ];
 
-// Build flat item ID list
-let allItemIds = [];
-CHECKLIST.forEach((phase, pi) => {
-  phase.periods.forEach((period, ri) => {
-    period.items.forEach((_, ii) => {
-      allItemIds.push(`${pi}_${ri}_${ii}`);
+// ── CUSTOM ITEMS (user-added, stored in state) ────────────────────────────────
+// state._custom = { "pi_ri": [ {id, text, addedBy, addedAt}, ... ] }
+// Custom item IDs: "custom_pi_ri_uuid"
+
+function getCustomItems(pi, ri) {
+  if (!state._custom) state._custom = {};
+  const key = `${pi}_${ri}`;
+  if (!state._custom[key]) state._custom[key] = [];
+  return state._custom[key];
+}
+
+function buildAllItemIds() {
+  allItemIds = [];
+  CHECKLIST.forEach((phase, pi) => {
+    phase.periods.forEach((period, ri) => {
+      period.items.forEach((_, ii) => allItemIds.push(`${pi}_${ri}_${ii}`));
+      getCustomItems(pi, ri).forEach(ci => allItemIds.push(ci.id));
     });
   });
-});
+}
+
+// Build flat item ID list
+let allItemIds = [];
+buildAllItemIds();
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let currentUser = null;
@@ -568,6 +771,7 @@ async function login(user) {
   await loadData();
   hideLoading();
   renderAll();
+  startCountdowns();
 }
 
 function logout() {
@@ -588,6 +792,7 @@ async function loadData() {
     const saved = localStorage.getItem('weddingState');
     if (saved) state = JSON.parse(saved);
   }
+  buildAllItemIds();
 }
 
 async function saveData() {
@@ -672,12 +877,15 @@ function escapeHtml(str) {
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
 function renderAll() {
-  // Save any text currently being typed before re-render
+  // Save draft
   let savedDraft = null;
   if (openPanelId) {
     const inputEl = document.getElementById(`ci-${openPanelId}`);
     if (inputEl) savedDraft = inputEl.value;
   }
+
+  buildAllItemIds();
+
   const container = document.getElementById('checklistContainer');
   container.innerHTML = '';
 
@@ -698,98 +906,32 @@ function renderAll() {
       pg.className = 'period-group';
       pg.innerHTML = `<div class="period-label">${period.label}</div>`;
 
+      // ── Built-in items ──
       period.items.forEach((text, ii) => {
-        const id = `${pi}_${ri}_${ii}`;
-        const s = state[id] || {};
-        const done = s.done || false;
-        const comments = s.comments || [];
-        const files = s.files || [];
-
-        const item = document.createElement('div');
-        item.className = 'checklist-item' + (done ? ' done' : '');
-        item.id = `item-${id}`;
-
-        const tags = [
-          done ? '<span class="item-tag tag-done">✓ Selesai</span>' : '',
-          comments.length ? `<span class="item-tag tag-comment">💬 ${comments.length}</span>` : '',
-          files.length ? `<span class="item-tag tag-file">📎 ${files.length}</span>` : '',
-        ].filter(Boolean).join('');
-
-        // Build comment HTML
-        const commentsHtml = comments.map((c, ci) => `
-          <div class="comment-entry" id="comment-${id}-${ci}">
-            <div class="comment-entry-header">
-              <span class="comment-author">${escapeHtml(c.author)}:</span>
-              <span class="comment-time">${c.time}</span>
-              <div class="comment-entry-actions">
-                ${c.author === currentUser ? `
-                  <button class="comment-action-btn" title="Edit" onclick="startEditComment('${id}', ${ci})">✏️</button>
-                  <button class="comment-action-btn del" title="Padam" onclick="deleteComment('${id}', ${ci})">🗑️</button>
-                ` : ''}
-              </div>
-            </div>
-            <div class="comment-body" id="comment-body-${id}-${ci}">${parseComment(c.text)}</div>
-          </div>
-        `).join('');
-
-        // Build files HTML
-        const filesHtml = files.map((f, fi) => `
-          <div class="file-entry" id="file-${id}-${fi}">
-            <span class="file-entry-icon">📎</span>
-            <a href="${f.url}" target="_blank">${escapeHtml(f.name)}</a>
-            <span style="font-size:0.68rem;color:var(--ink-muted)">${escapeHtml(f.uploader||'')}</span>
-            ${f.uploader === currentUser ? `<button class="file-delete-btn" title="Padam fail" onclick="deleteFile('${id}', ${fi})">🗑️</button>` : ''}
-          </div>
-        `).join('');
-
-        item.innerHTML = `
-          <div class="item-main" onclick="toggleExpand('${id}')">
-            <div class="item-checkbox" onclick="event.stopPropagation(); toggleDone('${id}')">
-              <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
-                <path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="item-body">
-              <div class="item-text">${text}</div>
-              <div class="item-meta">${tags}</div>
-            </div>
-            <div class="item-actions">
-              <button class="action-btn" title="Komen / Fail" onclick="event.stopPropagation(); openPanel('${id}')">✎</button>
-            </div>
-          </div>
-          <div class="item-panel" id="panel-${id}">
-            <div class="panel-section">
-              <div class="panel-label">Komen</div>
-              <div class="comment-hint">
-                Tulis senarai dengan <code>* item</code> atau <code>- item</code> di setiap baris.
-              </div>
-              <div class="comment-list" id="comments-${id}">${commentsHtml}</div>
-              <div class="comment-input-row">
-                <textarea class="comment-input" id="ci-${id}" placeholder="Tulis komen... (guna * atau - untuk senarai)" rows="2" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); addComment('${id}'); }"></textarea>
-                <button class="btn-send" onclick="addComment('${id}')">Hantar</button>
-              </div>
-              <div style="font-size:0.65rem;color:var(--ink-muted);margin-top:0.3rem;">Enter = hantar &nbsp;|&nbsp; Shift+Enter = baris baru</div>
-            </div>
-            <div class="panel-section">
-              <div class="panel-label">Lampiran Fail</div>
-              <div class="file-list" id="files-${id}">${filesHtml}</div>
-              <div class="upload-area">
-                <input type="file" onchange="handleFileUpload('${id}', this)">
-                <div class="upload-area-icon">☁</div>
-                <div class="upload-area-text">Klik atau seret fail ke sini<br><small>Fail akan disimpan di Google Drive</small></div>
-              </div>
-              <div style="margin-top:0.5rem;text-align:right">
-                <a href="${DRIVE_FOLDER}" target="_blank" style="font-size:0.72rem;color:var(--gold);text-decoration:none;">
-                  📁 Buka Folder Google Drive →
-                </a>
-              </div>
-            </div>
-          </div>
-        `;
-
-        pg.appendChild(item);
+        pg.appendChild(buildItemEl(`${pi}_${ri}_${ii}`, text, pi, ri, ii, false));
       });
 
+      // ── Custom items ──
+      const customItems = getCustomItems(pi, ri);
+      customItems.forEach((ci, idx) => {
+        pg.appendChild(buildItemEl(ci.id, ci.text, pi, ri, null, true, idx));
+      });
+
+      // ── Add item row ──
+      const addRow = document.createElement('div');
+      addRow.className = 'add-item-row';
+      addRow.id = `add-row-${pi}-${ri}`;
+      addRow.innerHTML = `
+        <button class="btn-add-item" onclick="showAddItemForm(${pi}, ${ri})">＋ Tambah item</button>
+        <div class="add-item-form" id="add-form-${pi}-${ri}" style="display:none">
+          <input class="add-item-input" id="add-input-${pi}-${ri}" placeholder="Tulis tugasan baru..." onkeydown="if(event.key==='Enter') addCustomItem(${pi},${ri})">
+          <div class="add-item-btns">
+            <button class="btn-save-edit" onclick="addCustomItem(${pi},${ri})">Tambah</button>
+            <button class="btn-cancel-edit" onclick="hideAddItemForm(${pi},${ri})">Batal</button>
+          </div>
+        </div>
+      `;
+      pg.appendChild(addRow);
       phaseBlock.appendChild(pg);
     });
 
@@ -798,20 +940,115 @@ function renderAll() {
 
   updateProgress();
 
-  // Restore open panel after re-render
+  // Restore open panel
   if (openPanelId) {
     const panel = document.getElementById(`panel-${openPanelId}`);
     if (panel) panel.classList.add('open');
-    // Restore any draft text the user was typing
     if (savedDraft !== null) {
       const inputEl = document.getElementById(`ci-${openPanelId}`);
       if (inputEl) {
         inputEl.value = savedDraft;
-        // Put cursor at end
         inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
       }
     }
   }
+}
+
+function buildItemEl(id, text, pi, ri, ii, isCustom, customIdx) {
+  const s = state[id] || {};
+  const done = s.done || false;
+  const comments = s.comments || [];
+  const files = s.files || [];
+
+  const item = document.createElement('div');
+  item.className = 'checklist-item' + (done ? ' done' : '') + (isCustom ? ' custom-item' : '');
+  item.id = `item-${id}`;
+
+  const tags = [
+    done ? '<span class="item-tag tag-done">✓ Selesai</span>' : '',
+    comments.length ? `<span class="item-tag tag-comment">💬 ${comments.length}</span>` : '',
+    files.length ? `<span class="item-tag tag-file">📎 ${files.length}</span>` : '',
+    isCustom ? '<span class="item-tag tag-custom">+ Ditambah</span>' : '',
+  ].filter(Boolean).join('');
+
+  const commentsHtml = comments.map((c, ci) => `
+    <div class="comment-entry" id="comment-${id}-${ci}">
+      <div class="comment-entry-header">
+        <span class="comment-author">${escapeHtml(c.author)}:</span>
+        <span class="comment-time">${c.time}</span>
+        <div class="comment-entry-actions">
+          ${c.author === currentUser ? `
+            <button class="comment-action-btn" title="Edit" onclick="startEditComment('${id}', ${ci})">✏️</button>
+            <button class="comment-action-btn del" title="Padam" onclick="deleteComment('${id}', ${ci})">🗑️</button>
+          ` : ''}
+        </div>
+      </div>
+      <div class="comment-body" id="comment-body-${id}-${ci}">${parseComment(c.text)}</div>
+    </div>
+  `).join('');
+
+  const filesHtml = files.map((f, fi) => `
+    <div class="file-entry" id="file-${id}-${fi}">
+      <span class="file-entry-icon">📎</span>
+      <a href="${f.url}" target="_blank">${escapeHtml(f.name)}</a>
+      <span style="font-size:0.68rem;color:var(--ink-muted)">${escapeHtml(f.uploader||'')}</span>
+      ${f.uploader === currentUser ? `<button class="file-delete-btn" title="Padam fail" onclick="deleteFile('${id}', ${fi})">🗑️</button>` : ''}
+    </div>
+  `).join('');
+
+  // Edit/delete buttons for custom items
+  const customControls = isCustom ? `
+    <button class="action-btn" title="Edit item" onclick="event.stopPropagation(); startEditItem('${id}', ${pi}, ${ri}, ${customIdx})">✏️</button>
+    <button class="action-btn" title="Padam item" onclick="event.stopPropagation(); deleteCustomItem('${id}', ${pi}, ${ri}, ${customIdx})">🗑️</button>
+  ` : '';
+
+  item.innerHTML = `
+    <div class="item-main" onclick="toggleExpand('${id}')">
+      <div class="item-checkbox" onclick="event.stopPropagation(); toggleDone('${id}')">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+          <path d="M1 4L4.5 7.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="item-body">
+        <div class="item-text" id="item-text-${id}">${escapeHtml(text)}</div>
+        <div class="item-meta">${tags}</div>
+      </div>
+      <div class="item-actions">
+        ${customControls}
+        <button class="action-btn" title="Komen / Fail" onclick="event.stopPropagation(); openPanel('${id}')">✎</button>
+      </div>
+    </div>
+    <div class="item-panel" id="panel-${id}">
+      <div class="panel-section">
+        <div class="panel-label">Komen</div>
+        <div class="comment-hint">
+          Tulis senarai dengan <code>* item</code> atau <code>- item</code> di setiap baris.
+        </div>
+        <div class="comment-list" id="comments-${id}">${commentsHtml}</div>
+        <div class="comment-input-row">
+          <textarea class="comment-input" id="ci-${id}" placeholder="Tulis komen... (guna * atau - untuk senarai)" rows="2" onkeydown="if(event.key==='Enter' && !event.shiftKey){ event.preventDefault(); addComment('${id}'); }"></textarea>
+          <button class="btn-send" onclick="addComment('${id}')">Hantar</button>
+        </div>
+        <div style="font-size:0.65rem;color:var(--ink-muted);margin-top:0.3rem;">Enter = hantar &nbsp;|&nbsp; Shift+Enter = baris baru</div>
+      </div>
+      <div class="panel-section">
+        <div class="panel-label">Lampiran Fail</div>
+        <div class="file-list" id="files-${id}">${filesHtml}</div>
+        <div class="upload-area">
+          <input type="file" onchange="handleFileUpload('${id}', this)">
+          <div class="upload-area-icon">☁</div>
+          <div class="upload-area-text">Klik atau seret fail ke sini<br><small>Fail akan disimpan di Google Drive</small></div>
+        </div>
+        <div style="margin-top:0.5rem;text-align:right">
+          <a href="${DRIVE_FOLDER}" target="_blank" style="font-size:0.72rem;color:var(--gold);text-decoration:none;">
+            📁 Buka Folder Google Drive →
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  return item;
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
@@ -940,6 +1177,105 @@ async function deleteFile(itemId, fileIndex) {
   showToast('Lampiran dipadam dari senarai.');
 }
 
+// ── CUSTOM ITEM CRUD ──────────────────────────────────────────────────────────
+function showAddItemForm(pi, ri) {
+  const form = document.getElementById(`add-form-${pi}-${ri}`);
+  const btn = document.querySelector(`#add-row-${pi}-${ri} .btn-add-item`);
+  form.style.display = 'block';
+  btn.style.display = 'none';
+  const input = document.getElementById(`add-input-${pi}-${ri}`);
+  input.focus();
+}
+
+function hideAddItemForm(pi, ri) {
+  const form = document.getElementById(`add-form-${pi}-${ri}`);
+  const btn = document.querySelector(`#add-row-${pi}-${ri} .btn-add-item`);
+  form.style.display = 'none';
+  btn.style.display = '';
+  document.getElementById(`add-input-${pi}-${ri}`).value = '';
+}
+
+async function addCustomItem(pi, ri) {
+  const input = document.getElementById(`add-input-${pi}-${ri}`);
+  const text = input.value.trim();
+  if (!text) { showToast('Sila tulis tugasan terlebih dahulu.'); return; }
+
+  if (!state._custom) state._custom = {};
+  const key = `${pi}_${ri}`;
+  if (!state._custom[key]) state._custom[key] = [];
+
+  const uid = `custom_${pi}_${ri}_${Date.now()}`;
+  state._custom[key].push({ id: uid, text, addedBy: currentUser, addedAt: new Date().toISOString() });
+
+  await saveData();
+  renderAll();
+  showToast('✅ Item baru ditambah!');
+}
+
+function startEditItem(id, pi, ri, customIdx) {
+  const customItems = getCustomItems(pi, ri);
+  if (!customItems[customIdx]) return;
+
+  const textEl = document.getElementById(`item-text-${id}`);
+  const originalText = customItems[customIdx].text;
+
+  // Replace text with inline input
+  textEl.style.display = 'none';
+
+  const existingEdit = document.getElementById(`inline-edit-${id}`);
+  if (existingEdit) existingEdit.remove();
+
+  const wrap = document.createElement('div');
+  wrap.id = `inline-edit-${id}`;
+  wrap.style.flex = '1';
+  wrap.innerHTML = `
+    <input class="add-item-input" id="edit-item-input-${id}" value="${escapeHtml(originalText)}" style="width:100%;margin-bottom:0.4rem" onkeydown="if(event.key==='Enter') saveEditItem('${id}',${pi},${ri},${customIdx})">
+    <div class="add-item-btns">
+      <button class="btn-save-edit" onclick="saveEditItem('${id}',${pi},${ri},${customIdx})">Simpan</button>
+      <button class="btn-cancel-edit" onclick="cancelEditItem('${id}')">Batal</button>
+    </div>
+  `;
+  textEl.parentNode.insertBefore(wrap, textEl);
+
+  const inp = document.getElementById(`edit-item-input-${id}`);
+  inp.focus();
+  inp.setSelectionRange(inp.value.length, inp.value.length);
+}
+
+async function saveEditItem(id, pi, ri, customIdx) {
+  const inp = document.getElementById(`edit-item-input-${id}`);
+  if (!inp) return;
+  const newText = inp.value.trim();
+  if (!newText) { showToast('Tugasan tidak boleh kosong.'); return; }
+
+  const customItems = getCustomItems(pi, ri);
+  if (customItems[customIdx]) customItems[customIdx].text = newText;
+
+  await saveData();
+  renderAll();
+  showToast('✏️ Item dikemaskini!');
+}
+
+function cancelEditItem(id) {
+  const wrap = document.getElementById(`inline-edit-${id}`);
+  if (wrap) wrap.remove();
+  const textEl = document.getElementById(`item-text-${id}`);
+  if (textEl) textEl.style.display = '';
+}
+
+async function deleteCustomItem(id, pi, ri, customIdx) {
+  if (!confirm('Padam item ini?')) return;
+  const key = `${pi}_${ri}`;
+  if (state._custom && state._custom[key]) {
+    state._custom[key].splice(customIdx, 1);
+    // Also remove its state data
+    delete state[id];
+  }
+  await saveData();
+  renderAll();
+  showToast('🗑️ Item dipadam.');
+}
+
 function handleFileUpload(id, input) {
   const file = input.files[0];
   if (!file) return;
@@ -968,6 +1304,43 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── COUNTDOWN ─────────────────────────────────────────────────────────────────
+function renderCountdown(targetDate, boxesId, cardClass) {
+  const boxesEl = document.getElementById(boxesId);
+  if (!boxesEl) return;
+
+  const now = new Date();
+  const diff = targetDate - now;
+
+  if (diff <= 0) {
+    boxesEl.innerHTML = `<div class="cd-done">🎉 Selamat Hari Bahagia!</div>`;
+    return;
+  }
+
+  const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins  = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const secs  = Math.floor((diff % (1000 * 60)) / 1000);
+
+  const fmt = n => String(n).padStart(2, '0');
+  boxesEl.innerHTML = [days, hours, mins, secs].map(n => `
+    <div class="cd-box">
+      <span class="cd-num">${fmt(n)}</span>
+    </div>
+  `).join('');
+}
+
+function tickCountdowns() {
+  renderCountdown(new Date('2026-08-30T00:00:00'), 'cd-tunang-boxes');
+  renderCountdown(new Date('2027-01-03T00:00:00'), 'cd-kahwin-boxes');
+}
+
+// Start ticking once app is visible
+function startCountdowns() {
+  tickCountdowns();
+  setInterval(tickCountdowns, 1000);
 }
 
 // Auto-refresh every 30s — skip if user is actively typing
