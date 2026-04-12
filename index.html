@@ -991,10 +991,10 @@ function buildItemEl(id, text, pi, ri, ii, isCustom, customIdx) {
     </div>
   `).join('');
 
-  // Edit/delete buttons for custom items
+  // Edit/delete buttons for custom items only
   const customControls = isCustom ? `
-    <button class="action-btn" title="Edit item" onclick="event.stopPropagation(); startEditItem('${id}', ${pi}, ${ri}, ${customIdx})">✏️</button>
-    <button class="action-btn" title="Padam item" onclick="event.stopPropagation(); deleteCustomItem('${id}', ${pi}, ${ri}, ${customIdx})">🗑️</button>
+    <button class="action-btn" title="Edit item" onclick="event.stopPropagation(); startEditItem('${id}', ${pi}, ${ri}, ${Number(customIdx)})">✏️</button>
+    <button class="action-btn" title="Padam item" onclick="event.stopPropagation(); deleteCustomItem('${id}', ${pi}, ${ri}, ${Number(customIdx)})">🗑️</button>
   ` : '';
 
   item.innerHTML = `
@@ -1209,36 +1209,40 @@ async function addCustomItem(pi, ri) {
 
 function startEditItem(id, pi, ri, customIdx) {
   const customItems = getCustomItems(pi, ri);
-  if (!customItems[customIdx]) return;
+  const item = customItems[customIdx];
+  if (!item) return;
 
-  const textEl = document.getElementById(`item-text-${id}`);
-  const originalText = customItems[customIdx].text;
+  const textEl = document.getElementById('item-text-' + id);
+  if (!textEl) return;
+  const originalText = item.text;
 
-  // Replace text with inline input
   textEl.style.display = 'none';
 
-  const existingEdit = document.getElementById(`inline-edit-${id}`);
+  const existingEdit = document.getElementById('inline-edit-' + id);
   if (existingEdit) existingEdit.remove();
 
   const wrap = document.createElement('div');
-  wrap.id = `inline-edit-${id}`;
+  wrap.id = 'inline-edit-' + id;
   wrap.style.flex = '1';
-  wrap.innerHTML = `
-    <input class="add-item-input" id="edit-item-input-${id}" value="${escapeHtml(originalText)}" style="width:100%;margin-bottom:0.4rem" onkeydown="if(event.key==='Enter') saveEditItem('${id}',${pi},${ri},${customIdx})">
-    <div class="add-item-btns">
-      <button class="btn-save-edit" onclick="saveEditItem('${id}',${pi},${ri},${customIdx})">Simpan</button>
-      <button class="btn-cancel-edit" onclick="cancelEditItem('${id}')">Batal</button>
-    </div>
-  `;
+  wrap.innerHTML =
+    '<input class="add-item-input" id="edit-item-input-' + id + '" style="width:100%;margin-bottom:0.4rem">' +
+    '<div class="add-item-btns">' +
+    '<button class="btn-save-edit" onclick="saveEditItem(\'' + id + '\',' + pi + ',' + ri + ',' + customIdx + ')">Simpan</button>' +
+    '<button class="btn-cancel-edit" onclick="cancelEditItem(\'' + id + '\')">Batal</button>' +
+    '</div>';
   textEl.parentNode.insertBefore(wrap, textEl);
 
-  const inp = document.getElementById(`edit-item-input-${id}`);
+  const inp = document.getElementById('edit-item-input-' + id);
+  inp.value = originalText;
   inp.focus();
   inp.setSelectionRange(inp.value.length, inp.value.length);
+  inp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') saveEditItem(id, pi, ri, customIdx);
+  });
 }
 
 async function saveEditItem(id, pi, ri, customIdx) {
-  const inp = document.getElementById(`edit-item-input-${id}`);
+  const inp = document.getElementById('edit-item-input-' + id);
   if (!inp) return;
   const newText = inp.value.trim();
   if (!newText) { showToast('Tugasan tidak boleh kosong.'); return; }
@@ -1252,18 +1256,17 @@ async function saveEditItem(id, pi, ri, customIdx) {
 }
 
 function cancelEditItem(id) {
-  const wrap = document.getElementById(`inline-edit-${id}`);
+  const wrap = document.getElementById('inline-edit-' + id);
   if (wrap) wrap.remove();
-  const textEl = document.getElementById(`item-text-${id}`);
+  const textEl = document.getElementById('item-text-' + id);
   if (textEl) textEl.style.display = '';
 }
 
 async function deleteCustomItem(id, pi, ri, customIdx) {
   if (!confirm('Padam item ini?')) return;
-  const key = `${pi}_${ri}`;
+  const key = pi + '_' + ri;
   if (state._custom && state._custom[key]) {
     state._custom[key].splice(customIdx, 1);
-    // Also remove its state data
     delete state[id];
   }
   await saveData();
