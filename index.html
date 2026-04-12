@@ -255,13 +255,11 @@
   .comment-action-btn:hover { background: rgba(200,134,106,0.15); color: var(--rose); }
   .comment-action-btn.del:hover { background: rgba(200,80,80,0.12); color: #c05050; }
 
-  /* Rendered bullet list inside comment */
   .comment-body { line-height: 1.5; }
   .comment-body ul { list-style: none; padding: 0; margin: 0; }
   .comment-body ul li { padding-left: 1rem; position: relative; margin-bottom: 0.15rem; }
   .comment-body ul li::before { content: '•'; position: absolute; left: 0; color: var(--rose); font-size: 0.9rem; }
 
-  /* Edit mode textarea */
   .comment-edit-area {
     width: 100%; border: 1px solid var(--rose-light); border-radius: 8px;
     padding: 0.5rem 0.8rem; font-size: 0.82rem; font-family: 'Jost', sans-serif;
@@ -276,7 +274,6 @@
   .btn-cancel-edit { background: none; border: 1px solid var(--rose-light); border-radius: 6px; padding: 0.3rem 0.7rem; font-size: 0.75rem; cursor: pointer; font-family: 'Jost', sans-serif; color: var(--ink-muted); transition: all 0.2s; }
   .btn-cancel-edit:hover { border-color: var(--rose); color: var(--rose); }
 
-  /* Hint text */
   .comment-hint { font-size: 0.68rem; color: var(--ink-muted); margin-bottom: 0.4rem; line-height: 1.5; }
   .comment-hint code { background: rgba(200,134,106,0.12); border-radius: 3px; padding: 0 0.25rem; font-family: monospace; font-size: 0.72rem; color: var(--rose); }
 
@@ -335,70 +332,34 @@
   .progress-pct { font-size: 0.8rem; color: var(--rose); font-weight: 500; white-space: nowrap; }
 
   /* ── ADD ITEM ROW ── */
-  .add-item-row {
-    margin: 0.4rem 0 0.8rem;
-    padding: 0 0.2rem;
-  }
+  .add-item-row { margin: 0.4rem 0 0.8rem; padding: 0 0.2rem; }
 
   .btn-add-item {
-    background: none;
-    border: 1.5px dashed rgba(200,134,106,0.35);
-    border-radius: 10px;
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    color: var(--rose);
-    cursor: pointer;
-    font-family: 'Jost', sans-serif;
-    transition: all 0.2s;
-    width: 100%;
-    text-align: left;
-    letter-spacing: 0.05rem;
+    background: none; border: 1.5px dashed rgba(200,134,106,0.35); border-radius: 10px;
+    padding: 0.5rem 1rem; font-size: 0.8rem; color: var(--rose); cursor: pointer;
+    font-family: 'Jost', sans-serif; transition: all 0.2s; width: 100%; text-align: left; letter-spacing: 0.05rem;
   }
-
-  .btn-add-item:hover {
-    background: var(--rose-pale);
-    border-color: var(--rose);
-  }
+  .btn-add-item:hover { background: var(--rose-pale); border-color: var(--rose); }
 
   .add-item-form {
-    background: var(--white);
-    border: 1px solid var(--rose-light);
-    border-radius: 12px;
-    padding: 0.8rem 1rem;
+    background: var(--white); border: 1px solid var(--rose-light); border-radius: 12px; padding: 0.8rem 1rem;
   }
 
   .add-item-input {
-    width: 100%;
-    border: 1px solid var(--rose-light);
-    border-radius: 8px;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.88rem;
-    font-family: 'Jost', sans-serif;
-    outline: none;
-    color: var(--ink);
-    background: white;
-    transition: border-color 0.2s;
-    margin-bottom: 0.5rem;
-    display: block;
+    width: 100%; border: 1px solid var(--rose-light); border-radius: 8px;
+    padding: 0.5rem 0.8rem; font-size: 0.88rem; font-family: 'Jost', sans-serif;
+    outline: none; color: var(--ink); background: white; transition: border-color 0.2s;
+    margin-bottom: 0.5rem; display: block;
   }
-
   .add-item-input:focus { border-color: var(--rose); }
 
-  .add-item-btns {
-    display: flex;
-    gap: 0.5rem;
-  }
+  .add-item-btns { display: flex; gap: 0.5rem; }
 
-  .custom-item {
-    border-left: 3px solid rgba(200,134,106,0.4);
-  }
-
+  .custom-item { border-left: 3px solid rgba(200,134,106,0.4); }
   .tag-custom { background: #f5f0ff; color: #8060b0; border-color: #d0c0ee; }
 
   /* ── PHASE HEADER ACTIONS ── */
-  .phase-header-actions {
-    display: flex; gap: 0.4rem; margin-left: auto; flex-shrink: 0;
-  }
+  .phase-header-actions { display: flex; gap: 0.4rem; margin-left: auto; flex-shrink: 0; }
 
   .hdr-btn {
     background: none; border: 1px solid rgba(200,134,106,0.2); border-radius: 8px;
@@ -415,7 +376,6 @@
   }
 
   .period-label { font-size: 0.68rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--gold); font-weight: 500; }
-
   .period-actions { display: flex; gap: 0.3rem; margin-left: auto; }
 
   .period-btn {
@@ -426,9 +386,7 @@
   .period-btn-del:hover { background: rgba(200,80,80,0.12); color: #c05050; }
 
   /* ── ADD PERIOD ROW ── */
-  .add-period-row {
-    margin: 0.5rem 0 1.5rem; padding: 0 0.2rem;
-  }
+  .add-period-row { margin: 0.5rem 0 1.5rem; padding: 0 0.2rem; }
 
   .btn-add-period {
     background: none; border: 1.5px dashed rgba(184,151,106,0.35); border-radius: 10px;
@@ -453,30 +411,6 @@
 
   .form-row { margin-bottom: 0.6rem; }
   .form-label { display: block; font-size: 0.68rem; letter-spacing: 0.12rem; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.3rem; font-weight: 500; }
-
-  /* ── ADD ITEM ROW ── */
-  .add-item-row { margin: 0.4rem 0 0.8rem; padding: 0 0.2rem; }
-
-  .btn-add-item {
-    background: none; border: 1.5px dashed rgba(200,134,106,0.35); border-radius: 10px;
-    padding: 0.5rem 1rem; font-size: 0.8rem; color: var(--rose); cursor: pointer;
-    font-family: 'Jost', sans-serif; transition: all 0.2s; width: 100%; text-align: left; letter-spacing: 0.05rem;
-  }
-  .btn-add-item:hover { background: var(--rose-pale); border-color: var(--rose); }
-
-  .add-item-form {
-    background: var(--white); border: 1px solid var(--rose-light); border-radius: 12px; padding: 0.8rem 1rem;
-  }
-
-  .add-item-input {
-    width: 100%; border: 1px solid var(--rose-light); border-radius: 8px;
-    padding: 0.5rem 0.8rem; font-size: 0.88rem; font-family: 'Jost', sans-serif;
-    outline: none; color: var(--ink); background: white; transition: border-color 0.2s;
-    margin-bottom: 0.5rem; display: block;
-  }
-  .add-item-input:focus { border-color: var(--rose); }
-
-  .add-item-btns { display: flex; gap: 0.5rem; }
 
   /* ── COUNTDOWN ── */
   .countdown-wrap {
@@ -581,11 +515,164 @@
     padding: 0.5rem 0;
   }
 
+  /* ── EDIT DATES BUTTON ── */
+  .cd-edit-btn {
+    position: absolute;
+    top: 0.6rem; right: 0.6rem;
+    background: none;
+    border: 1px solid rgba(200,134,106,0.2);
+    border-radius: 6px;
+    width: 24px; height: 24px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    transition: all 0.2s;
+    z-index: 2;
+  }
+  .cd-edit-btn:hover { background: var(--rose-pale); border-color: var(--rose); color: var(--rose); }
+
+  /* ── DATE EDIT MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(42,34,32,0.45);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal-box {
+    background: var(--cream);
+    border: 1px solid var(--rose-light);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 420px;
+    animation: slideUp 0.25s ease;
+    position: relative;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+
+  .modal-subtitle {
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.08rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-divider {
+    width: 50px; height: 1px;
+    background: linear-gradient(90deg, var(--rose), transparent);
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-field { margin-bottom: 1.2rem; }
+
+  .modal-field-label {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.14rem;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-field-sub {
+    font-size: 0.68rem;
+    color: var(--ink-muted);
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+
+  .modal-input {
+    width: 100%;
+    border: 1px solid var(--rose-light);
+    border-radius: 10px;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.88rem;
+    font-family: 'Jost', sans-serif;
+    outline: none;
+    color: var(--ink);
+    background: white;
+    transition: border-color 0.2s;
+  }
+  .modal-input:focus { border-color: var(--rose); box-shadow: 0 0 0 3px rgba(200,134,106,0.1); }
+
+  .modal-input-display {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    margin-top: 0.3rem;
+    font-style: italic;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.8rem;
+  }
+
+  .btn-modal-save {
+    flex: 1;
+    background: linear-gradient(135deg, var(--rose), #d4926f);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    font-size: 0.82rem;
+    font-family: 'Jost', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    letter-spacing: 0.05rem;
+  }
+  .btn-modal-save:hover { opacity: 0.88; }
+
+  .btn-modal-cancel {
+    background: none;
+    border: 1px solid var(--rose-light);
+    border-radius: 10px;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.82rem;
+    font-family: 'Jost', sans-serif;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-modal-cancel:hover { border-color: var(--rose); color: var(--rose); }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none; border: none;
+    font-size: 1.1rem; color: var(--ink-muted);
+    cursor: pointer; padding: 0.2rem; border-radius: 4px;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--rose); }
+
   @media (max-width: 500px) {
     .countdown-wrap { grid-template-columns: 1fr; }
     .cd-box { min-width: 38px; }
     .cd-num { font-size: 1.3rem; }
     .cd-units span { min-width: 38px; }
+    .modal-box { padding: 1.5rem; }
   }
 
   /* Toast */
@@ -631,7 +718,7 @@
     <div class="landing-subtitle">Perancangan Majlis</div>
     <h1 class="landing-title"><em>Hafiza</em> & <em>Aeizat</em></h1>
     <div class="landing-divider"></div>
-    <div class="landing-dates">Pertunangan · 30 Ogos 2026 &nbsp;|&nbsp; Perkahwinan · 3 Januari 2027</div>
+    <div class="landing-dates" id="landingDates">Pertunangan · 30 Ogos 2026 &nbsp;|&nbsp; Perkahwinan · 3 Januari 2027</div>
     <div class="landing-prompt">Siapakah anda hari ini?</div>
     <div class="user-cards">
       <div class="user-card" onclick="login('Hafiza')">
@@ -669,14 +756,16 @@
     <!-- Countdown -->
     <div class="countdown-wrap">
       <div class="countdown-card">
+        <button class="cd-edit-btn" onclick="openDateModal('tunang')" title="Tukar tarikh pertunangan">✏️</button>
         <div class="cd-label">💍 Majlis Pertunangan</div>
-        <div class="cd-date-str">30 Ogos 2026</div>
+        <div class="cd-date-str" id="cd-tunang-label">30 Ogos 2026</div>
         <div class="cd-boxes" id="cd-tunang-boxes"></div>
         <div class="cd-units"><span>Hari</span><span>Jam</span><span>Minit</span><span>Saat</span></div>
       </div>
       <div class="countdown-card gold">
+        <button class="cd-edit-btn" onclick="openDateModal('kahwin')" title="Tukar tarikh perkahwinan">✏️</button>
         <div class="cd-label">🌸 Majlis Perkahwinan</div>
-        <div class="cd-date-str">3 Januari 2027</div>
+        <div class="cd-date-str" id="cd-kahwin-label">3 Januari 2027</div>
         <div class="cd-boxes" id="cd-kahwin-boxes"></div>
         <div class="cd-units"><span>Hari</span><span>Jam</span><span>Minit</span><span>Saat</span></div>
       </div>
@@ -691,6 +780,36 @@
   </div>
 </div>
 
+<!-- DATE EDIT MODAL -->
+<div id="dateModal" style="display:none">
+  <div class="modal-overlay" onclick="closeDateModal(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeDateModal()">✕</button>
+      <div class="modal-title" id="modalTitle">Tukar Tarikh</div>
+      <div class="modal-subtitle" id="modalSubtitle">Kemas kini tarikh majlis anda</div>
+      <div class="modal-divider"></div>
+
+      <div class="modal-field">
+        <label class="modal-field-label" id="modalFieldLabel">Tarikh Majlis</label>
+        <span class="modal-field-sub">Pilih tarikh menggunakan pemilih di bawah:</span>
+        <input type="date" class="modal-input" id="modalDateInput">
+        <div class="modal-input-display" id="modalDateDisplay"></div>
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-field-label">Nama Paparan</label>
+        <span class="modal-field-sub">Teks yang akan dipaparkan pada kiraan detik (cth: 30 Ogos 2026):</span>
+        <input type="text" class="modal-input" id="modalLabelInput" placeholder="cth: 30 Ogos 2026">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeDateModal()">Batal</button>
+        <button class="btn-modal-save" onclick="saveDateModal()">💾 Simpan Tarikh</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 <div id="loading" style="display:none">
   <div class="loading-spinner"></div>
@@ -699,10 +818,16 @@
 
 <script>
 // ── CONFIG ────────────────────────────────────────────────────────────────────
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyC6fBRegq6EAtRKepdSxSJOPbcOZn3lmHlKqT9YBlPW0lCmaYdC-WvUoTCLvmefht8EA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyA5kv2G-KOYShg3dGxMvm50mpWUsTT9cHprXiiSjOwjR4n830JHr-4arGD_rn-B1Ik/exec';
 const DRIVE_FOLDER = 'https://drive.google.com/drive/folders/1jRcBD1xTyifIfS83VusqKC8J1ZYcv3Iw';
 
-// ── DEFAULT DATA (seeded on first run) ────────────────────────────────────────
+// ── DEFAULT DATES ─────────────────────────────────────────────────────────────
+const DEFAULT_DATES = {
+  tunang: { iso: '2026-08-30', label: '30 Ogos 2026' },
+  kahwin: { iso: '2027-01-03', label: '3 Januari 2027' },
+};
+
+// ── DEFAULT DATA ──────────────────────────────────────────────────────────────
 const DEFAULT_DATA = [
   {
     id: 'phase_0', label: 'FASA 1: MAJLIS PERTUNANGAN',
@@ -774,10 +899,12 @@ const DEFAULT_DATA = [
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let currentUser = null;
-let state = {};        // { itemId: { done, comments, files } }
-let structure = [];    // [ { id, label, badge, badgeClass, date, periods: [ { id, label, items: [{id,text}] } ] } ]
+let state = {};
+let structure = [];
+let eventDates = JSON.parse(JSON.stringify(DEFAULT_DATES)); // { tunang: {iso, label}, kahwin: {iso, label} }
 let openPanelId = null;
 let countdownStarted = false;
+let modalTarget = null; // 'tunang' or 'kahwin'
 
 function uid() {
   return 'x' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
@@ -810,6 +937,7 @@ async function login(user) {
   showLoading('Memuatkan senarai semak...');
   await loadData();
   hideLoading();
+  updateCountdownLabels();
   renderAll();
   startCountdowns();
 }
@@ -826,25 +954,28 @@ async function loadData() {
     const res  = await fetch(SCRIPT_URL + '?action=load');
     const json = await res.json();
     if (json.ok) {
-      state     = json.data.state     || {};
-      structure = json.data.structure || [];
+      state      = json.data.state      || {};
+      structure  = json.data.structure  || [];
+      if (json.data.eventDates) {
+        eventDates = json.data.eventDates;
+      }
     }
   } catch (e) {
     const saved = localStorage.getItem('weddingApp');
     if (saved) {
       const parsed = JSON.parse(saved);
-      state     = parsed.state     || {};
-      structure = parsed.structure || [];
+      state      = parsed.state      || {};
+      structure  = parsed.structure  || [];
+      if (parsed.eventDates) eventDates = parsed.eventDates;
     }
   }
-  // Seed structure from DEFAULT_DATA if empty
   if (!structure || structure.length === 0) {
     structure = JSON.parse(JSON.stringify(DEFAULT_DATA));
   }
 }
 
 async function saveData() {
-  const payload = { state: state, structure: structure };
+  const payload = { state: state, structure: structure, eventDates: eventDates };
   localStorage.setItem('weddingApp', JSON.stringify(payload));
   try {
     await fetch(SCRIPT_URL, {
@@ -884,6 +1015,73 @@ async function uploadFile(itemId, file) {
     };
     reader.readAsDataURL(file);
   } catch (e) { hideLoading(); showToast('Ralat semasa memuat naik fail.'); }
+}
+
+// ── DATE MODAL ────────────────────────────────────────────────────────────────
+function openDateModal(target) {
+  modalTarget = target;
+  const isTunang = target === 'tunang';
+  const d = eventDates[target];
+
+  document.getElementById('modalTitle').textContent    = isTunang ? '💍 Tarikh Pertunangan' : '🌸 Tarikh Perkahwinan';
+  document.getElementById('modalSubtitle').textContent = isTunang
+    ? 'Kemas kini tarikh majlis pertunangan anda'
+    : 'Kemas kini tarikh majlis perkahwinan anda';
+  document.getElementById('modalFieldLabel').textContent = isTunang ? 'Tarikh Pertunangan' : 'Tarikh Perkahwinan';
+
+  const dateInput  = document.getElementById('modalDateInput');
+  const labelInput = document.getElementById('modalLabelInput');
+  dateInput.value  = d.iso   || '';
+  labelInput.value = d.label || '';
+  updateModalDisplay();
+
+  dateInput.addEventListener('input', updateModalDisplay);
+  document.getElementById('dateModal').style.display = 'block';
+}
+
+function updateModalDisplay() {
+  const val = document.getElementById('modalDateInput').value;
+  const disp = document.getElementById('modalDateDisplay');
+  if (val) {
+    const dt = new Date(val + 'T00:00:00');
+    disp.textContent = 'Tarikh dipilih: ' + dt.toLocaleDateString('ms-MY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  } else {
+    disp.textContent = '';
+  }
+}
+
+function closeDateModal(e) {
+  if (e && e.target !== document.querySelector('.modal-overlay')) return;
+  document.getElementById('dateModal').style.display = 'none';
+  modalTarget = null;
+  // Remove listener to avoid stacking
+  document.getElementById('modalDateInput').removeEventListener('input', updateModalDisplay);
+}
+
+async function saveDateModal() {
+  const isoVal   = document.getElementById('modalDateInput').value;
+  const labelVal = document.getElementById('modalLabelInput').value.trim();
+
+  if (!isoVal) { showToast('Sila pilih tarikh terlebih dahulu.'); return; }
+
+  eventDates[modalTarget] = {
+    iso:   isoVal,
+    label: labelVal || isoVal,
+  };
+
+  // Update countdown label immediately
+  updateCountdownLabels();
+
+  document.getElementById('dateModal').style.display = 'none';
+  modalTarget = null;
+
+  await saveData();
+  showToast('📅 Tarikh berjaya dikemas kini!');
+}
+
+function updateCountdownLabels() {
+  document.getElementById('cd-tunang-label').textContent = eventDates.tunang.label;
+  document.getElementById('cd-kahwin-label').textContent = eventDates.kahwin.label;
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
@@ -937,7 +1135,6 @@ function renderAll() {
     container.appendChild(buildPhaseEl(phase, pi));
   });
 
-  // ── Add Phase button ──
   const addPhaseRow = document.createElement('div');
   addPhaseRow.style.cssText = 'margin:1rem 0 2rem;';
   addPhaseRow.innerHTML =
@@ -973,7 +1170,6 @@ function buildPhaseEl(phase, pi) {
   phaseBlock.className = 'phase-block';
   phaseBlock.id = 'phase-block-' + phase.id;
 
-  // Phase header with edit/delete
   const header = document.createElement('div');
   header.className = 'phase-header';
   header.innerHTML =
@@ -986,12 +1182,10 @@ function buildPhaseEl(phase, pi) {
     '</div>';
   phaseBlock.appendChild(header);
 
-  // Periods
   phase.periods.forEach(function(period, ri) {
     phaseBlock.appendChild(buildPeriodEl(phase, pi, period, ri));
   });
 
-  // Add Period button
   const addPRow = document.createElement('div');
   addPRow.className = 'add-period-row';
   addPRow.id = 'add-period-row-' + phase.id;
@@ -1014,7 +1208,6 @@ function buildPeriodEl(phase, pi, period, ri) {
   pg.className = 'period-group';
   pg.id = 'period-group-' + period.id;
 
-  // Period label row with edit/delete
   const labelRow = document.createElement('div');
   labelRow.className = 'period-label-row';
   labelRow.innerHTML =
@@ -1025,12 +1218,10 @@ function buildPeriodEl(phase, pi, period, ri) {
     '</div>';
   pg.appendChild(labelRow);
 
-  // Items
   period.items.forEach(function(item, ii) {
     pg.appendChild(buildItemEl(item, phase.id, period.id));
   });
 
-  // Add item row
   const addRow = document.createElement('div');
   addRow.className = 'add-item-row';
   addRow.id = 'add-row-' + period.id;
@@ -1371,7 +1562,6 @@ function startEditPhase(phaseId) {
   const dateEl  = document.getElementById('phase-date-' + phaseId);
   if (!titleEl) return;
 
-  // hide existing
   titleEl.style.display = 'none';
   dateEl.style.display  = 'none';
 
@@ -1573,10 +1763,11 @@ function showToast(msg) {
 }
 
 // ── COUNTDOWN ─────────────────────────────────────────────────────────────────
-function renderCountdown(targetDate, boxesId) {
-  const el   = document.getElementById(boxesId);
+function renderCountdown(isoDate, boxesId) {
+  const el = document.getElementById(boxesId);
   if (!el) return;
-  const diff = targetDate - new Date();
+  const target = new Date(isoDate + 'T00:00:00');
+  const diff   = target - new Date();
   if (diff <= 0) { el.innerHTML = '<div class="cd-done">🎉 Selamat Hari Bahagia!</div>'; return; }
   const days  = Math.floor(diff / 86400000);
   const hours = Math.floor((diff % 86400000) / 3600000);
@@ -1589,8 +1780,8 @@ function renderCountdown(targetDate, boxesId) {
 }
 
 function tickCountdowns() {
-  renderCountdown(new Date('2026-08-30T00:00:00'), 'cd-tunang-boxes');
-  renderCountdown(new Date('2027-01-03T00:00:00'), 'cd-kahwin-boxes');
+  renderCountdown(eventDates.tunang.iso, 'cd-tunang-boxes');
+  renderCountdown(eventDates.kahwin.iso, 'cd-kahwin-boxes');
 }
 
 function startCountdowns() {
@@ -1606,6 +1797,7 @@ setInterval(async function() {
   const active = document.activeElement;
   if (active && (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT')) return;
   await loadData();
+  updateCountdownLabels();
   renderAll();
 }, 30000);
 </script>
