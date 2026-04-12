@@ -713,6 +713,11 @@ const CHECKLIST = [
   }
 ];
 
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let currentUser = null;
+let state = {};
+let openPanelId = null; // track which panel is open
+
 // ── CUSTOM ITEMS (user-added, stored in state) ────────────────────────────────
 // state._custom = { "pi_ri": [ {id, text, addedBy, addedAt}, ... ] }
 // Custom item IDs: "custom_pi_ri_uuid"
@@ -737,11 +742,6 @@ function buildAllItemIds() {
 // Build flat item ID list
 let allItemIds = [];
 buildAllItemIds();
-
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let currentUser = null;
-let state = {};
-let openPanelId = null; // track which panel is open
 
 // ── PETALS ────────────────────────────────────────────────────────────────────
 function createPetals() {
